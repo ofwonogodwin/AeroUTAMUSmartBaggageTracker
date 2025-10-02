@@ -21,7 +21,7 @@ ALLOWED_HOSTS = ['localhost', '127.0.0.1', '0.0.0.0']
 
 # Application definition
 INSTALLED_APPS = [
-    'daphne',  # ASGI server for Channels
+    # 'daphne',  # ASGI server for Channels - temporarily disabled
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -33,7 +33,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework_simplejwt',
     'corsheaders',
-    'channels',
+    # 'channels',  # temporarily disabled
     
     # Local apps
     'tracking',
@@ -69,7 +69,7 @@ TEMPLATES = [
 ]
 
 # ASGI/WSGI configuration
-ASGI_APPLICATION = 'baggage_tracker.asgi.application'
+# ASGI_APPLICATION = 'baggage_tracker.asgi.application'  # temporarily disabled
 WSGI_APPLICATION = 'baggage_tracker.wsgi.application'
 
 # Database
@@ -165,12 +165,12 @@ CORS_ALLOWED_ORIGINS = [
 
 CORS_ALLOW_CREDENTIALS = True
 
-# Channels configuration for WebSockets (using in-memory for demo)
-CHANNEL_LAYERS = {
-    "default": {
-        "BACKEND": "channels.layers.InMemoryChannelLayer"
-    }
-}
+# Channels configuration for WebSockets (using in-memory for demo) - temporarily disabled
+# CHANNEL_LAYERS = {
+#     "default": {
+#         "BACKEND": "channels.layers.InMemoryChannelLayer"
+#     }
+# }
 
 # Baggage status choices
 BAGGAGE_STATUSES = [

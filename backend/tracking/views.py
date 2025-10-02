@@ -4,8 +4,8 @@ from rest_framework.response import Response
 from rest_framework.pagination import PageNumberPagination
 from django.shortcuts import get_object_or_404
 from django.db.models import Q
-from channels.layers import get_channel_layer
-from asgiref.sync import async_to_sync
+# from channels.layers import get_channel_layer  # temporarily disabled
+# from asgiref.sync import async_to_sync  # temporarily disabled
 import json
 from .models import Baggage, StatusUpdate, UserProfile
 from .serializers import (
@@ -126,24 +126,24 @@ def update_baggage_status(request, baggage_id):
     if serializer.is_valid():
         status_update = serializer.save()
         
-        # Send real-time update via WebSocket
-        channel_layer = get_channel_layer()
-        async_to_sync(channel_layer.group_send)(
-            f'baggage_{baggage_id}',
-            {
-                'type': 'baggage_update',
-                'message': {
-                    'baggage_id': str(baggage.id),
-                    'qr_code': baggage.qr_code,
-                    'status': status_update.status,
-                    'status_display': status_update.get_status_display(),
-                    'timestamp': status_update.timestamp.isoformat(),
-                    'updated_by': status_update.updated_by.username,
-                    'notes': status_update.notes,
-                    'location': status_update.location,
-                }
-            }
-        )
+        # Send real-time update via WebSocket - temporarily disabled
+        # channel_layer = get_channel_layer()
+        # async_to_sync(channel_layer.group_send)(
+        #     f'baggage_{baggage_id}',
+        #     {
+        #         'type': 'baggage_update',
+        #         'message': {
+        #             'baggage_id': str(baggage.id),
+        #             'qr_code': baggage.qr_code,
+        #             'status': status_update.status,
+        #             'status_display': status_update.get_status_display(),
+        #             'timestamp': status_update.timestamp.isoformat(),
+        #             'updated_by': status_update.updated_by.username,
+        #             'notes': status_update.notes,
+        #             'location': status_update.location,
+        #         }
+        #     }
+        # )
         
         # Return updated baggage data
         baggage_serializer = BaggageSerializer(baggage, context={'request': request})
