@@ -1,0 +1,91 @@
+@import "tailwindcss";
+
+:root {
+  --background: #ffffff;
+  --foreground: #003366;
+
+  /* Aviation Theme Colors */
+  --deep-blue: #003366;
+  --sky-blue: #0096FF;
+  --gold: #FFD700;
+  --light-gray: #F8FAFC;
+  --dark-gray: #64748B;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+
+  /* Custom Aviation Colors */
+  --color-deep-blue: var(--deep-blue);
+  --color-sky-blue: var(--sky-blue);
+  --color-gold: var(--gold);
+  --color-light-gray: var(--light-gray);
+  --color-dark-gray: var(--dark-gray);
+
+  --color-primary-50: #f0f9ff;
+  --color-primary-100: #e0f2fe;
+  --color-primary-200: #bae6fd;
+  --color-primary-300: #7dd3fc;
+  --color-primary-400: #38bdf8;
+  --color-primary-500: var(--sky-blue);
+  --color-primary-600: #0284c7;
+  --color-primary-700: #0369a1;
+  --color-primary-800: var(--deep-blue);
+  --color-primary-900: #0c4a6e;
+
+  --color-accent-500: var(--gold);
+  --color-accent-600: #f59e0b;
+  --color-accent-700: #d97706;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0f172a;
+    --foreground: #f1f5f9;
+  }
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+}
+
+/* Custom animations for aviation theme */
+@keyframes plane-takeoff {
+  0% {
+    transform: translateX(-100px) translateY(0px) rotate(-10deg);
+  }
+
+  100% {
+    transform: translateX(100px) translateY(-50px) rotate(10deg);
+  }
+}
+
+.animate-plane-takeoff {
+  animation: plane-takeoff 3s ease-in-out infinite;
+}
+
+/* Status indicator styles */
+.status-checked-in {
+  @apply bg-blue-100 text-blue-800 border-blue-200;
+}
+
+.status-security-cleared {
+  @apply bg-yellow-100 text-yellow-800 border-yellow-200;
+}
+
+.status-loaded {
+  @apply bg-orange-100 text-orange-800 border-orange-200;
+}
+
+.status-in-flight {
+  @apply bg-purple-100 text-purple-800 border-purple-200;
+}
+
+.status-arrived {
+  @apply bg-green-100 text-green-800 border-green-200;
+}

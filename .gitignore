@@ -44,8 +44,11 @@ dist/
 downloads/
 eggs/
 .eggs/
-lib/
-lib64/
+# Python lib directories (backend only)
+backend/lib/
+backend/lib64/
+# Allow frontend/src/lib directory
+!frontend/src/lib/
 parts/
 sdist/
 var/
