@@ -1,0 +1,37 @@
+# Smart Baggage Tracker - Production Requirements
+# ===============================================
+# Dependencies for production deployment
+
+Django==5.0
+djangorestframework==3.14.0
+djangorestframework-simplejwt==5.3.0
+channels==4.0.0
+channels-redis==4.2.0
+daphne==4.0.0
+django-cors-headers==4.3.1
+Pillow==10.1.0
+qrcode[pil]==7.4.2
+
+# Production server
+gunicorn==21.2.0
+uvicorn[standard]==0.23.2
+
+# Database (choose one)
+psycopg2-binary==2.9.7  # PostgreSQL
+# mysqlclient==2.2.0     # MySQL
+
+# Redis for WebSocket support
+redis==4.6.0
+
+# Environment management
+python-decouple==3.8
+
+# Cloud storage (optional)
+django-storages==1.14.2
+boto3==1.28.62
+
+# Monitoring
+sentry-sdk==1.32.0
+
+# Security
+django-environ==0.11.2
