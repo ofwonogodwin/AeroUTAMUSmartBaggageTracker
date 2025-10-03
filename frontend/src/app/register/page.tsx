@@ -58,6 +58,7 @@ export default function RegisterPage() {
     }
 
     try {
+      console.log("Submitting registration with data:", formData);
       await register(formData);
       // Redirect after successful registration
       setTimeout(() => {
@@ -74,6 +75,10 @@ export default function RegisterPage() {
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
     const { name, value } = e.target;
+
+    // Debug logging to see what's happening
+    console.log(`Field changed: ${name} = ${value}`);
+
     setFormData((prev) => ({ ...prev, [name]: value }));
     // Clear error when user starts typing
     if (errors[name]) {

@@ -26,7 +26,10 @@ export default function LoginPage() {
 
     try {
       await login(formData);
-      // Redirect is handled in AuthContext after successful login
+      // Redirect after successful login
+      setTimeout(() => {
+        window.location.href = "/";
+      }, 500);
     } catch {
       const errorMessage = "Login failed. Please check your credentials.";
       setErrors({ general: errorMessage });

@@ -90,11 +90,6 @@ export function AuthProvider({ children }: AuthProviderProps) {
         ? "Staff Member"
         : "Passenger";
       toast.success(`Welcome back! Logged in as ${roleText}`);
-
-      // Force a page refresh to ensure proper redirect
-      setTimeout(() => {
-        window.location.href = response.user.is_staff_member ? "/staff" : "/";
-      }, 500);
     } catch (error: any) {
       const message = error.response?.data?.error || "Login failed";
       toast.error(message);
@@ -144,11 +139,6 @@ export function AuthProvider({ children }: AuthProviderProps) {
         ? "Staff Member"
         : "Passenger";
       toast.success(`Account created successfully! Welcome as ${roleText}`);
-
-      // Redirect after successful registration
-      setTimeout(() => {
-        window.location.href = response.user.is_staff_member ? "/staff" : "/";
-      }, 1000);
     } catch (error: any) {
       console.error("Registration error:", error);
       console.error("Error response:", error.response?.data);

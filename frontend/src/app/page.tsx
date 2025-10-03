@@ -31,10 +31,13 @@ export default function Home() {
   const [isSearching, setIsSearching] = useState(false);
   const [searchError, setSearchError] = useState("");
 
-  // Redirect unauthenticated users to login
+  // Redirect unauthenticated users to login with a delay to prevent flashing
   useEffect(() => {
     if (!isLoading && !isAuthenticated) {
-      router.push("/login");
+      const timer = setTimeout(() => {
+        router.push("/login");
+      }, 100);
+      return () => clearTimeout(timer);
     }
   }, [isLoading, isAuthenticated, router]);
 
