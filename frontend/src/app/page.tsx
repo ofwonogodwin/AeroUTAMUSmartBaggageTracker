@@ -4,14 +4,14 @@ import Link from "next/link";
 import { useAuth } from "@/contexts/AuthContext";
 import { LoadingSpinner } from "@/components/ui/LoadingSpinner";
 import { Button } from "@/components/ui/Button";
-import AccountDropdown from "@/components/AccountDropdown";
+import SignOutButton from "@/components/SignOutButton";
+
 import {
   Plane,
   QrCode,
   Shield,
   MapPin,
   ArrowRight,
-  Clock,
   Luggage,
   Search,
   CheckCircle,
@@ -51,6 +51,12 @@ export default function Home() {
                 Track Baggage
               </Link>
               <Link
+                href="/map"
+                className="text-gray-600 hover:text-blue-600 font-medium transition-colors"
+              >
+                Airport Map
+              </Link>
+              <Link
                 href="/support"
                 className="text-gray-600 hover:text-blue-600 font-medium transition-colors"
               >
@@ -59,8 +65,16 @@ export default function Home() {
             </nav>
 
             <div className="flex items-center space-x-4">
+              {/* Debug info - remove after testing */}
+              {process.env.NODE_ENV === "development" && (
+                <div className="text-xs bg-yellow-100 p-1 rounded">
+                  Auth: {isAuthenticated ? "Yes" : "No"} | User:{" "}
+                  {user ? user.username : "None"}
+                </div>
+              )}
+
               {isAuthenticated && user ? (
-                <AccountDropdown />
+                <SignOutButton variant="full" />
               ) : (
                 <div className="flex items-center space-x-3">
                   <Link href="/login">
@@ -114,6 +128,16 @@ export default function Home() {
                     Track My Baggage
                   </Button>
                 </Link>
+                <Link href="/map">
+                  <Button
+                    size="lg"
+                    variant="outline"
+                    className="px-8 py-3 border-purple-200 text-purple-600 hover:bg-purple-50"
+                  >
+                    <MapPin className="h-5 w-5 mr-2" />
+                    Airport Map
+                  </Button>
+                </Link>
                 {user?.is_staff_member && (
                   <Link href="/staff">
                     <Button
@@ -136,6 +160,16 @@ export default function Home() {
                   >
                     <Search className="h-5 w-5 mr-2" />
                     Track Baggage
+                  </Button>
+                </Link>
+                <Link href="/map">
+                  <Button
+                    size="lg"
+                    variant="outline"
+                    className="px-8 py-3 border-purple-200 text-purple-600 hover:bg-purple-50"
+                  >
+                    <MapPin className="h-5 w-5 mr-2" />
+                    Airport Map
                   </Button>
                 </Link>
                 <Link href="/login">
@@ -185,7 +219,7 @@ export default function Home() {
             </p>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-8">
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
             {/* Feature 1 */}
             <div className="bg-white p-8 rounded-2xl shadow-sm border border-gray-200 text-center">
               <div className="bg-blue-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6">
@@ -225,6 +259,20 @@ export default function Home() {
               <p className="text-gray-600">
                 Industry-standard security with 99.9% uptime ensuring your
                 baggage data is always protected.
+              </p>
+            </div>
+
+            {/* Feature 4 - Airport Map */}
+            <div className="bg-white p-8 rounded-2xl shadow-sm border border-gray-200 text-center">
+              <div className="bg-purple-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6">
+                <Plane className="h-8 w-8 text-purple-600" />
+              </div>
+              <h3 className="text-xl font-semibold text-gray-900 mb-4">
+                Interactive Airport Map
+              </h3>
+              <p className="text-gray-600">
+                Navigate Entebbe Airport easily with our interactive map showing
+                gates, baggage areas, and services.
               </p>
             </div>
           </div>
