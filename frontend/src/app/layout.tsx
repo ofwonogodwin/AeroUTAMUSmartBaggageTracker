@@ -16,10 +16,15 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "Smart Baggage Tracker | Entebbe Airport",
-  description: "Real-time baggage tracking system for Entebbe International Airport. Track your luggage from check-in to arrival.",
+  description:
+    "Real-time baggage tracking system for Entebbe International Airport. Track your luggage from check-in to arrival.",
   keywords: "baggage tracking, airport, Entebbe, luggage, real-time",
   authors: [{ name: "Entebbe Airport" }],
-  viewport: "width=device-width, initial-scale=1",
+};
+
+export const viewport = {
+  width: "device-width",
+  initialScale: 1,
   themeColor: "#003366",
 };
 
@@ -40,20 +45,20 @@ export default function RootLayout({
             toastOptions={{
               duration: 4000,
               style: {
-                background: '#ffffff',
-                color: '#003366',
-                border: '1px solid #0096FF',
+                background: "#ffffff",
+                color: "#003366",
+                border: "1px solid #0096FF",
               },
               success: {
                 iconTheme: {
-                  primary: '#10B981',
-                  secondary: '#ffffff',
+                  primary: "#10B981",
+                  secondary: "#ffffff",
                 },
               },
               error: {
                 iconTheme: {
-                  primary: '#EF4444',
-                  secondary: '#ffffff',
+                  primary: "#EF4444",
+                  secondary: "#ffffff",
                 },
               },
             }}
