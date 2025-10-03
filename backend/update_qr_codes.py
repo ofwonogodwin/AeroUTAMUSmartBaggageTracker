@@ -14,7 +14,7 @@ from io import BytesIO
 import base64
 
 # Setup Django environment
-sys.path.append('/home/top-g/Desktop/aviathon/AeroUTAMUSmartBaggageTracker/backend')
+sys.path.append(os.path.join(os.path.dirname(__file__)))
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'baggage_tracker.settings')
 django.setup()
 
@@ -58,7 +58,7 @@ def create_professional_qr_code(baggage_data, qr_code):
 
 def save_qr_code_image(image, filename):
     """Save QR code image to file"""
-    qr_codes_dir = '/home/top-g/Desktop/aviathon/qr_codes'
+    qr_codes_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'sample_qr_codes')
     os.makedirs(qr_codes_dir, exist_ok=True)
     
     file_path = os.path.join(qr_codes_dir, filename)
@@ -125,13 +125,13 @@ def main():
         print()
     
     # Save complete data to JSON file
-    output_file = '/home/top-g/Desktop/aviathon/qr_codes_complete.json'
+    output_file = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'qr_codes_complete.json')
     with open(output_file, 'w') as f:
         json.dump(qr_codes_data, f, indent=2, default=str)
     
     print("=" * 50)
     print(f"✅ Complete! Generated {total_items} QR codes")
-    print(f"📁 Images saved to: /home/top-g/Desktop/aviathon/qr_codes/")
+    print(f"📁 Images saved to: {os.path.join(os.path.dirname(os.path.dirname(__file__)), 'sample_qr_codes')}")
     print(f"📋 Complete data saved to: {output_file}")
     print()
     

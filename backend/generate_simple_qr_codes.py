@@ -11,7 +11,7 @@ import qrcode
 import json
 
 # Setup Django environment
-sys.path.append('/home/top-g/Desktop/aviathon/AeroUTAMUSmartBaggageTracker/backend')
+sys.path.append(os.path.join(os.path.dirname(__file__)))
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'baggage_tracker.settings')
 django.setup()
 
@@ -45,7 +45,7 @@ def main():
     print()
     
     # Create output directory
-    output_dir = '/home/top-g/Desktop/aviathon/qr_codes_simple'
+    output_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'sample_qr_codes')
     os.makedirs(output_dir, exist_ok=True)
     
     for i, baggage in enumerate(baggage_items, 1):
