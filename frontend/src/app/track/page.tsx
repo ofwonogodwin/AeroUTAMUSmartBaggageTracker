@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { useAuth } from "@/contexts/AuthContext";
 import { baggageAPI } from "@/lib/api";
@@ -26,11 +27,58 @@ import { Baggage } from "@/types";
 
 export default function TrackPage() {
   const { isAuthenticated, user, isLoading: authLoading } = useAuth();
+  const searchParams = useSearchParams();
   const [trackingCode, setTrackingCode] = useState("");
   const [baggage, setBaggage] = useState<Baggage | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
   const [showScanner, setShowScanner] = useState(false);
+  const [autoSearched, setAutoSearched] = useState(false);
+
+  // Auto-search when URL contains baggage ID
+  useEffect(() => {
+    const id = searchParams.get("id");
+    if (id && !autoSearched) {
+      setTrackingCode(id);
+      setAutoSearched(true);
+      handleSearchById(id);
+    }
+  }, [searchParams, autoSearched]);
+
+  // Search by baggage ID (used for auto-search from URL)
+  const handleSearchById = async (baggageId: string) => {
+    setIsLoading(true);
+    setError("");
+    setBaggage(null);
+
+    try {
+      // First try to get by direct ID
+      const result = await baggageAPI.getById(baggageId.trim());
+      setBaggage(result);
+    } catch {
+      // If direct ID search fails, try by QR code
+      try {
+        const result = await baggageAPI.getByQrCode(baggageId.trim());
+        setBaggage(result);
+      } catch {
+        // Finally, try searching in the general list
+        try {
+          const searchResults = await baggageAPI.getAll({
+            search: baggageId.trim(),
+          });
+          if (searchResults.results && searchResults.results.length > 0) {
+            setBaggage(searchResults.results[0]);
+          } else {
+            setError("Baggage not found. Please check your tracking code.");
+          }
+        } catch {
+          setError("Baggage not found. Please check your tracking code.");
+        }
+      }
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const handleSearch = async (qrCode?: string) => {
     const codeToSearch = qrCode || trackingCode;
@@ -46,11 +94,8 @@ export default function TrackPage() {
     try {
       const result = await baggageAPI.getByQrCode(codeToSearch.trim());
       setBaggage(result);
-    } catch (err: any) {
-      setError(
-        err.response?.data?.error ||
-          "Baggage not found. Please check your tracking code."
-      );
+    } catch {
+      setError("Baggage not found. Please check your tracking code.");
     } finally {
       setIsLoading(false);
     }
@@ -209,6 +254,18 @@ export default function TrackPage() {
             </div>
           </div>
         </div>
+
+        {/* Auto-loaded notification */}
+        {autoSearched && baggage && (
+          <div className="mb-6 bg-blue-50 border border-blue-200 rounded-md p-4">
+            <div className="flex">
+              <CheckCircle className="h-5 w-5 text-blue-400 mr-3" />
+              <p className="text-sm text-blue-700">
+                ✅ Baggage details automatically loaded from your search!
+              </p>
+            </div>
+          </div>
+        )}
 
         {/* Error Message */}
         {error && (

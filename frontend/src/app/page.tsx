@@ -1,10 +1,14 @@
 "use client";
 
 import Link from "next/link";
+import { useState } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { LoadingSpinner } from "@/components/ui/LoadingSpinner";
 import { Button } from "@/components/ui/Button";
+import { SearchInput } from "@/components/ui/FormElements";
 import SignOutButton from "@/components/SignOutButton";
+import { baggageAPI } from "@/lib/api";
+import { Baggage } from "@/types";
 
 import {
   Plane,
@@ -20,6 +24,54 @@ import {
 
 export default function Home() {
   const { isLoading, isAuthenticated, user } = useAuth();
+  const [searchQuery, setSearchQuery] = useState("");
+  const [searchResult, setSearchResult] = useState<Baggage | null>(null);
+  const [isSearching, setIsSearching] = useState(false);
+  const [searchError, setSearchError] = useState("");
+
+  // Handle baggage search
+  const handleSearch = async (e?: React.FormEvent) => {
+    if (e) e.preventDefault();
+
+    if (!searchQuery.trim()) {
+      setSearchError("Please enter a QR code or baggage ID");
+      return;
+    }
+
+    setIsSearching(true);
+    setSearchError("");
+    setSearchResult(null);
+
+    try {
+      // Try to search by QR code first
+      const result = await baggageAPI.getByQrCode(searchQuery.trim());
+      setSearchResult(result);
+    } catch {
+      // If QR code search fails, try searching in the general baggage list
+      try {
+        const searchResults = await baggageAPI.getAll({
+          search: searchQuery.trim(),
+        });
+        if (searchResults.results && searchResults.results.length > 0) {
+          setSearchResult(searchResults.results[0]);
+        } else {
+          setSearchError("No baggage found with that ID or QR code");
+        }
+      } catch {
+        setSearchError(
+          "Baggage not found. Please check your ID or QR code and try again."
+        );
+      }
+    } finally {
+      setIsSearching(false);
+    }
+  };
+
+  // Handle search from SearchInput component
+  const handleSearchFromInput = (value: string) => {
+    setSearchQuery(value);
+    handleSearch();
+  };
 
   if (isLoading) {
     return <LoadingSpinner size="lg" className="min-h-screen" />;
@@ -191,19 +243,110 @@ export default function Home() {
             <h3 className="text-lg font-semibold text-gray-900 mb-4">
               Quick Track
             </h3>
-            <div className="flex flex-col sm:flex-row gap-3">
+            <form
+              onSubmit={handleSearch}
+              className="flex flex-col sm:flex-row gap-3"
+            >
               <div className="flex-1">
-                <input
+                <SearchInput
                   type="text"
                   placeholder="Enter QR code or baggage ID"
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  onSearch={handleSearchFromInput}
+                  isLoading={isSearching}
                 />
               </div>
-              <Button className="bg-blue-600 hover:bg-blue-700 px-6 py-3">
-                <Search className="h-5 w-5 mr-2" />
-                Track
+              <Button
+                type="submit"
+                className="bg-blue-600 hover:bg-blue-700 px-6 py-3"
+                disabled={isSearching || !searchQuery.trim()}
+              >
+                {isSearching ? (
+                  <LoadingSpinner size="sm" className="mr-2" />
+                ) : (
+                  <Search className="h-5 w-5 mr-2" />
+                )}
+                {isSearching ? "Searching..." : "Track"}
               </Button>
-            </div>
+            </form>
+
+            {/* Search Results */}
+            {searchError && (
+              <div className="mt-4 p-4 bg-red-50 border border-red-200 rounded-lg">
+                <p className="text-red-600 text-sm">{searchError}</p>
+              </div>
+            )}
+
+            {searchResult && (
+              <div className="mt-6 p-6 bg-green-50 border border-green-200 rounded-lg">
+                <div className="flex items-start justify-between mb-4">
+                  <div>
+                    <h4 className="text-lg font-semibold text-green-800 mb-1">
+                      Baggage Found! 🎉
+                    </h4>
+                    <p className="text-green-600 text-sm">
+                      ID: {searchResult.id}
+                    </p>
+                  </div>
+                  <span
+                    className={`px-3 py-1 rounded-full text-xs font-medium ${
+                      searchResult.current_status === "ARRIVED"
+                        ? "bg-green-100 text-green-800"
+                        : searchResult.current_status === "IN_FLIGHT"
+                        ? "bg-blue-100 text-blue-800"
+                        : searchResult.current_status === "LOADED"
+                        ? "bg-purple-100 text-purple-800"
+                        : searchResult.current_status === "SECURITY_CLEARED"
+                        ? "bg-yellow-100 text-yellow-800"
+                        : "bg-gray-100 text-gray-800"
+                    }`}
+                  >
+                    {searchResult.current_status_display}
+                  </span>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <p className="text-sm text-gray-600 mb-1">Passenger</p>
+                    <p className="font-medium text-gray-900">
+                      {searchResult.passenger_name}
+                    </p>
+                  </div>
+                  {searchResult.flight_number && (
+                    <div>
+                      <p className="text-sm text-gray-600 mb-1">Flight</p>
+                      <p className="font-medium text-gray-900">
+                        {searchResult.flight_number}
+                      </p>
+                    </div>
+                  )}
+                  {searchResult.destination && (
+                    <div>
+                      <p className="text-sm text-gray-600 mb-1">Destination</p>
+                      <p className="font-medium text-gray-900">
+                        {searchResult.destination}
+                      </p>
+                    </div>
+                  )}
+                  <div>
+                    <p className="text-sm text-gray-600 mb-1">Last Updated</p>
+                    <p className="font-medium text-gray-900">
+                      {new Date(searchResult.updated_at).toLocaleString()}
+                    </p>
+                  </div>
+                </div>
+
+                <div className="mt-4 pt-4 border-t border-green-200">
+                  <Link href={`/track?id=${searchResult.id}`}>
+                    <Button className="bg-green-600 hover:bg-green-700 text-white">
+                      <MapPin className="h-4 w-4 mr-2" />
+                      View Full Tracking Details
+                    </Button>
+                  </Link>
+                </div>
+              </div>
+            )}
           </div>
         </div>
 

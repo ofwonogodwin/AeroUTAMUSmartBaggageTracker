@@ -1,7 +1,7 @@
 "use client";
 
 import Navigation from "@/components/Navigation";
-import EntebbeAirportMapV2 from "@/components/EntebbeAirportMapFixed";
+import EntebbeAirportMapV2 from "@/components/EntebbeAirportMapV2";
 import {
   MapPin,
   Navigation as NavigationIcon,
