@@ -1,8 +1,13 @@
 "use client";
 
 import Navigation from "@/components/Navigation";
-import EntebbeAirportMap from "@/components/EntebbeAirportMap";
-import { MapPin, Navigation as NavigationIcon, Info } from "lucide-react";
+import EntebbeAirportMapV2 from "@/components/EntebbeAirportMapFixed";
+import {
+  MapPin,
+  Navigation as NavigationIcon,
+  Info,
+  Satellite,
+} from "lucide-react";
 
 export default function AirportMapPage() {
   return (
@@ -52,11 +57,11 @@ export default function AirportMapPage() {
           </div>
         </div>
 
-        {/* Interactive Map */}
-        <EntebbeAirportMap className="mb-8" />
+        {/* Interactive Google Map */}
+        <EntebbeAirportMapV2 height="70vh" />
 
         {/* Airport Information */}
-        <div className="grid md:grid-cols-2 gap-6">
+        <div className="grid md:grid-cols-3 gap-6">
           <div className="bg-white rounded-lg shadow p-6">
             <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center">
               <NavigationIcon className="h-5 w-5 mr-2 text-blue-600" />
@@ -88,6 +93,20 @@ export default function AirportMapPage() {
               <li>• Medical center located on the ground floor</li>
               <li>• Lost & found office near baggage claim</li>
               <li>• Prayer room available for all faiths</li>
+            </ul>
+          </div>
+
+          <div className="bg-white rounded-lg shadow p-6">
+            <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center">
+              <Satellite className="h-5 w-5 mr-2 text-blue-600" />
+              Map Features
+            </h3>
+            <ul className="space-y-2 text-gray-600">
+              <li>• Real-time satellite and street view imagery</li>
+              <li>• Interactive markers for all key locations</li>
+              <li>• Filter locations by type (terminals, dining, etc.)</li>
+              <li>• Click markers for detailed information</li>
+              <li>• Fullscreen mode for better navigation</li>
             </ul>
           </div>
         </div>

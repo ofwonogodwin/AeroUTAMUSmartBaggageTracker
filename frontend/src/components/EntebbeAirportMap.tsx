@@ -12,16 +12,9 @@ import {
   Navigation,
   Layers,
   Maximize,
+  Minimize,
 } from "lucide-react";
 import { Button } from "@/components/ui/Button";
-
-// Declare google maps types
-declare global {
-  interface Window {
-    google: any;
-    initMap: () => void;
-  }
-}
 
 interface MapLocation {
   id: string;
