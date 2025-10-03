@@ -8,7 +8,9 @@
 .env.development.local
 .env.test.local
 .env.production.local
-.env.example
+# Keep .env.example files for others
+!.env.example
+!**/.env.example
 
 # IDE / Editor Files
 .vscode/
@@ -233,9 +235,12 @@ jspm_packages/
 # PROJECT SPECIFIC
 # ================================================
 
-# QR Code Images
-*/qr_codes/
+# QR Code Images (but keep sample QR codes for demo)
+backend/qr_codes/
 */media/qr_codes/
+# Keep sample QR codes for GitHub users
+!sample_qr_codes/
+!sample_qr_codes/*.png
 
 # Log files
 backend.log

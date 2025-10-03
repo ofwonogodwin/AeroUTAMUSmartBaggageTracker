@@ -91,19 +91,49 @@ export async function generateQRCode(data: string): Promise<string> {
 export const storage = {
     set: (key: string, value: any) => {
         if (typeof window !== 'undefined') {
-            localStorage.setItem(key, JSON.stringify(value))
+            try {
+                localStorage.setItem(key, JSON.stringify(value))
+            } catch (error) {
+                console.error('Error storing data in localStorage:', error)
+            }
         }
     },
     get: (key: string) => {
         if (typeof window !== 'undefined') {
-            const item = localStorage.getItem(key)
-            return item ? JSON.parse(item) : null
+            try {
+                const item = localStorage.getItem(key)
+                if (!item || item === 'undefined' || item === 'null') {
+                    return null
+                }
+                return JSON.parse(item)
+            } catch (error) {
+                console.error('Error parsing localStorage data for key:', key, error)
+                // Remove corrupted data
+                localStorage.removeItem(key)
+                return null
+            }
         }
         return null
     },
     remove: (key: string) => {
         if (typeof window !== 'undefined') {
             localStorage.removeItem(key)
+        }
+    },
+    clear: () => {
+        if (typeof window !== 'undefined') {
+            localStorage.clear()
+        }
+    },
+    cleanupCorruptedData: () => {
+        if (typeof window !== 'undefined') {
+            const keysToCheck = ['auth_tokens', 'user']
+            keysToCheck.forEach(key => {
+                const item = localStorage.getItem(key)
+                if (item === 'undefined' || item === 'null' || item === '') {
+                    localStorage.removeItem(key)
+                }
+            })
         }
     }
 }

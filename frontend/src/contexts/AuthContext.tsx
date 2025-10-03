@@ -35,6 +35,9 @@ export function AuthProvider({ children }: AuthProviderProps) {
     useEffect(() => {
         const initializeAuth = async () => {
             try {
+                // Clean up any corrupted localStorage data first
+                storage.cleanupCorruptedData()
+                
                 const storedTokens = storage.get('auth_tokens')
                 const storedUser = storage.get('user')
 
@@ -77,7 +80,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
             storage.set('user', response.user)
             storage.set('auth_tokens', response.tokens)
 
-            toast.success('Successfully logged in!')
+            const roleText = response.user.is_staff_member ? 'Staff Member' : 'Passenger'
+            toast.success(`Welcome back! Logged in as ${roleText}`)
         } catch (error: any) {
             const message = error.response?.data?.error || 'Login failed'
             toast.error(message)
@@ -99,7 +103,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
             storage.set('user', response.user)
             storage.set('auth_tokens', response.tokens)
 
-            toast.success('Staff login successful!')
+            toast.success('Welcome! Staff login successful')
         } catch (error: any) {
             const message = error.response?.data?.error || 'Staff login failed'
             toast.error(message)
@@ -112,7 +116,9 @@ export function AuthProvider({ children }: AuthProviderProps) {
     const register = async (data: RegisterData) => {
         try {
             setIsLoading(true)
+            console.log('Registration data:', data)
             const response = await authAPI.register(data)
+            console.log('Registration response:', response)
 
             setUser(response.user)
             setTokens(response.tokens)
@@ -121,9 +127,12 @@ export function AuthProvider({ children }: AuthProviderProps) {
             storage.set('user', response.user)
             storage.set('auth_tokens', response.tokens)
 
-            toast.success('Account created successfully!')
+            const roleText = response.user.is_staff_member ? 'Staff Member' : 'Passenger'
+            toast.success(`Account created successfully! Welcome as ${roleText}`)
         } catch (error: any) {
-            const message = error.response?.data?.error || 'Registration failed'
+            console.error('Registration error:', error)
+            console.error('Error response:', error.response?.data)
+            const message = error.response?.data?.error || error.response?.data?.message || 'Registration failed'
             toast.error(message)
             throw error
         } finally {

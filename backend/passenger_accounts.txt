@@ -1,0 +1,228 @@
+================================================================================
+AERO UTAMU SMART BAGGAGE TRACKER - PASSENGER ACCOUNTS
+================================================================================
+Report Generated: 2025-10-03T15:01:15.070063+00:00
+Total Passengers: 25
+Total Baggage Items: 40
+
+================================================================================
+SYSTEM URLS
+================================================================================
+Passenger Login: http://localhost:3000/login
+Staff Login: http://localhost:3000/staff-login
+Track Baggage: http://localhost:3000/track
+
+================================================================================
+QUICK REFERENCE LOGINS
+================================================================================
+PASSENGER (Sample):
+  Username: adamyoung
+  Password: adam2024
+
+STAFF:
+  Username: staff1
+  Password: staff123
+
+ADMIN:
+  Username: admin
+  Password: admin123
+
+================================================================================
+ALL PASSENGER ACCOUNTS
+================================================================================
+No.  Name                 Username        Password     Email                          Bags 
+--------------------------------------------------------------------------------
+1    Adam Young           adamyoung       adam2024     adam.young@email.com           2    
+2    Alice Johnson        alicejohnson    alice2024    alice.johnson@email.com        2    
+3    Beth King            bethking        beth2024     beth.king@email.com            1    
+4    Diana Lopez          dianalopez      diana2024    diana.lopez@email.com          1    
+5    Emma Davis           emmadavis       emma2024     emma.davis@email.com           1    
+6    Eric Hill            erichill        eric2024     eric.hill@email.com            1    
+7    Fiona Scott          fionascott      fiona2024    fiona.scott@email.com          1    
+8    Frank Miller         frankmiller     frank2024    frank.miller@email.com         3    
+9    George Green         georgegreen     george2024   george.green@email.com         2    
+10   Grace Wilson         gracewilson     grace2024    grace.wilson@email.com         1    
+11   Henry Moore          henrymoore      henry2024    henry.moore@email.com          1    
+12   Ivy Taylor           ivytaylor       ivy2024      ivy.taylor@email.com           2    
+13   Kate Thomas          katethomas      kate2024     kate.thomas@email.com          1    
+14   Liam Jackson         liamjackson     liam2024     liam.jackson@email.com         1    
+15   Noah Harris          noahharris      noah2024     noah.harris@email.com          1    
+16   Olivia Martin        oliviamartin    olivia2024   olivia.martin@email.com        2    
+17   Quinn Garcia         quinngarcia     quinn2024    quinn.garcia@email.com         1    
+18   Ruby Martinez        rubymartinez    ruby2024     ruby.martinez@email.com        2    
+19   Sam Robinson         samrobinson     sam2024      sam.robinson@email.com         2    
+20   Uma Rodriguez        umarodriguez    uma2024      uma.rodriguez@email.com        3    
+21   Victor Lewis         victorlewis     victor2024   victor.lewis@email.com         3    
+22   Wendy Lee            wendylee        wendy2024    wendy.lee@email.com            1    
+23   Xavier Walker        xavierwalker    xavier2024   xavier.walker@email.com        1    
+24   Yara Hall            yarahall        yara2024     yara.hall@email.com            2    
+25   Zoe Allen            zoeallen        zoe2024      zoe.allen@email.com            2    
+
+================================================================================
+DETAILED BAGGAGE INFORMATION
+================================================================================
+
+1. Adam Young (adamyoung)
+   Email: adam.young@email.com
+   Password: adam2024
+   Baggage Items (2):
+     1. QR: BAG-85D37765 | Flight: VS201 → Doha | Status: SECURITY_CLEARED
+     2. QR: BAG-CD0BE473 | Flight: QR434 → Istanbul | Status: CHECKED_IN
+
+2. Alice Johnson (alicejohnson)
+   Email: alice.johnson@email.com
+   Password: alice2024
+   Baggage Items (2):
+     1. QR: BAG-2106F8F3 | Flight: QR434 → Paris | Status: CHECKED_IN
+     2. QR: BAG-3265BBAE | Flight: LH567 → Cairo | Status: CHECKED_IN
+
+3. Beth King (bethking)
+   Email: beth.king@email.com
+   Password: beth2024
+   Baggage Items (1):
+     1. QR: BAG-ADAE3DB3 | Flight: MS843 → Doha | Status: SECURITY_CLEARED
+
+4. Diana Lopez (dianalopez)
+   Email: diana.lopez@email.com
+   Password: diana2024
+   Baggage Items (1):
+     1. QR: BAG-D2752A32 | Flight: EK729 → Amsterdam | Status: ARRIVED
+
+5. Emma Davis (emmadavis)
+   Email: emma.davis@email.com
+   Password: emma2024
+   Baggage Items (1):
+     1. QR: BAG-F781DD59 | Flight: DL439 → Atlanta | Status: SECURITY_CLEARED
+
+6. Eric Hill (erichill)
+   Email: eric.hill@email.com
+   Password: eric2024
+   Baggage Items (1):
+     1. QR: BAG-9C91C819 | Flight: RW501 → Dubai | Status: ARRIVED
+
+7. Fiona Scott (fionascott)
+   Email: fiona.scott@email.com
+   Password: fiona2024
+   Baggage Items (1):
+     1. QR: BAG-AB344D65 | Flight: TK742 → Kigali | Status: LOADED
+
+8. Frank Miller (frankmiller)
+   Email: frank.miller@email.com
+   Password: frank2024
+   Baggage Items (3):
+     1. QR: BAG-9BE98CF5 | Flight: BA728 → Paris | Status: LOADED
+     2. QR: BAG-155EBDDD | Flight: MS843 → London | Status: SECURITY_CLEARED
+     3. QR: BAG-B40F5BD0 | Flight: AF814 → Frankfurt | Status: CHECKED_IN
+
+9. George Green (georgegreen)
+   Email: george.green@email.com
+   Password: george2024
+   Baggage Items (2):
+     1. QR: BAG-23702C05 | Flight: KE924 → Atlanta | Status: CHECKED_IN
+     2. QR: BAG-885E73A8 | Flight: DL439 → Istanbul | Status: ARRIVED
+
+10. Grace Wilson (gracewilson)
+   Email: grace.wilson@email.com
+   Password: grace2024
+   Baggage Items (1):
+     1. QR: BAG-3AF9643F | Flight: SA234 → Amsterdam | Status: IN_FLIGHT
+
+11. Henry Moore (henrymoore)
+   Email: henry.moore@email.com
+   Password: henry2024
+   Baggage Items (1):
+     1. QR: BAG-1F0C5581 | Flight: TK742 → London | Status: LOADED
+
+12. Ivy Taylor (ivytaylor)
+   Email: ivy.taylor@email.com
+   Password: ivy2024
+   Baggage Items (2):
+     1. QR: BAG-14D44F17 | Flight: DL439 → Paris | Status: CHECKED_IN
+     2. QR: BAG-98C34263 | Flight: BA728 → Doha | Status: ARRIVED
+
+13. Kate Thomas (katethomas)
+   Email: kate.thomas@email.com
+   Password: kate2024
+   Baggage Items (1):
+     1. QR: BAG-6A2E7EAD | Flight: MS843 → Cairo | Status: IN_FLIGHT
+
+14. Liam Jackson (liamjackson)
+   Email: liam.jackson@email.com
+   Password: liam2024
+   Baggage Items (1):
+     1. QR: BAG-8CEC369C | Flight: BA728 → Istanbul | Status: LOADED
+
+15. Noah Harris (noahharris)
+   Email: noah.harris@email.com
+   Password: noah2024
+   Baggage Items (1):
+     1. QR: BAG-B4B0147A | Flight: QR434 → Paris | Status: SECURITY_CLEARED
+
+16. Olivia Martin (oliviamartin)
+   Email: olivia.martin@email.com
+   Password: olivia2024
+   Baggage Items (2):
+     1. QR: BAG-C82AA5D7 | Flight: SA234 → London | Status: CHECKED_IN
+     2. QR: BAG-834391D1 | Flight: VS201 → Atlanta | Status: ARRIVED
+
+17. Quinn Garcia (quinngarcia)
+   Email: quinn.garcia@email.com
+   Password: quinn2024
+   Baggage Items (1):
+     1. QR: BAG-B808E237 | Flight: QR434 → Paris | Status: LOADED
+
+18. Ruby Martinez (rubymartinez)
+   Email: ruby.martinez@email.com
+   Password: ruby2024
+   Baggage Items (2):
+     1. QR: BAG-4DAFF685 | Flight: LH567 → Dubai | Status: LOADED
+     2. QR: BAG-65B24C93 | Flight: DL439 → Paris | Status: SECURITY_CLEARED
+
+19. Sam Robinson (samrobinson)
+   Email: sam.robinson@email.com
+   Password: sam2024
+   Baggage Items (2):
+     1. QR: BAG-96D4A575 | Flight: KL566 → Brussels | Status: SECURITY_CLEARED
+     2. QR: BAG-C475BC9D | Flight: RW501 → Dubai | Status: LOADED
+
+20. Uma Rodriguez (umarodriguez)
+   Email: uma.rodriguez@email.com
+   Password: uma2024
+   Baggage Items (3):
+     1. QR: BAG-3F7E9333 | Flight: KL566 → Cairo | Status: IN_FLIGHT
+     2. QR: BAG-0EC9E801 | Flight: KE924 → Dubai | Status: SECURITY_CLEARED
+     3. QR: BAG-433A66FD | Flight: BA728 → Dubai | Status: SECURITY_CLEARED
+
+21. Victor Lewis (victorlewis)
+   Email: victor.lewis@email.com
+   Password: victor2024
+   Baggage Items (3):
+     1. QR: BAG-7A85CD17 | Flight: EK729 → Istanbul | Status: ARRIVED
+     2. QR: BAG-4878C9A7 | Flight: MS843 → London | Status: SECURITY_CLEARED
+     3. QR: BAG-25CF3AA0 | Flight: TK742 → Istanbul | Status: SECURITY_CLEARED
+
+22. Wendy Lee (wendylee)
+   Email: wendy.lee@email.com
+   Password: wendy2024
+   Baggage Items (1):
+     1. QR: BAG-097730C2 | Flight: LH567 → Istanbul | Status: SECURITY_CLEARED
+
+23. Xavier Walker (xavierwalker)
+   Email: xavier.walker@email.com
+   Password: xavier2024
+   Baggage Items (1):
+     1. QR: BAG-68879D04 | Flight: LH567 → Atlanta | Status: ARRIVED
+
+24. Yara Hall (yarahall)
+   Email: yara.hall@email.com
+   Password: yara2024
+   Baggage Items (2):
+     1. QR: BAG-A8C74A09 | Flight: EK729 → Kigali | Status: ARRIVED
+     2. QR: BAG-C8E09E0D | Flight: DL439 → Frankfurt | Status: ARRIVED
+
+25. Zoe Allen (zoeallen)
+   Email: zoe.allen@email.com
+   Password: zoe2024
+   Baggage Items (2):
+     1. QR: BAG-C94A991C | Flight: RW501 → Brussels | Status: CHECKED_IN
+     2. QR: BAG-CEDBFF0D | Flight: QR434 → Frankfurt | Status: IN_FLIGHT

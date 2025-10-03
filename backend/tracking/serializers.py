@@ -29,8 +29,13 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
             'id': self.user.id,
             'username': self.user.username,
             'email': self.user.email,
+            'first_name': self.user.first_name,
+            'last_name': self.user.last_name,
             'role': user_profile.role if user_profile else 'PASSENGER',
+            'employee_id': user_profile.employee_id if user_profile else None,
+            'department': user_profile.department if user_profile else None,
             'is_staff_member': user_profile.is_staff_member if user_profile else False,
+            'can_update_baggage_status': user_profile.can_update_baggage_status if user_profile else False,
         }
         
         return data

@@ -19,7 +19,11 @@ export const metadata: Metadata = {
   description: "Real-time baggage tracking system for Entebbe International Airport. Track your luggage from check-in to arrival.",
   keywords: "baggage tracking, airport, Entebbe, luggage, real-time",
   authors: [{ name: "Entebbe Airport" }],
-  viewport: "width=device-width, initial-scale=1",
+};
+
+export const viewport = {
+  width: "device-width",
+  initialScale: 1,
   themeColor: "#003366",
 };
 

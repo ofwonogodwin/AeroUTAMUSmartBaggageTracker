@@ -2,47 +2,61 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
+import { useAuth } from '@/contexts/AuthContext'
 import { baggageAPI } from '@/lib/api'
 import { Button } from '@/components/ui/Button'
 import { Input } from '@/components/ui/FormElements'
 import { StatusBadge } from '@/components/ui/StatusBadge'
 import { LoadingSpinner } from '@/components/ui/LoadingSpinner'
+import QRScanner from '@/components/QRScanner'
+import AccountDropdown from '@/components/AccountDropdown'
 import { formatDateTime, formatRelativeTime } from '@/lib/utils'
-import { Baggage, StatusUpdate } from '@/types'
 import {
     Plane,
     QrCode,
     Search,
+    User,
     MapPin,
     Clock,
-    User,
-    Mail,
-    AlertTriangle
+    ChevronRight,
+    AlertCircle,
+    CheckCircle
 } from 'lucide-react'
+import { Baggage } from '@/types'
 
-export default function TrackBaggagePage() {
-    const [qrCode, setQrCode] = useState('')
+export default function TrackPage() {
+    const { isAuthenticated, user, isLoading: authLoading } = useAuth()
+    const [trackingCode, setTrackingCode] = useState('')
     const [baggage, setBaggage] = useState<Baggage | null>(null)
     const [isLoading, setIsLoading] = useState(false)
     const [error, setError] = useState('')
+    const [showScanner, setShowScanner] = useState(false)
 
-    const handleSearch = async (e: React.FormEvent) => {
-        e.preventDefault()
-        if (!qrCode.trim()) return
+    const handleSearch = async (qrCode?: string) => {
+        const codeToSearch = qrCode || trackingCode
+        if (!codeToSearch.trim()) {
+            setError('Please enter a tracking code')
+            return
+        }
 
         setIsLoading(true)
         setError('')
         setBaggage(null)
 
         try {
-            const baggageData = await baggageAPI.getByQRCode(qrCode.trim())
-            setBaggage(baggageData)
-        } catch (error: any) {
-            const errorMessage = error.response?.data?.error || 'Baggage not found'
-            setError(errorMessage)
+            const result = await baggageAPI.getByQrCode(codeToSearch.trim())
+            setBaggage(result)
+        } catch (err: any) {
+            setError(err.response?.data?.error || 'Baggage not found. Please check your tracking code.')
         } finally {
             setIsLoading(false)
         }
+    }
+
+    const handleQRScan = (qrCode: string) => {
+        setTrackingCode(qrCode)
+        setShowScanner(false)
+        handleSearch(qrCode)
     }
 
     const getStatusIcon = (status: string) => {
@@ -62,6 +76,10 @@ export default function TrackBaggagePage() {
         }
     }
 
+    if (authLoading) {
+        return <LoadingSpinner size="lg" className="min-h-screen" />
+    }
+
     return (
         <div className="min-h-screen bg-gradient-to-br from-blue-50 to-sky-100">
             {/* Navigation */}
@@ -76,12 +94,7 @@ export default function TrackBaggagePage() {
                         </Link>
 
                         <div className="flex items-center space-x-4">
-                            <Link href="/login">
-                                <Button size="sm" variant="outline">Login</Button>
-                            </Link>
-                            <Link href="/register">
-                                <Button size="sm">Register</Button>
-                            </Link>
+                            <AccountDropdown />
                         </div>
                     </div>
                 </div>
@@ -95,212 +108,194 @@ export default function TrackBaggagePage() {
                         <h1 className="text-3xl font-bold text-gray-900">Track Your Baggage</h1>
                     </div>
                     <p className="text-lg text-gray-600">
-                        Enter your QR code to get real-time updates on your baggage location
+                        {isAuthenticated 
+                            ? `Welcome back${user?.first_name ? `, ${user.first_name}` : ''}! Track your baggage using the QR code or manual entry below.`
+                            : 'Enter your QR code to get real-time updates on your baggage location'
+                        }
                     </p>
                 </div>
 
-                {/* Search Form */}
-                <div className="bg-white rounded-lg shadow-md p-8 mb-8">
-                    <form onSubmit={handleSearch} className="space-y-6">
-                        <div className="flex flex-col sm:flex-row gap-4">
-                            <div className="flex-1">
-                                <Input
-                                    label="Baggage QR Code"
-                                    type="text"
-                                    value={qrCode}
-                                    onChange={(e) => setQrCode(e.target.value)}
-                                    placeholder="Enter your QR code (e.g., BAG-12345678)"
-                                    className="text-lg"
-                                />
+                {/* Tracking Methods */}
+                <div className="grid md:grid-cols-2 gap-6 mb-8">
+                    {/* QR Code Scanning Section */}
+                    <div className="bg-white rounded-lg shadow-md p-8">
+                        <div className="text-center">
+                            <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                                <QrCode className="w-8 h-8 text-blue-600" />
                             </div>
-                            <div className="flex items-end">
+                            <h3 className="text-xl font-bold text-gray-900 mb-2">Scan QR Code</h3>
+                            <p className="text-gray-600 mb-6">Use your device camera to scan the QR code on your baggage tag</p>
+                            
+                            <Button
+                                onClick={() => setShowScanner(true)}
+                                className="w-full bg-blue-600 hover:bg-blue-700"
+                                size="lg"
+                            >
+                                <QrCode className="w-5 h-5 mr-2" />
+                                Open Camera Scanner
+                            </Button>
+                        </div>
+                    </div>
+
+                    {/* Manual Entry Section */}
+                    <div className="bg-white rounded-lg shadow-md p-8">
+                        <div className="text-center">
+                            <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                                <Search className="w-8 h-8 text-green-600" />
+                            </div>
+                            <h3 className="text-xl font-bold text-gray-900 mb-2">Manual Entry</h3>
+                            <p className="text-gray-600 mb-6">Enter your tracking code manually if you can&apos;t scan</p>
+                            
+                            <div className="space-y-4">
+                                <Input
+                                    type="text"
+                                    placeholder="Enter QR tracking code"
+                                    value={trackingCode}
+                                    onChange={(e) => setTrackingCode(e.target.value)}
+                                    className="text-center"
+                                />
                                 <Button
-                                    type="submit"
+                                    onClick={() => handleSearch()}
+                                    className="w-full bg-green-600 hover:bg-green-700"
                                     size="lg"
-                                    isLoading={isLoading}
-                                    disabled={!qrCode.trim()}
-                                    className="w-full sm:w-auto"
+                                    disabled={!trackingCode.trim() || isLoading}
                                 >
-                                    <Search className="h-5 w-5 mr-2" />
-                                    Track Baggage
+                                    {isLoading ? (
+                                        <>
+                                            <LoadingSpinner size="sm" className="mr-2" />
+                                            Searching...
+                                        </>
+                                    ) : (
+                                        <>
+                                            <Search className="w-5 h-5 mr-2" />
+                                            Track Baggage
+                                        </>
+                                    )}
                                 </Button>
                             </div>
                         </div>
-
-                        {error && (
-                            <div className="bg-red-50 border border-red-200 rounded-md p-4">
-                                <div className="flex items-center">
-                                    <AlertTriangle className="h-5 w-5 text-red-600 mr-2" />
-                                    <p className="text-sm text-red-600">{error}</p>
-                                </div>
-                            </div>
-                        )}
-                    </form>
+                    </div>
                 </div>
 
-                {/* Loading State */}
-                {isLoading && (
-                    <div className="bg-white rounded-lg shadow-md p-8 text-center">
-                        <LoadingSpinner size="lg" />
-                        <p className="text-gray-600 mt-4">Searching for your baggage...</p>
+                {/* Error Message */}
+                {error && (
+                    <div className="mb-8 bg-red-50 border border-red-200 rounded-md p-4">
+                        <div className="flex">
+                            <AlertCircle className="h-5 w-5 text-red-400 mr-3" />
+                            <p className="text-sm text-red-600">{error}</p>
+                        </div>
                     </div>
                 )}
 
                 {/* Baggage Information */}
                 {baggage && (
-                    <div className="space-y-8">
-                        {/* Baggage Details */}
-                        <div className="bg-white rounded-lg shadow-md p-8">
-                            <div className="flex items-center justify-between mb-6">
-                                <h2 className="text-2xl font-bold text-gray-900">Baggage Details</h2>
-                                <StatusBadge status={baggage.current_status} size="lg" />
-                            </div>
-
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                <div className="space-y-4">
-                                    <div className="flex items-center space-x-3">
-                                        <User className="h-5 w-5 text-gray-400" />
-                                        <div>
-                                            <p className="text-sm text-gray-600">Passenger</p>
-                                            <p className="font-medium">{baggage.passenger_name}</p>
-                                        </div>
-                                    </div>
-
-                                    {baggage.passenger_email && (
-                                        <div className="flex items-center space-x-3">
-                                            <Mail className="h-5 w-5 text-gray-400" />
-                                            <div>
-                                                <p className="text-sm text-gray-600">Email</p>
-                                                <p className="font-medium">{baggage.passenger_email}</p>
-                                            </div>
-                                        </div>
-                                    )}
-
-                                    <div className="flex items-center space-x-3">
-                                        <QrCode className="h-5 w-5 text-gray-400" />
-                                        <div>
-                                            <p className="text-sm text-gray-600">QR Code</p>
-                                            <p className="font-medium font-mono">{baggage.qr_code}</p>
-                                        </div>
-                                    </div>
+                    <div className="bg-white rounded-lg shadow-md overflow-hidden">
+                        {/* Header */}
+                        <div className="bg-blue-600 text-white px-6 py-4">
+                            <div className="flex items-center justify-between">
+                                <div>
+                                    <h2 className="text-xl font-bold">Baggage Found!</h2>
+                                    <p className="text-blue-100">Tracking Code: {baggage.qr_code}</p>
                                 </div>
-
-                                <div className="space-y-4">
-                                    {baggage.flight_number && (
-                                        <div className="flex items-center space-x-3">
-                                            <Plane className="h-5 w-5 text-gray-400" />
-                                            <div>
-                                                <p className="text-sm text-gray-600">Flight</p>
-                                                <p className="font-medium">{baggage.flight_number}</p>
-                                            </div>
-                                        </div>
-                                    )}
-
-                                    {baggage.destination && (
-                                        <div className="flex items-center space-x-3">
-                                            <MapPin className="h-5 w-5 text-gray-400" />
-                                            <div>
-                                                <p className="text-sm text-gray-600">Destination</p>
-                                                <p className="font-medium">{baggage.destination}</p>
-                                            </div>
-                                        </div>
-                                    )}
-
-                                    <div className="flex items-center space-x-3">
-                                        <Clock className="h-5 w-5 text-gray-400" />
-                                        <div>
-                                            <p className="text-sm text-gray-600">Checked In</p>
-                                            <p className="font-medium">{formatDateTime(baggage.created_at)}</p>
-                                        </div>
-                                    </div>
-                                </div>
+                                <CheckCircle className="h-8 w-8" />
                             </div>
                         </div>
 
-                        {/* Status Timeline */}
-                        <div className="bg-white rounded-lg shadow-md p-8">
-                            <h2 className="text-2xl font-bold text-gray-900 mb-6">Baggage Journey</h2>
+                        {/* Baggage Details */}
+                        <div className="p-6">
+                            <div className="grid md:grid-cols-2 gap-6 mb-6">
+                                <div>
+                                    <p className="text-sm text-gray-500 mb-1">Passenger Name</p>
+                                    <p className="font-semibold text-gray-900">{baggage.passenger_name}</p>
+                                </div>
+                                <div>
+                                    <p className="text-sm text-gray-500 mb-1">Flight Number</p>
+                                    <p className="font-semibold text-gray-900">{baggage.flight_number || 'N/A'}</p>
+                                </div>
+                                <div>
+                                    <p className="text-sm text-gray-500 mb-1">Destination</p>
+                                    <p className="font-semibold text-gray-900">{baggage.destination || 'N/A'}</p>
+                                </div>
+                                <div>
+                                    <p className="text-sm text-gray-500 mb-1">Current Status</p>
+                                    <StatusBadge status={baggage.current_status} />
+                                </div>
+                            </div>
 
-                            {baggage.status_timeline && baggage.status_timeline.length > 0 ? (
-                                <div className="space-y-6">
-                                    {baggage.status_timeline.map((update: StatusUpdate, index: number) => (
-                                        <div key={update.id} className="flex items-start space-x-4">
-                                            <div className="flex-shrink-0">
-                                                <div className="flex items-center justify-center w-10 h-10 bg-blue-100 rounded-full">
+                            {/* Status Timeline */}
+                            {baggage.status_timeline && baggage.status_timeline.length > 0 && (
+                                <div>
+                                    <h3 className="text-lg font-semibold text-gray-900 mb-4">Status Timeline</h3>
+                                    <div className="space-y-4">
+                                        {baggage.status_timeline.map((update, index) => (
+                                            <div key={update.id} className="flex items-start space-x-4">
+                                                <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
+                                                    index === 0 ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-600'
+                                                }`}>
                                                     {getStatusIcon(update.status)}
                                                 </div>
-                                            </div>
-                                            <div className="flex-1 min-w-0">
-                                                <div className="flex items-center justify-between">
-                                                    <StatusBadge status={update.status} />
-                                                    <p className="text-sm text-gray-500">
-                                                        {formatRelativeTime(update.timestamp)}
+                                                <div className="flex-1 min-w-0">
+                                                    <div className="flex items-center justify-between">
+                                                        <p className="text-sm font-medium text-gray-900">
+                                                            {update.status_display}
+                                                        </p>
+                                                        <p className="text-sm text-gray-500">
+                                                            {formatRelativeTime(update.timestamp)}
+                                                        </p>
+                                                    </div>
+                                                    <p className="text-sm text-gray-600">
+                                                        {formatDateTime(update.timestamp)}
                                                     </p>
+                                                    {update.notes && (
+                                                        <p className="text-sm text-gray-600 mt-1">
+                                                            Note: {update.notes}
+                                                        </p>
+                                                    )}
+                                                    {update.location && (
+                                                        <p className="text-sm text-gray-600 mt-1">
+                                                            Location: {update.location}
+                                                        </p>
+                                                    )}
                                                 </div>
-                                                <p className="text-sm text-gray-600 mt-1">
-                                                    {formatDateTime(update.timestamp)}
-                                                </p>
-                                                {update.location && (
-                                                    <p className="text-sm text-gray-600 mt-1">
-                                                        📍 {update.location}
-                                                    </p>
-                                                )}
-                                                {update.notes && (
-                                                    <p className="text-sm text-gray-700 mt-1">{update.notes}</p>
-                                                )}
-                                                {update.updated_by_name && (
-                                                    <p className="text-xs text-gray-500 mt-1">
-                                                        Updated by: {update.updated_by_name}
-                                                    </p>
-                                                )}
                                             </div>
-                                        </div>
-                                    ))}
+                                        ))}
+                                    </div>
                                 </div>
-                            ) : (
-                                <p className="text-gray-600">No status updates available.</p>
                             )}
                         </div>
                     </div>
                 )}
 
-                {/* Instructions */}
-                {!baggage && !isLoading && (
-                    <div className="bg-white rounded-lg shadow-md p-8">
-                        <h2 className="text-xl font-bold text-gray-900 mb-4">How to Track Your Baggage</h2>
-                        <div className="space-y-4 text-gray-600">
-                            <div className="flex items-start space-x-3">
-                                <div className="flex-shrink-0 w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center text-sm font-medium text-blue-600">
-                                    1
-                                </div>
-                                <p>Find your baggage QR code on your check-in receipt or luggage tag</p>
-                            </div>
-                            <div className="flex items-start space-x-3">
-                                <div className="flex-shrink-0 w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center text-sm font-medium text-blue-600">
-                                    2
-                                </div>
-                                <p>Enter the QR code in the search box above</p>
-                            </div>
-                            <div className="flex items-start space-x-3">
-                                <div className="flex-shrink-0 w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center text-sm font-medium text-blue-600">
-                                    3
-                                </div>
-                                <p>View real-time status updates and location information</p>
-                            </div>
-                        </div>
-
-                        {/* Sample QR codes for demo */}
-                        <div className="mt-8 p-4 bg-gray-50 rounded-md">
-                            <h3 className="text-sm font-medium text-gray-900 mb-2">Try these demo QR codes:</h3>
-                            <div className="text-sm text-gray-600 space-y-1">
-                                <p className="font-mono">BAG-12345678</p>
-                                <p className="font-mono">BAG-87654321</p>
-                                <p className="font-mono">BAG-ABCD1234</p>
-                            </div>
+                {/* Quick Actions for Authenticated Users */}
+                {isAuthenticated && !baggage && (
+                    <div className="mt-8 bg-white rounded-lg shadow-md p-6">
+                        <h3 className="text-lg font-semibold text-gray-900 mb-4">Quick Actions</h3>
+                        <div className="grid sm:grid-cols-2 gap-4">
+                            <Link href="/">
+                                <Button variant="outline" className="w-full justify-between">
+                                    Back to Home
+                                    <ChevronRight className="h-4 w-4" />
+                                </Button>
+                            </Link>
+                            {user?.is_staff_member && (
+                                <Link href="/staff">
+                                    <Button variant="outline" className="w-full justify-between">
+                                        Staff Dashboard
+                                        <ChevronRight className="h-4 w-4" />
+                                    </Button>
+                                </Link>
+                            )}
                         </div>
                     </div>
                 )}
             </div>
+
+            {/* QR Scanner Modal */}
+            <QRScanner
+                onScan={handleQRScan}
+                onClose={() => setShowScanner(false)}
+                isOpen={showScanner}
+            />
         </div>
     )
 }

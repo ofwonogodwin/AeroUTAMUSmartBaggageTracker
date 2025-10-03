@@ -28,7 +28,8 @@ export default function LoginPage() {
 
         try {
             await login(formData)
-            router.push('/') // Redirect to home page after successful login
+            // Force refresh to ensure authentication state updates
+            window.location.href = '/'
         } catch (error: any) {
             const errorMessage = error.response?.data?.error || 'Login failed'
             setErrors({ general: errorMessage })
@@ -59,7 +60,8 @@ export default function LoginPage() {
                         <Plane className="h-10 w-10 text-blue-600" />
                         <h1 className="text-2xl font-bold text-gray-900">Smart Baggage Tracker</h1>
                     </div>
-                    <h2 className="text-xl text-gray-600">Sign in to your account</h2>
+                    <h2 className="text-xl text-gray-600">Passenger Login</h2>
+                    <p className="text-sm text-gray-500 mt-2">Sign in to track your baggage</p>
                 </div>
 
                 {/* Login Form */}
@@ -117,7 +119,7 @@ export default function LoginPage() {
                             isLoading={isSubmitting}
                             disabled={!formData.username || !formData.password}
                         >
-                            {isSubmitting ? 'Signing in...' : 'Sign In'}
+                            {isSubmitting ? 'Signing in...' : 'Sign In as Passenger'}
                         </Button>
                     </form>
 
@@ -125,7 +127,7 @@ export default function LoginPage() {
                     <div className="mt-6 space-y-4">
                         <div className="text-center">
                             <p className="text-sm text-gray-600">
-                                Don't have an account?{' '}
+                                Don&apos;t have an account?{' '}
                                 <Link href="/register" className="text-blue-600 hover:text-blue-700 font-medium">
                                     Create one here
                                 </Link>

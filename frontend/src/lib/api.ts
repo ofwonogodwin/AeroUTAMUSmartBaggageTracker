@@ -7,10 +7,8 @@ import {
     Baggage,
     BaggageCreateData,
     StatusUpdateCreateData,
-    StatusUpdate,
     DashboardStats,
-    PaginatedResponse,
-    SearchFilters
+    PaginatedResponse
 } from '@/types'
 import { storage } from '@/lib/utils'
 
@@ -113,48 +111,23 @@ export const authAPI = {
 
 // Baggage API
 export const baggageAPI = {
-    getAll: async (filters?: SearchFilters): Promise<PaginatedResponse<Baggage>> => {
-        const params = new URLSearchParams()
-        if (filters?.search) params.append('search', filters.search)
-        if (filters?.status) params.append('status', filters.status)
-        if (filters?.page) params.append('page', filters.page.toString())
-        if (filters?.page_size) params.append('page_size', filters.page_size.toString())
-
-        const response: AxiosResponse<PaginatedResponse<Baggage>> = await api.get(`/baggage/?${params}`)
+    getAll: async (params?: { page?: number; search?: string; status?: string }): Promise<PaginatedResponse<Baggage>> => {
+        const response: AxiosResponse<PaginatedResponse<Baggage>> = await api.get('/baggage/', { params })
         return response.data
     },
 
-    getById: async (id: string): Promise<Baggage> => {
-        const response: AxiosResponse<Baggage> = await api.get(`/baggage/${id}/`)
-        return response.data
-    },
-
-    getByQRCode: async (qrCode: string): Promise<Baggage> => {
+    getByQrCode: async (qrCode: string): Promise<Baggage> => {
         const response: AxiosResponse<Baggage> = await api.get(`/baggage/qr/${qrCode}/`)
         return response.data
     },
 
-    create: async (data: BaggageCreateData): Promise<{ message: string; baggage: Baggage }> => {
-        const response: AxiosResponse<{ message: string; baggage: Baggage }> = await api.post('/baggage/', data)
+    updateStatus: async (id: string, data: StatusUpdateCreateData): Promise<Baggage> => {
+        const response: AxiosResponse<Baggage> = await api.post(`/baggage/${id}/update/`, data)
         return response.data
     },
 
-    updateStatus: async (
-        baggageId: string,
-        statusData: StatusUpdateCreateData
-    ): Promise<{ message: string; baggage: Baggage; status_update: StatusUpdate }> => {
-        const response = await api.post(`/baggage/${baggageId}/update/`, statusData)
-        return response.data
-    },
-
-    getTimeline: async (baggageId: string): Promise<{
-        baggage_id: string
-        qr_code: string
-        passenger_name: string
-        current_status: string
-        timeline: StatusUpdate[]
-    }> => {
-        const response = await api.get(`/baggage/${baggageId}/timeline/`)
+    create: async (data: BaggageCreateData): Promise<Baggage> => {
+        const response: AxiosResponse<Baggage> = await api.post('/baggage/', data)
         return response.data
     }
 }

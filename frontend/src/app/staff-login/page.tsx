@@ -28,7 +28,8 @@ export default function StaffLoginPage() {
 
         try {
             await staffLogin(formData)
-            router.push('/staff') // Redirect to staff dashboard after successful login
+            // Force refresh to ensure authentication state updates
+            window.location.href = '/staff'
         } catch (error: any) {
             const errorMessage = error.response?.data?.error || 'Staff login failed'
             setErrors({ general: errorMessage })
@@ -138,7 +139,7 @@ export default function StaffLoginPage() {
                             <p className="text-sm text-gray-600">
                                 Not a staff member?{' '}
                                 <Link href="/login" className="text-blue-600 hover:text-blue-700 font-medium">
-                                    Regular Login
+                                    Passenger Login
                                 </Link>
                             </p>
                         </div>

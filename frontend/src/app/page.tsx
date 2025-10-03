@@ -4,13 +4,13 @@ import Link from 'next/link'
 import { useAuth } from '@/contexts/AuthContext'
 import { LoadingSpinner } from '@/components/ui/LoadingSpinner'
 import { Button } from '@/components/ui/Button'
+import AccountDropdown from '@/components/AccountDropdown'
 import {
   Plane,
   QrCode,
   Shield,
   Users,
   CheckCircle,
-  Clock,
   MapPin,
   ArrowRight
 } from 'lucide-react'
@@ -21,6 +21,8 @@ export default function Home() {
   if (isLoading) {
     return <LoadingSpinner size="lg" className="min-h-screen" />
   }
+
+
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-sky-100">
@@ -36,30 +38,11 @@ export default function Home() {
             </div>
 
             <div className="flex items-center space-x-4">
-              {isAuthenticated ? (
-                <>
-                  <span className="text-sm text-gray-600">
-                    Welcome, {user?.username}
-                  </span>
-                  {user?.is_staff_member && (
-                    <Link href="/staff">
-                      <Button size="sm">Staff Dashboard</Button>
-                    </Link>
-                  )}
-                  <Link href="/track">
-                    <Button size="sm" variant="outline">Track Baggage</Button>
-                  </Link>
-                </>
-              ) : (
-                <>
-                  <Link href="/login">
-                    <Button size="sm" variant="outline">Login</Button>
-                  </Link>
-                  <Link href="/register">
-                    <Button size="sm">Get Started</Button>
-                  </Link>
-                </>
-              )}
+              <Link href="/track">
+                <Button size="sm" variant="outline">Track Baggage</Button>
+              </Link>
+
+              <AccountDropdown />
             </div>
           </div>
         </div>
@@ -74,27 +57,31 @@ export default function Home() {
               <span className="text-blue-600"> In Real-Time</span>
             </h1>
             <p className="text-xl text-gray-600 mb-8 max-w-3xl mx-auto">
-              Experience seamless baggage tracking at Entebbe International Airport.
-              Know exactly where your luggage is from check-in to arrival.
+              {isAuthenticated 
+                ? `Welcome back${user?.first_name ? `, ${user.first_name}` : ''}! Track your baggage in real-time at Entebbe International Airport.`
+                : 'Experience seamless baggage tracking at Entebbe International Airport. Know exactly where your luggage is from check-in to arrival.'
+              }
             </p>
 
-            <div className="flex flex-col sm:flex-row justify-center items-center gap-4">
-              <Link href="/track">
-                <Button size="lg" className="flex items-center space-x-2">
-                  <QrCode className="h-5 w-5" />
-                  <span>Start Tracking</span>
-                  <ArrowRight className="h-5 w-5" />
-                </Button>
-              </Link>
-
-              {!isAuthenticated && (
-                <Link href="/register">
-                  <Button size="lg" variant="outline">
-                    Create Account
+            {isAuthenticated && (
+              <div className="flex flex-col sm:flex-row justify-center items-center gap-4">
+                <Link href="/track">
+                  <Button size="lg" className="flex items-center space-x-2">
+                    <QrCode className="h-5 w-5" />
+                    <span>Track Your Baggage</span>
+                    <ArrowRight className="h-5 w-5" />
                   </Button>
                 </Link>
-              )}
-            </div>
+                {user?.is_staff_member && (
+                  <Link href="/staff">
+                    <Button size="lg" variant="outline" className="flex items-center space-x-2">
+                      <Users className="h-5 w-5" />
+                      <span>Staff Dashboard</span>
+                    </Button>
+                  </Link>
+                )}
+              </div>
+            )}
           </div>
         </div>
 
@@ -175,35 +162,6 @@ export default function Home() {
         </div>
       </div>
 
-      {/* CTA Section */}
-      <div className="bg-blue-600 py-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl font-bold text-white mb-4">
-            Ready to Track Your Baggage?
-          </h2>
-          <p className="text-xl text-blue-100 mb-8">
-            Experience peace of mind with real-time baggage updates
-          </p>
-
-          <div className="flex flex-col sm:flex-row justify-center items-center gap-4">
-            <Link href="/track">
-              <Button size="lg" variant="outline" className="bg-white text-blue-600 hover:bg-gray-50">
-                <QrCode className="h-5 w-5 mr-2" />
-                Scan QR Code
-              </Button>
-            </Link>
-
-            {user?.is_staff_member && (
-              <Link href="/staff">
-                <Button size="lg" className="bg-yellow-500 text-blue-900 hover:bg-yellow-400">
-                  <Users className="h-5 w-5 mr-2" />
-                  Staff Dashboard
-                </Button>
-              </Link>
-            )}
-          </div>
-        </div>
-      </div>
 
       {/* Footer */}
       <footer className="bg-gray-900 text-white py-12">

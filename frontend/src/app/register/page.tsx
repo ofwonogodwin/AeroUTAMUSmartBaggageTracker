@@ -61,7 +61,8 @@ export default function RegisterPage() {
 
         try {
             await register(formData)
-            router.push('/') // Redirect to home page after successful registration
+            // Force refresh to ensure authentication state updates
+            window.location.href = '/'
         } catch (error: any) {
             const responseErrors = error.response?.data?.errors || {}
             const errorMessage = error.response?.data?.error || 'Registration failed'

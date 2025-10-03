@@ -1,323 +1,419 @@
-# Smart Baggage Tracker – Entebbe Airport Hackathon System
+# 🎯 AERO UTAMU Smart Baggage Tracker
 
-A comprehensive full-stack baggage tracking system built for Entebbe International Airport hackathon, featuring real-time updates, QR code scanning, and staff management capabilities.
+**Professional Aviation Baggage Management System for Entebbe International Airport**
 
-## 🚀 Features
+A comprehensive full-stack baggage tracking solution featuring real-time updates, professional QR code scanning, staff operations dashboard, and seamless passenger experience built with modern web technologies.
 
-### For Passengers
-- **QR Code Scanning**: Scan baggage QR codes to track status in real-time
-- **Real-time Updates**: Get instant notifications when baggage status changes
-- **Timeline View**: See complete journey of baggage from check-in to arrival
-- **Mobile-First Design**: PWA-enabled responsive design for mobile devices
-- **Multi-language Support**: Aviation-themed UI with clear status indicators
+---
 
-### For Staff
-- **Staff Dashboard**: Comprehensive overview of all baggage operations
+## 🚀 System Overview
+
+### 🎫 For Passengers
+- **QR Code Scanning**: Real-time camera scanning with file upload support
+- **Baggage Tracking**: Complete timeline from check-in to arrival
+- **Real-time Updates**: Live status notifications via WebSocket
+- **Mobile Optimized**: PWA-enabled responsive design
+- **User Authentication**: Secure registration and login system
+
+### 👨‍✈️ For Staff
+- **Operations Dashboard**: Complete overview of all 40+ baggage items
 - **Status Management**: Update baggage status with location and notes
-- **Search & Filter**: Find baggage by passenger name, QR code, or flight number
-- **Real-time Analytics**: Dashboard statistics and recent activity monitoring
-- **Role-based Access**: Secure authentication with staff/passenger roles
+- **Search & Filter**: Find baggage by name, QR code, or flight number
+- **Real-time Analytics**: Live statistics and activity monitoring
+- **QR Scanner Integration**: Quick baggage lookup via mobile scanning
 
-### Technical Features
-- **Real-time Communication**: WebSocket connections for instant updates
-- **QR Code Generation**: Automatic QR code creation for each baggage item
-- **JWT Authentication**: Secure token-based authentication system
-- **RESTful API**: Comprehensive API endpoints for all operations
-- **Database Seeding**: Sample data generation for testing and demonstration
+### 🏗️ Technical Architecture
+- **Backend**: Django 5.0 + DRF + WebSocket (Channels)
+- **Frontend**: Next.js 15 + TypeScript + Tailwind CSS
+- **Authentication**: JWT with role-based access control
+- **Real-time**: WebSocket connections for live updates
+- **Database**: SQLite (dev) / PostgreSQL (production ready)
+- **QR System**: Professional scannable codes with JSON data
 
-## 🏗️ Architecture
+---
 
-### Backend (Django + DRF)
-- **Django 5.0** with Django REST Framework
-- **Django Channels** for WebSocket real-time communication
-- **JWT Authentication** with role-based permissions
-- **SQLite Database** for demo purposes
-- **QR Code Generation** using Python qrcode library
-- **Comprehensive API** with pagination and filtering
+## 🎨 Design & Features
 
-### Frontend (Next.js 15)
-- **Next.js 15** with App Router and TypeScript
-- **Tailwind CSS** with aviation theme colors
-- **React Context** for state management
-- **QR Scanner** integration for mobile devices
-- **WebSocket Client** for real-time updates
-- **PWA Capabilities** for mobile app experience
+### Aviation-Themed Interface
+- **Deep Blue** (#003366) - Primary navigation and headers
+- **Sky Blue** (#0096FF) - Action buttons and interactive elements
+- **Gold** (#FFD700) - Accent colors and status highlights
+- **Professional Layout** - Clean, modern aviation industry design
 
-## 🎨 Design Theme
+### Advanced Functionality
+- **25 Pre-registered Passenger Accounts** with realistic data
+- **40 Baggage Items** across various flight routes and statuses
+- **Professional QR Codes** (810x810px) with scannable JSON data
+- **Real-time WebSocket** updates across all connected clients
+- **Mobile PWA** capabilities with offline support
+- **Camera Integration** for QR scanning on mobile devices
 
-**Aviation Colors:**
-- Deep Blue (`#003366`) - Primary navigation and headers
-- Sky Blue (`#0096FF`) - Action buttons and links
-- Gold (`#FFD700`) - Accent colors and highlights
-- Light Gray (`#F8FAFC`) - Background and neutral areas
+---
 
-## 📦 Installation & Setup
+## 📦 Quick Start Installation
 
 ### Prerequisites
-- Python 3.12+
-- Node.js 18+
-- Git
+- **Python 3.12+** and **Node.js 18+**
+- **Git** for version control
+- **Terminal/Command Prompt** access
 
-### Backend Setup
+### 🛠️ Backend Setup (Django API)
 
-1. **Clone the repository**
-   ```bash
-   git clone <repository-url>
-   cd AeroUTAMU2/backend
-   ```
+```bash
+# 1. Navigate to backend directory
+cd backend
 
-2. **Create virtual environment**
-   ```bash
-   python -m venv .venv
-   source .venv/bin/activate  # On Windows: .venv\Scripts\activate
-   ```
+# 2. Create and activate virtual environment
+python -m venv .venv
+source .venv/bin/activate  # Linux/Mac
+# OR: .venv\Scripts\activate  # Windows
 
-3. **Install dependencies**
-   ```bash
-   pip install Django==5.0 djangorestframework==3.14.0 channels==4.0.0 channels-redis==4.2.0 djangorestframework-simplejwt==5.3.0 django-cors-headers==4.3.1 qrcode[pil]==7.4.2 Pillow==10.1.0 daphne==4.0.0
-   ```
+# 3. Install ALL backend dependencies (REQUIRED)
+pip install -r requirements-dev.txt
 
-4. **Run migrations**
-   ```bash
-   python manage.py migrate
-   ```
+# 4. Run database migrations
+python manage.py migrate
 
-5. **Create sample data (optional)**
-   ```bash
-   python manage.py seed_baggage_data --baggage-count 15
-   ```
+# 5. Create sample data and user accounts (REQUIRED for demo)
+python manage.py seed_baggage_data --baggage-count=20
+python update_qr_codes.py
+python create_passenger_accounts.py
 
-6. **Create superuser (optional)**
-   ```bash
-   python manage.py createsuperuser
-   ```
+# 6. Start Django server
+python manage.py runserver
+```
 
-7. **Start the development server**
-   ```bash
-   python manage.py runserver
-   ```
+**Backend runs at**: `http://localhost:8000`
 
-The Django backend will be available at `http://localhost:8000`
+### 🎨 Frontend Setup (Next.js UI)
 
-### Frontend Setup
+```bash
+# 1. Navigate to frontend directory (new terminal)
+cd frontend
 
-1. **Navigate to frontend directory**
-   ```bash
-   cd ../frontend
-   ```
+# 2. Install ALL frontend dependencies (REQUIRED)
+npm install
 
-2. **Install dependencies**
-   ```bash
-   npm install
-   ```
+# 3. Create environment configuration
+echo "NEXT_PUBLIC_API_URL=http://localhost:8000/api" > .env.local
+echo "NEXT_PUBLIC_WS_URL=ws://localhost:8000/ws" >> .env.local
 
-3. **Create environment file**
-   ```bash
-   # Create .env.local
-   NEXT_PUBLIC_API_URL=http://localhost:8000/api
-   NEXT_PUBLIC_WS_URL=ws://localhost:8000/ws
-   ```
+# 4. Start Next.js development server
+npm run dev
+```
 
-4. **Start the development server**
-   ```bash
-   npm run dev
-   ```
+**Frontend runs at**: `http://localhost:3000`
 
-The Next.js frontend will be available at `http://localhost:3000`
+---
 
-## 🔗 API Endpoints
+## 🎯 Demo Access & Testing
 
-### Authentication
-- `POST /api/auth/login/` - User login
-- `POST /api/auth/staff-login/` - Staff login with role verification
-- `POST /api/auth/register/` - User registration
-- `POST /api/auth/refresh/` - Token refresh
-- `GET /api/auth/user/` - Get current user info
-- `POST /api/auth/logout/` - Logout (blacklist token)
+### 🔐 Ready-to-Use Accounts
+
+#### Staff Access (Full System Control)
+```
+Username: staff1
+Password: staff123
+URL: http://localhost:3000/staff-login
+Features: View all baggage, update status, real-time dashboard
+```
+
+#### Sample Passenger Accounts
+```
+Username: adamyoung       | Password: adam2024    | Bags: 2
+Username: alicejohnson    | Password: alice2024   | Bags: 2  
+Username: henrymoore      | Password: henry2024   | Bags: 1
+Username: frankmiller     | Password: frank2024   | Bags: 3
+```
+
+*See `backend/passenger_accounts.txt` for complete list of 25 accounts*
+
+#### System Administrator
+```
+Username: admin
+Password: admin123
+URL: http://localhost:8000/admin
+Features: Django admin interface, full system control
+```
+
+### 🧳 Sample QR Codes for Testing
+```
+BAG-1F0C5581  (Henry Moore - Flight TK742 → London)
+BAG-65B24C93  (Ruby Martinez - Flight DL439 → Paris) 
+BAG-2106F8F3  (Alice Johnson - Flight QR434 → Paris)
+BAG-F781DD59  (Emma Davis - Flight DL439 → Atlanta)
+```
+
+*All QR codes available in `backend/qr_codes/` directory*
+
+---
+
+## 🌐 Complete API Reference
+
+### Authentication Endpoints
+```http
+POST /api/auth/login/                 # Passenger login
+POST /api/auth/staff-login/           # Staff login with role verification
+POST /api/auth/register/              # User registration
+POST /api/auth/refresh/               # JWT token refresh
+GET  /api/auth/user/                  # Current user information
+POST /api/auth/logout/                # Secure logout
+```
 
 ### Baggage Management
-- `GET /api/baggage/` - List all baggage (with search & filters)
-- `POST /api/baggage/` - Create new baggage entry
-- `GET /api/baggage/{id}/` - Get specific baggage details
-- `GET /api/baggage/qr/{qr_code}/` - Get baggage by QR code
-- `POST /api/baggage/{id}/update/` - Update baggage status (staff only)
-- `GET /api/baggage/{id}/timeline/` - Get baggage status timeline
+```http
+GET  /api/baggage/                    # List all baggage (with pagination)
+GET  /api/baggage/qr/{qr_code}/       # Get baggage by QR code
+POST /api/baggage/{id}/update/        # Update status (staff only)
+GET  /api/baggage/{id}/timeline/      # Status timeline
+GET  /api/staff/dashboard/stats/      # Dashboard analytics
+```
 
-### Staff Dashboard
-- `GET /api/staff/dashboard/stats/` - Get dashboard statistics
+### Real-time WebSocket
+```websocket
+ws://localhost:8000/ws/baggage/{id}/      # Baggage-specific updates
+ws://localhost:8000/ws/notifications/     # System notifications
+ws://localhost:8000/ws/staff/dashboard/   # Staff dashboard updates
+```
 
-### Health Check
-- `GET /api/health/` - API health check
+### System Health
+```http
+GET  /api/health/                     # API health check
+```
 
-## 🔌 WebSocket Endpoints
+---
 
-### Real-time Baggage Updates
-- `ws://localhost:8000/ws/baggage/{baggage_id}/` - Subscribe to specific baggage updates
-- `ws://localhost:8000/ws/notifications/` - General notifications channel
+## 🧪 Development & Testing Workflow
 
-## 👥 Default Users
+### Backend Development
+```bash
+# Activate environment
+source .venv/bin/activate
 
-After running the seeding command, these users will be available:
+# Run tests
+python manage.py test
 
-### Admin
-- **Username**: `admin`
-- **Password**: `admin123`
-- **Role**: Admin (full access)
+# Check system
+python manage.py check
 
-### Staff Users
-- **Username**: `staff1` | **Password**: `staff123` | **Department**: Baggage Handling
-- **Username**: `staff2` | **Password**: `staff123` | **Department**: Security
-- **Username**: `staff3` | **Password**: `staff123` | **Department**: Ground Operations
+# Create migrations
+python manage.py makemigrations
 
-### Passenger Users
-- **Username**: `passenger1` | **Password**: `passenger123`
-- **Username**: `passenger2` | **Password**: `passenger123`
+# Apply migrations  
+python manage.py migrate
 
-## 🏃‍♂️ Running the System
+# Start server with debug
+python manage.py runserver --verbosity=2
+```
 
-### Development Mode
+### Frontend Development
+```bash
+# Development with hot reload
+npm run dev
 
-1. **Start Backend** (Terminal 1):
-   ```bash
-   cd backend
-   source .venv/bin/activate  # On Windows: .venv\Scripts\activate
-   python manage.py runserver
-   ```
+# Type checking
+npm run type-check
 
-2. **Start Frontend** (Terminal 2):
-   ```bash
-   cd frontend
-   npm run dev
-   ```
+# Linting
+npm run lint
 
-3. **Access the application**:
-   - Frontend: http://localhost:3000
-   - Backend API: http://localhost:8000/api
-   - Django Admin: http://localhost:8000/admin
+# Production build test
+npm run build && npm start
+```
 
-### Production Deployment
+### Testing Scenarios
 
-#### Backend (Django)
+#### Passenger Journey Test
+1. Visit `http://localhost:3000/login`
+2. Login with `adamyoung` / `adam2024`
+3. Go to "Track Baggage" 
+4. Scan/enter QR: `BAG-85D37765` or `BAG-CD0BE473`
+5. View real-time status and timeline
+
+#### Staff Operations Test  
+1. Visit `http://localhost:3000/staff-login`
+2. Login with `staff1` / `staff123`
+3. View dashboard with all 40+ baggage items
+4. Search for specific passenger or flight
+5. Update baggage status and add notes
+6. Verify real-time updates to passengers
+
+---
+
+## 📊 System Statistics
+
+### Data Volume
+- **User Accounts**: 25 passengers + 3 staff + 1 admin = 29 total
+- **Baggage Items**: 40 bags with complete tracking data
+- **QR Codes**: Professional 810x810px codes with JSON data
+- **Status Updates**: Comprehensive timeline for each bag
+- **Flights**: 15 different flight numbers to major destinations
+
+### Technical Specifications
+- **Backend**: Django 5.0, Python 3.12+, SQLite database
+- **Frontend**: Next.js 15, React 19, TypeScript 5.7
+- **Real-time**: WebSocket support via Django Channels
+- **Authentication**: JWT tokens with role-based permissions
+- **API**: RESTful design with comprehensive documentation
+
+---
+
+## 🚀 Production Deployment
+
+### Backend (Django) Production
 ```bash
 # Install production dependencies
-pip install gunicorn
+pip install -r requirements-prod.txt
+
+# Configure environment variables
+export DJANGO_SECRET_KEY="your-secret-key"
+export DJANGO_DEBUG="False"
+export DATABASE_URL="postgresql://..."
 
 # Collect static files
 python manage.py collectstatic
 
-# Run with Gunicorn
+# Run with production server
 gunicorn baggage_tracker.wsgi:application --bind 0.0.0.0:8000
+
+# For WebSocket support
+daphne -b 0.0.0.0 -p 8000 baggage_tracker.asgi:application
 ```
 
-#### Frontend (Next.js)
+### Frontend (Next.js) Production
 ```bash
-# Build the application
+# Build for production
 npm run build
 
 # Start production server
 npm start
+
+# Deploy to Vercel
+npx vercel --prod
 ```
 
-## 📱 Mobile PWA
-
-The frontend is configured as a Progressive Web App (PWA) with:
-- **Installable**: Add to home screen capability
-- **Offline Support**: Service worker for offline functionality
-- **Mobile Optimized**: Touch-friendly interface with responsive design
-- **QR Scanner**: Camera access for scanning QR codes
+---
 
 ## 🔒 Security Features
 
-- **JWT Authentication**: Secure token-based authentication
-- **Role-based Permissions**: Staff/Passenger/Admin role segregation
-- **CORS Configuration**: Proper cross-origin resource sharing setup
-- **Input Validation**: Comprehensive data validation on both frontend and backend
-- **Token Refresh**: Automatic token refresh mechanism
+### Authentication & Authorization
+- **JWT Tokens**: Secure access and refresh token system
+- **Role-based Access**: Admin, Staff, Passenger role separation
+- **Token Blacklisting**: Secure logout with token invalidation
+- **Password Security**: Django PBKDF2 hashing
 
-## 🎯 Demo Scenarios
+### API Security
+- **CORS Configuration**: Proper cross-origin setup
+- **Input Validation**: DRF serializer validation
+- **SQL Injection Protection**: Django ORM security
+- **XSS Protection**: Built-in Django middleware
 
-### Passenger Journey
-1. Visit http://localhost:3000
-2. Register as a new user or login
-3. Go to "Track Baggage" and scan/enter QR code
-4. View real-time baggage status and timeline
+### Data Protection
+- **UUID Primary Keys**: Prevent ID enumeration attacks
+- **Audit Trail**: Complete tracking of all status updates
+- **Sensitive Data Filtering**: Protected information handling
 
-### Staff Operations
-1. Login with staff credentials
-2. Access staff dashboard at http://localhost:3000/staff
-3. View all baggage and statistics
-4. Search for specific baggage
-5. Update baggage status with location and notes
-6. Real-time updates are sent to passengers
+---
 
-## 🛠️ Technology Stack
+## 🐛 Troubleshooting Guide
 
-### Backend
-- **Django 5.0** - Web framework
-- **Django REST Framework** - API development
-- **Django Channels** - WebSocket support
-- **SQLite** - Database
-- **JWT** - Authentication
-- **Pillow** - Image processing
-- **qrcode** - QR code generation
+### Common Backend Issues
+```bash
+# Database issues
+rm db.sqlite3
+python manage.py migrate
+python manage.py seed_baggage_data --baggage-count=20
 
-### Frontend
-- **Next.js 15** - React framework
-- **TypeScript** - Type safety
-- **Tailwind CSS** - Styling
-- **Axios** - HTTP client
-- **Socket.io Client** - WebSocket client
-- **React Hot Toast** - Notifications
-- **Lucide React** - Icons
+# Package issues
+pip install -r requirements-dev.txt
 
-## 🐛 Troubleshooting
+# QR code generation issues
+python update_qr_codes.py
+```
 
-### Common Issues
+### Common Frontend Issues
+```bash
+# Dependency issues
+rm -rf node_modules package-lock.json
+npm install
 
-1. **CORS Errors**
-   - Ensure backend CORS settings include frontend URL
-   - Check `CORS_ALLOWED_ORIGINS` in Django settings
+# Build issues
+npm run type-check
+npm run lint
 
-2. **WebSocket Connection Failed**
-   - Verify Django Channels is properly configured
-   - Check if ASGI application is running correctly
+# Environment issues
+echo "NEXT_PUBLIC_API_URL=http://localhost:8000/api" > .env.local
+```
 
-3. **QR Scanner Not Working**
-   - Ensure HTTPS in production (camera requires secure context)
-   - Check browser permissions for camera access
+### Connection Issues
+1. **Backend not accessible**: Ensure Django server is running on port 8000
+2. **Frontend not loading**: Check Next.js server on port 3000
+3. **API calls failing**: Verify CORS settings and environment variables
+4. **WebSocket connection failed**: Ensure Django Channels is properly configured
 
-4. **Database Issues**
-   - Run migrations: `python manage.py migrate`
-   - Reset database: Delete `db.sqlite3` and run migrations again
+---
 
 ## 📈 Future Enhancements
 
-- **Push Notifications**: Browser push notifications for status updates
-- **Email Notifications**: Email alerts for baggage status changes
-- **Multi-language Support**: Internationalization for multiple languages
-- **Advanced Analytics**: Detailed reporting and analytics dashboard
-- **Integration APIs**: Connect with existing airport systems
+### Planned Features
+- **Push Notifications**: Browser notifications for status updates
+- **Email Integration**: Automated email alerts for passengers
+- **Multi-language Support**: Internationalization for global use
+- **Advanced Analytics**: Detailed reporting and performance metrics
 - **Mobile Apps**: Native iOS and Android applications
+- **Integration APIs**: Connect with existing airport systems
 
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Test thoroughly
-5. Submit a pull request
-
-## 📄 License
-
-This project is developed for the Entebbe Airport Hackathon 2025.
-
-## 📞 Support
-
-For technical support or questions:
-- Create an issue in the repository
-- Contact the development team
-- Check the API documentation at http://localhost:8000/api
+### Scalability Improvements
+- **PostgreSQL Migration**: Enterprise database support
+- **Redis Integration**: Enhanced WebSocket performance
+- **Load Balancing**: Multi-server deployment support
+- **CDN Integration**: Global content delivery
+- **Microservices Architecture**: Scalable service separation
 
 ---
+
+## 📞 Support & Documentation
+
+### Resources
+- **API Documentation**: `http://localhost:8000/api/`
+- **Django Admin**: `http://localhost:8000/admin/`
+- **Frontend Documentation**: See `frontend/README.md`
+- **Backend Documentation**: See `backend/README.md`
+
+### Getting Help
+1. **Check troubleshooting section** above
+2. **Review terminal output** for error messages
+3. **Verify all dependencies** are installed correctly
+4. **Test with provided sample accounts** and QR codes
+5. **Check network connectivity** between frontend and backend
+
+---
+
+## 🎉 Demo Success Checklist
+
+### ✅ Backend Verification
+- [ ] Django server running on `http://localhost:8000`
+- [ ] Health check returns success: `http://localhost:8000/api/health/`
+- [ ] 40 baggage items created with QR codes
+- [ ] 25 passenger accounts created
+- [ ] Staff login working: `staff1` / `staff123`
+
+### ✅ Frontend Verification  
+- [ ] Next.js server running on `http://localhost:3000`
+- [ ] Passenger login working with sample accounts
+- [ ] QR scanner functional with camera and file upload
+- [ ] Staff dashboard showing all baggage items
+- [ ] Real-time updates working between staff and passenger views
+
+### ✅ Integration Testing
+- [ ] Scan QR code `BAG-1F0C5581` successfully
+- [ ] Update baggage status from staff dashboard
+- [ ] Verify passenger sees real-time status update
+- [ ] Test search and filtering functionality
+- [ ] Confirm mobile responsiveness
+
+---
+
+**🛫 Ready for takeoff! Your professional aviation baggage tracking system is now fully operational.**
 
 **Built with ❤️ for Entebbe International Airport Hackathon 2025**

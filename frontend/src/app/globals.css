@@ -12,34 +12,7 @@
   --dark-gray: #64748B;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-
-  /* Custom Aviation Colors */
-  --color-deep-blue: var(--deep-blue);
-  --color-sky-blue: var(--sky-blue);
-  --color-gold: var(--gold);
-  --color-light-gray: var(--light-gray);
-  --color-dark-gray: var(--dark-gray);
-
-  --color-primary-50: #f0f9ff;
-  --color-primary-100: #e0f2fe;
-  --color-primary-200: #bae6fd;
-  --color-primary-300: #7dd3fc;
-  --color-primary-400: #38bdf8;
-  --color-primary-500: var(--sky-blue);
-  --color-primary-600: #0284c7;
-  --color-primary-700: #0369a1;
-  --color-primary-800: var(--deep-blue);
-  --color-primary-900: #0c4a6e;
-
-  --color-accent-500: var(--gold);
-  --color-accent-600: #f59e0b;
-  --color-accent-700: #d97706;
-}
+/* Theme variables moved to :root for better compatibility */
 
 @media (prefers-color-scheme: dark) {
   :root {
@@ -71,21 +44,31 @@ body {
 
 /* Status indicator styles */
 .status-checked-in {
-  @apply bg-blue-100 text-blue-800 border-blue-200;
+  background-color: #dbeafe;
+  color: #1e40af;
+  border-color: #bfdbfe;
 }
 
 .status-security-cleared {
-  @apply bg-yellow-100 text-yellow-800 border-yellow-200;
+  background-color: #fef3c7;
+  color: #a16207;
+  border-color: #fde68a;
 }
 
 .status-loaded {
-  @apply bg-orange-100 text-orange-800 border-orange-200;
+  background-color: #fed7aa;
+  color: #c2410c;
+  border-color: #fdba74;
 }
 
 .status-in-flight {
-  @apply bg-purple-100 text-purple-800 border-purple-200;
+  background-color: #ede9fe;
+  color: #7c3aed;
+  border-color: #ddd6fe;
 }
 
 .status-arrived {
-  @apply bg-green-100 text-green-800 border-green-200;
+  background-color: #dcfce7;
+  color: #166534;
+  border-color: #bbf7d0;
 }
