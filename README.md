@@ -1,4 +1,4 @@
-# Smart Baggage Tracker – Entebbe Airport Hackathon System
+# Smart Baggage Tracker – Entebbe Airport System
 
 A comprehensive full-stack baggage tracking system built for Entebbe International Airport hackathon, featuring real-time updates, QR code scanning, and staff management capabilities.
 
@@ -43,14 +43,6 @@ A comprehensive full-stack baggage tracking system built for Entebbe Internation
 - **WebSocket Client** for real-time updates
 - **PWA Capabilities** for mobile app experience
 
-## 🎨 Design Theme
-
-**Aviation Colors:**
-- Deep Blue (`#003366`) - Primary navigation and headers
-- Sky Blue (`#0096FF`) - Action buttons and links
-- Gold (`#FFD700`) - Accent colors and highlights
-- Light Gray (`#F8FAFC`) - Background and neutral areas
-
 ## 📦 Installation & Setup
 
 ### Prerequisites
@@ -80,16 +72,6 @@ A comprehensive full-stack baggage tracking system built for Entebbe Internation
 4. **Run migrations**
    ```bash
    python manage.py migrate
-   ```
-
-5. **Create sample data (optional)**
-   ```bash
-   python manage.py seed_baggage_data --baggage-count 15
-   ```
-
-6. **Create superuser (optional)**
-   ```bash
-   python manage.py createsuperuser
    ```
 
 7. **Start the development server**
@@ -124,38 +106,6 @@ The Django backend will be available at `http://localhost:8000`
    ```
 
 The Next.js frontend will be available at `http://localhost:3000`
-
-## 🔗 API Endpoints
-
-### Authentication
-- `POST /api/auth/login/` - User login
-- `POST /api/auth/staff-login/` - Staff login with role verification
-- `POST /api/auth/register/` - User registration
-- `POST /api/auth/refresh/` - Token refresh
-- `GET /api/auth/user/` - Get current user info
-- `POST /api/auth/logout/` - Logout (blacklist token)
-
-### Baggage Management
-- `GET /api/baggage/` - List all baggage (with search & filters)
-- `POST /api/baggage/` - Create new baggage entry
-- `GET /api/baggage/{id}/` - Get specific baggage details
-- `GET /api/baggage/qr/{qr_code}/` - Get baggage by QR code
-- `POST /api/baggage/{id}/update/` - Update baggage status (staff only)
-- `GET /api/baggage/{id}/timeline/` - Get baggage status timeline
-
-### Staff Dashboard
-- `GET /api/staff/dashboard/stats/` - Get dashboard statistics
-
-### Health Check
-- `GET /api/health/` - API health check
-
-## 🔌 WebSocket Endpoints
-
-### Real-time Baggage Updates
-- `ws://localhost:8000/ws/baggage/{baggage_id}/` - Subscribe to specific baggage updates
-- `ws://localhost:8000/ws/notifications/` - General notifications channel
-
-## 👥 Default Users
 
 After running the seeding command, these users will be available:
 
