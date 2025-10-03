@@ -1,5 +1,9 @@
 "use client";
 
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { useAuth } from "@/contexts/AuthContext";
+import { LoadingSpinner } from "@/components/ui/LoadingSpinner";
 import Navigation from "@/components/Navigation";
 import EntebbeAirportMapV2 from "@/components/EntebbeAirportMapV2";
 import {
@@ -10,6 +14,20 @@ import {
 } from "lucide-react";
 
 export default function AirportMapPage() {
+  const { isAuthenticated, isLoading } = useAuth();
+  const router = useRouter();
+
+  // Redirect unauthenticated users to login
+  useEffect(() => {
+    if (!isLoading && !isAuthenticated) {
+      router.push("/login");
+    }
+  }, [isLoading, isAuthenticated, router]);
+
+  if (isLoading) {
+    return <LoadingSpinner size="lg" className="min-h-screen" />;
+  }
+
   return (
     <div className="min-h-screen bg-gray-50">
       <Navigation title="Airport Navigation" showTrackButton={true} />

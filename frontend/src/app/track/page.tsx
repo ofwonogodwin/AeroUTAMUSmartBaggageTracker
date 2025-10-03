@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import { useAuth } from "@/contexts/AuthContext";
 import { baggageAPI } from "@/lib/api";
@@ -28,6 +28,7 @@ import { Baggage } from "@/types";
 export default function TrackPage() {
   const { isAuthenticated, user, isLoading: authLoading } = useAuth();
   const searchParams = useSearchParams();
+  const router = useRouter();
   const [trackingCode, setTrackingCode] = useState("");
   const [baggage, setBaggage] = useState<Baggage | null>(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -35,11 +36,18 @@ export default function TrackPage() {
   const [showScanner, setShowScanner] = useState(false);
   const [autoSearched, setAutoSearched] = useState(false);
 
+  // Redirect unauthenticated users to login
+  useEffect(() => {
+    if (!authLoading && !isAuthenticated) {
+      router.push("/login");
+    }
+  }, [authLoading, isAuthenticated, router]);
+
   // Auto-search when URL contains baggage ID
   useEffect(() => {
     const id = searchParams.get("id");
     if (id && !autoSearched) {
-      setTrackingCode(id);
+      // Don't pre-fill the input, just search directly
       setAutoSearched(true);
       handleSearchById(id);
     }
