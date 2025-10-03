@@ -29,7 +29,13 @@ class UserRegistrationView(generics.CreateAPIView):
     permission_classes = [permissions.AllowAny]
     
     def create(self, request, *args, **kwargs):
+        import logging
+        logger = logging.getLogger(__name__)
+        logger.error(f"Registration data received: {request.data}")
+        
         serializer = self.get_serializer(data=request.data)
+        if not serializer.is_valid():
+            logger.error(f"Serializer errors: {serializer.errors}")
         serializer.is_valid(raise_exception=True)
         user = serializer.save()
         

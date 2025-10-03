@@ -51,6 +51,10 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
     employee_id = serializers.CharField(required=False, allow_blank=True)
     department = serializers.CharField(required=False, allow_blank=True)
     
+    def validate_username(self, value):
+        # Allow spaces in usernames by replacing them with underscores
+        return value.replace(' ', '_')
+    
     class Meta:
         model = User
         fields = ['username', 'email', 'first_name', 'last_name', 'password', 'password_confirm', 'role', 'employee_id', 'department']

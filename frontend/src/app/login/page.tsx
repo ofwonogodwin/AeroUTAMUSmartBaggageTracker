@@ -26,8 +26,7 @@ export default function LoginPage() {
 
     try {
       await login(formData);
-      // Force refresh to ensure authentication state updates
-      window.location.href = "/";
+      // Redirect is handled in AuthContext after successful login
     } catch {
       const errorMessage = "Login failed. Please check your credentials.";
       setErrors({ general: errorMessage });
@@ -50,25 +49,21 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-sky-400 via-blue-500 to-indigo-600 relative overflow-hidden">
-      {/* Aviation Background Pattern */}
-      <div className="absolute inset-0 opacity-10">
-        <div className="absolute top-10 left-10 transform rotate-12">
-          <Plane className="h-20 w-20 text-white" />
-        </div>
-        <div className="absolute top-32 right-20 transform -rotate-45">
-          <Plane className="h-16 w-16 text-white" />
-        </div>
-        <div className="absolute bottom-20 left-1/4 transform rotate-90">
-          <Plane className="h-24 w-24 text-white" />
-        </div>
-        <div className="absolute bottom-32 right-10 transform -rotate-12">
-          <Plane className="h-18 w-18 text-white" />
-        </div>
+    <div className="min-h-screen relative overflow-hidden">
+      {/* Uganda Airlines Background Image */}
+      <div
+        className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+        style={{
+          backgroundImage:
+            "url(https://caa.go.ug/wp-content/uploads/2023/06/Uganda-Airlines.jpg)",
+        }}
+      >
+        {/* Dark overlay for better text readability */}
+        <div className="absolute inset-0 bg-black/60"></div>
       </div>
 
       <div className="relative z-10 min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-md w-full space-y-8">
+        <div className="max-w-2xl w-full space-y-8">
           {/* Header */}
           <div className="text-center">
             <div className="flex justify-center items-center space-x-3 mb-6">
