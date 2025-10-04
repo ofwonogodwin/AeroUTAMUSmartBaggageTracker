@@ -1,16 +1,15 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useAuth } from "@/contexts/AuthContext";
 import { useRouter } from "next/navigation";
-import { baggageAPI } from "@/lib/api";
+import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/Button";
 import { Input, Select } from "@/components/ui/FormElements";
 import { StatusBadge } from "@/components/ui/StatusBadge";
 import { LoadingSpinner } from "@/components/ui/LoadingSpinner";
 import QRScanner from "@/components/QRScanner";
-import SignOutButton from "@/components/SignOutButton";
 import { formatDateTime } from "@/lib/utils";
+import { baggageAPI } from "@/lib/api";
 import { Baggage, StatusUpdate, DashboardStats } from "@/types";
 import {
   Plane,
@@ -21,10 +20,12 @@ import {
   TrendingUp,
   Activity,
   Camera,
+  X,
+  LogOut,
 } from "lucide-react";
 
 export default function StaffDashboard() {
-  const { user, isAuthenticated, isLoading: authLoading } = useAuth();
+  const { user, isAuthenticated, isLoading: authLoading, logout } = useAuth();
   const router = useRouter();
 
   // State management
@@ -33,15 +34,13 @@ export default function StaffDashboard() {
   const [recentUpdates, setRecentUpdates] = useState<StatusUpdate[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
-
-  // Search and filter state
+  const [successMessage, setSuccessMessage] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("");
-  const [selectedBaggage, setSelectedBaggage] = useState<Baggage | null>(null);
   const [showUpdateModal, setShowUpdateModal] = useState(false);
+  const [selectedBaggage, setSelectedBaggage] = useState<Baggage | null>(null);
   const [showScanner, setShowScanner] = useState(false);
-
-  // Update form state
+  const [isUpdating, setIsUpdating] = useState(false);
   const [updateForm, setUpdateForm] = useState({
     status: "",
     location: "",
@@ -65,12 +64,10 @@ export default function StaffDashboard() {
   const loadDashboardData = async () => {
     try {
       setIsLoading(true);
-
-      // Load all baggage first
       const baggageData = await baggageAPI.getAll();
       setBaggage(baggageData.results);
 
-      // Calculate stats from baggage data
+      // Calculate stats
       const stats: DashboardStats = {
         total_baggage: baggageData.results.length,
         status_counts: {
@@ -83,21 +80,16 @@ export default function StaffDashboard() {
         recent_updates: [],
       };
 
-      // Count statuses and extract recent updates
       const allUpdates: StatusUpdate[] = [];
       baggageData.results.forEach((bag) => {
-        // Count status
         if (stats.status_counts[bag.current_status]) {
           stats.status_counts[bag.current_status].count++;
         }
-
-        // Extract updates
         if (bag.status_timeline) {
           allUpdates.push(...bag.status_timeline);
         }
       });
 
-      // Sort by timestamp and take latest 10
       const sortedUpdates = allUpdates
         .sort(
           (a, b) =>
@@ -126,14 +118,7 @@ export default function StaffDashboard() {
       setIsLoading(true);
       const searchData = await baggageAPI.getAll({
         search: searchQuery,
-        status: statusFilter
-          ? (statusFilter as
-              | "CHECKED_IN"
-              | "SECURITY_CLEARED"
-              | "LOADED"
-              | "IN_FLIGHT"
-              | "ARRIVED")
-          : undefined,
+        status: statusFilter ? (statusFilter as any) : undefined,
       });
       setBaggage(searchData.results);
     } catch (error) {
@@ -151,37 +136,71 @@ export default function StaffDashboard() {
       location: "",
       notes: "",
     });
+    setError("");
+    setSuccessMessage("");
     setShowUpdateModal(true);
   };
 
+  const closeModal = () => {
+    if (!isUpdating) {
+      setShowUpdateModal(false);
+      setSelectedBaggage(null);
+      setUpdateForm({ status: "", location: "", notes: "" });
+      setError("");
+      setSuccessMessage("");
+    }
+  };
+
   const handleStatusUpdate = async () => {
-    if (!selectedBaggage) return;
+    if (!selectedBaggage || !updateForm.status) {
+      setError("Please select a status");
+      return;
+    }
 
     try {
-      setIsLoading(true);
-      await baggageAPI.updateStatus(selectedBaggage.id, {
-        status: updateForm.status as
-          | "CHECKED_IN"
-          | "SECURITY_CLEARED"
-          | "LOADED"
-          | "IN_FLIGHT"
-          | "ARRIVED",
+      setIsUpdating(true);
+      setError("");
+
+      const updatedBaggage = await baggageAPI.updateStatus(selectedBaggage.id, {
+        status: updateForm.status as any,
         location: updateForm.location,
         notes: updateForm.notes,
       });
 
-      setShowUpdateModal(false);
-      setSelectedBaggage(null);
-      loadDashboardData(); // Refresh data
-    } catch (error) {
+      // Update the baggage in the list
+      setBaggage((prevBaggage) =>
+        prevBaggage.map((bag) =>
+          bag.id === selectedBaggage.id ? updatedBaggage : bag
+        )
+      );
+
+      setSuccessMessage("Baggage status updated successfully!");
+      setTimeout(() => {
+        closeModal();
+        loadDashboardData();
+      }, 1500);
+    } catch (error: any) {
       console.error("Update error:", error);
-      setError("Failed to update baggage status");
+      let errorMessage = "Failed to update baggage status";
+
+      if (error && typeof error === "object" && "response" in error) {
+        const axiosError = error as {
+          response?: { data?: { error?: string; message?: string } };
+        };
+        if (axiosError.response?.data?.error) {
+          errorMessage = axiosError.response.data.error;
+        } else if (axiosError.response?.data?.message) {
+          errorMessage = axiosError.response.data.message;
+        }
+      }
+
+      setError(errorMessage);
     } finally {
-      setIsLoading(false);
+      setIsUpdating(false);
     }
   };
 
-  // Filter baggage based on search query and status filter
+  // Filter baggage based on search and status
   const filteredBaggage = baggage.filter((bag) => {
     const matchesSearch =
       !searchQuery ||
@@ -234,66 +253,74 @@ export default function StaffDashboard() {
                 </p>
               </div>
             </div>
-            <div className="flex items-center space-x-4">
-              <SignOutButton />
-            </div>
+            <Button
+              onClick={() => {
+                logout();
+                router.push("/staff-login");
+              }}
+              variant="outline"
+              size="sm"
+              className="border-stone-300 text-stone-700 hover:bg-stone-50"
+            >
+              <LogOut className="h-4 w-4 mr-2" />
+              Sign Out
+            </Button>
           </div>
         </div>
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Statistics Cards */}
+        {/* Stats Cards */}
         {stats && (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-            <div className="bg-white rounded-lg shadow p-6">
+            <div className="bg-white/80 backdrop-blur-sm rounded-lg shadow-md p-6">
               <div className="flex items-center">
                 <Package className="h-8 w-8 text-blue-500" />
                 <div className="ml-4">
-                  <p className="text-sm font-medium text-gray-500">
+                  <p className="text-sm font-medium text-stone-600">
                     Total Baggage
                   </p>
-                  <p className="text-2xl font-bold text-gray-900">
+                  <p className="text-2xl font-bold text-stone-800">
                     {stats.total_baggage}
                   </p>
                 </div>
               </div>
             </div>
 
-            <div className="bg-white rounded-lg shadow p-6">
+            <div className="bg-white/80 backdrop-blur-sm rounded-lg shadow-md p-6">
               <div className="flex items-center">
                 <Clock className="h-8 w-8 text-yellow-500" />
                 <div className="ml-4">
-                  <p className="text-sm font-medium text-gray-500">
+                  <p className="text-sm font-medium text-stone-600">
                     In Transit
                   </p>
-                  <p className="text-2xl font-bold text-gray-900">
-                    {(stats.status_counts.IN_FLIGHT?.count || 0) +
-                      (stats.status_counts.LOADED?.count || 0)}
+                  <p className="text-2xl font-bold text-stone-800">
+                    {stats.status_counts.IN_FLIGHT?.count || 0}
                   </p>
                 </div>
               </div>
             </div>
 
-            <div className="bg-white rounded-lg shadow p-6">
+            <div className="bg-white/80 backdrop-blur-sm rounded-lg shadow-md p-6">
               <div className="flex items-center">
                 <TrendingUp className="h-8 w-8 text-green-500" />
                 <div className="ml-4">
-                  <p className="text-sm font-medium text-gray-500">Arrived</p>
-                  <p className="text-2xl font-bold text-gray-900">
+                  <p className="text-sm font-medium text-stone-600">Arrived</p>
+                  <p className="text-2xl font-bold text-stone-800">
                     {stats.status_counts.ARRIVED?.count || 0}
                   </p>
                 </div>
               </div>
             </div>
 
-            <div className="bg-white rounded-lg shadow p-6">
+            <div className="bg-white/80 backdrop-blur-sm rounded-lg shadow-md p-6">
               <div className="flex items-center">
                 <Activity className="h-8 w-8 text-purple-500" />
                 <div className="ml-4">
-                  <p className="text-sm font-medium text-gray-500">
+                  <p className="text-sm font-medium text-stone-600">
                     Recent Updates
                   </p>
-                  <p className="text-2xl font-bold text-gray-900">
+                  <p className="text-2xl font-bold text-stone-800">
                     {recentUpdates.length}
                   </p>
                 </div>
@@ -303,242 +330,127 @@ export default function StaffDashboard() {
         )}
 
         {/* Search and Filter */}
-        <div className="bg-white rounded-lg shadow p-6 mb-8">
-          <h2 className="text-lg font-semibold text-gray-900 mb-4">
-            Search & Filter Baggage
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div className="md:col-span-2">
+        <div className="bg-white/80 backdrop-blur-sm rounded-lg shadow-md p-6 mb-8">
+          <div className="flex flex-col sm:flex-row gap-4 items-end">
+            <div className="flex-1">
               <Input
+                label="Search Baggage"
                 type="text"
-                placeholder="Search by passenger name, QR code, or flight number..."
+                placeholder="Search by QR code, passenger name, or flight number"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 onKeyPress={(e) => e.key === "Enter" && handleSearch()}
               />
             </div>
-            <div className="flex space-x-2">
+            <div className="w-full sm:w-48">
               <Select
+                label="Filter by Status"
                 value={statusFilter}
                 onChange={(e) => setStatusFilter(e.target.value)}
                 options={statusOptions}
               />
-              <Button
-                onClick={() => setShowScanner(true)}
-                variant="outline"
-                className="flex-shrink-0"
-              >
-                <Camera className="h-4 w-4 mr-2" />
-                Scan
-              </Button>
-              <Button onClick={handleSearch} className="flex-shrink-0">
-                <Search className="h-4 w-4 mr-2" />
-                Search
-              </Button>
             </div>
+            <Button
+              onClick={handleSearch}
+              className="bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800"
+            >
+              <Search className="h-4 w-4 mr-2" />
+              Search
+            </Button>
+            <Button
+              onClick={() => setShowScanner(true)}
+              variant="outline"
+              className="border-amber-300 text-amber-700 hover:bg-amber-50"
+            >
+              <Camera className="h-4 w-4 mr-2" />
+              Scan QR
+            </Button>
           </div>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Baggage List */}
-          <div className="lg:col-span-2">
-            <div className="bg-white rounded-lg shadow">
-              <div className="p-6 border-b border-gray-200">
-                <h2 className="text-lg font-semibold text-gray-900">
-                  Baggage Operations
-                </h2>
-              </div>
-              <div className="overflow-x-auto">
-                <table className="min-w-full divide-y divide-gray-200">
-                  <thead className="bg-gray-50">
-                    <tr>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        QR Code
-                      </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Passenger
-                      </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Flight
-                      </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Status
-                      </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Actions
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody className="bg-white divide-y divide-gray-200">
-                    {filteredBaggage.map((bag) => (
-                      <tr key={bag.id} className="hover:bg-gray-50">
-                        <td className="px-6 py-4 whitespace-nowrap text-sm font-mono text-gray-900">
-                          {bag.qr_code}
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                          {bag.passenger_name}
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                          {bag.flight_number || "N/A"}
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          <StatusBadge status={bag.current_status} />
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-2">
-                          <Button
-                            size="sm"
-                            variant="outline"
-                            onClick={() => openUpdateModal(bag)}
-                          >
-                            <Edit className="h-4 w-4 mr-1" />
-                            Update
-                          </Button>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            </div>
+        {/* Baggage Table */}
+        <div className="bg-white/80 backdrop-blur-sm rounded-lg shadow-md overflow-hidden">
+          <div className="px-6 py-4 border-b border-stone-200">
+            <h3 className="text-lg font-medium text-stone-900">
+              Baggage Management
+            </h3>
           </div>
-
-          {/* Recent Activity */}
-          <div className="bg-white rounded-lg shadow">
-            <div className="p-6 border-b border-gray-200">
-              <h2 className="text-lg font-semibold text-gray-900">
-                Recent Activity
-              </h2>
-            </div>
-            <div className="p-6">
-              <div className="space-y-4">
-                {recentUpdates.map((update, index) => (
-                  <div
-                    key={`${update.id}-${index}`}
-                    className="flex items-start space-x-3"
+          <div className="overflow-x-auto">
+            <table className="min-w-full divide-y divide-stone-200">
+              <thead className="bg-stone-50">
+                <tr>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-stone-500 uppercase tracking-wider">
+                    QR Code
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-stone-500 uppercase tracking-wider">
+                    Passenger
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-stone-500 uppercase tracking-wider">
+                    Flight
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-stone-500 uppercase tracking-wider">
+                    Status
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-stone-500 uppercase tracking-wider">
+                    Last Updated
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-stone-500 uppercase tracking-wider">
+                    Actions
+                  </th>
+                </tr>
+              </thead>
+              <tbody className="bg-white divide-y divide-stone-200">
+                {filteredBaggage.map((bag, index) => (
+                  <tr
+                    key={bag.id || `bag-${index}`}
+                    className="hover:bg-stone-50"
                   >
-                    <div className="flex-shrink-0">
-                      <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
-                        <Activity className="w-4 h-4 text-blue-600" />
-                      </div>
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center space-x-2">
-                        <StatusBadge status={update.status} size="sm" />
-                        <span className="text-xs text-gray-500">
-                          {formatDateTime(update.timestamp)}
-                        </span>
-                      </div>
-                      {update.location && (
-                        <p className="text-sm text-gray-600 mt-1">
-                          📍 {update.location}
-                        </p>
-                      )}
-                      {update.notes && (
-                        <p className="text-sm text-gray-700 mt-1">
-                          {update.notes}
-                        </p>
-                      )}
-                      {update.updated_by_name && (
-                        <p className="text-xs text-gray-500 mt-1">
-                          by {update.updated_by_name}
-                        </p>
-                      )}
-                    </div>
-                  </div>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-stone-900">
+                      {bag.qr_code}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-stone-900">
+                      {bag.passenger_name}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-stone-900">
+                      {bag.flight_number || "-"}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <StatusBadge
+                        status={bag.current_status || "CHECKED_IN"}
+                      />
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-stone-500">
+                      {formatDateTime(bag.updated_at)}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                      <Button
+                        onClick={() => openUpdateModal(bag)}
+                        size="sm"
+                        variant="outline"
+                        className="border-blue-300 text-blue-700 hover:bg-blue-50"
+                      >
+                        <Edit className="h-4 w-4 mr-1" />
+                        Update
+                      </Button>
+                    </td>
+                  </tr>
                 ))}
+              </tbody>
+            </table>
+            {filteredBaggage.length === 0 && (
+              <div className="text-center py-12">
+                <Package className="mx-auto h-12 w-12 text-stone-400" />
+                <h3 className="mt-2 text-sm font-medium text-stone-900">
+                  No baggage found
+                </h3>
+                <p className="mt-1 text-sm text-stone-500">
+                  Try adjusting your search terms or filters.
+                </p>
               </div>
-            </div>
+            )}
           </div>
         </div>
       </div>
-
-      {/* Update Status Modal */}
-      {showUpdateModal && selectedBaggage && (
-        <div className="fixed inset-0 z-50 overflow-y-auto">
-          <div className="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-            <div
-              className="fixed inset-0 transition-opacity"
-              aria-hidden="true"
-            >
-              <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
-            </div>
-
-            <div className="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
-              <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-                <div className="sm:flex sm:items-start">
-                  <div className="mt-3 text-center sm:mt-0 sm:text-left w-full">
-                    <h3 className="text-lg leading-6 font-medium text-gray-900 mb-4">
-                      Update Baggage Status
-                    </h3>
-                    <div className="mb-4">
-                      <p className="text-sm text-gray-600">
-                        <strong>QR Code:</strong> {selectedBaggage.qr_code}
-                      </p>
-                      <p className="text-sm text-gray-600">
-                        <strong>Passenger:</strong>{" "}
-                        {selectedBaggage.passenger_name}
-                      </p>
-                    </div>
-                    <div className="space-y-4">
-                      <Select
-                        label="New Status"
-                        value={updateForm.status}
-                        onChange={(e) =>
-                          setUpdateForm({
-                            ...updateForm,
-                            status: e.target.value,
-                          })
-                        }
-                        options={statusOptions.slice(1)} // Remove "All Statuses" option
-                      />
-                      <Input
-                        label="Location"
-                        type="text"
-                        value={updateForm.location}
-                        onChange={(e) =>
-                          setUpdateForm({
-                            ...updateForm,
-                            location: e.target.value,
-                          })
-                        }
-                        placeholder="e.g., Gate A12, Baggage Claim 3"
-                      />
-                      <Input
-                        label="Notes"
-                        type="text"
-                        value={updateForm.notes}
-                        onChange={(e) =>
-                          setUpdateForm({
-                            ...updateForm,
-                            notes: e.target.value,
-                          })
-                        }
-                        placeholder="Additional notes (optional)"
-                      />
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div className="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
-                <Button
-                  onClick={handleStatusUpdate}
-                  className="w-full sm:w-auto sm:ml-3"
-                  disabled={!updateForm.status}
-                >
-                  Update Status
-                </Button>
-                <Button
-                  variant="outline"
-                  onClick={() => setShowUpdateModal(false)}
-                  className="mt-3 w-full sm:mt-0 sm:w-auto"
-                >
-                  Cancel
-                </Button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
 
       {/* QR Scanner Modal */}
       <QRScanner
@@ -546,15 +458,114 @@ export default function StaffDashboard() {
         onScan={(code) => {
           setSearchQuery(code);
           setShowScanner(false);
-          // Trigger search automatically
           handleSearch();
         }}
         onClose={() => setShowScanner(false)}
       />
 
-      {error && (
-        <div className="fixed bottom-4 right-4 bg-red-500 text-white px-4 py-2 rounded-lg shadow-lg">
-          {error}
+      {/* Update Status Modal */}
+      {showUpdateModal && selectedBaggage && (
+        <div
+          className="fixed inset-0 z-50 overflow-y-auto flex items-center justify-center"
+          style={{
+            background:
+              "linear-gradient(135deg, rgba(250, 248, 246, 0.95) 0%, rgba(247, 245, 243, 0.95) 100%)",
+          }}
+        >
+          <div className="relative bg-white rounded-lg shadow-xl max-w-md w-full mx-4">
+            {!isUpdating && (
+              <button
+                onClick={closeModal}
+                className="absolute top-4 right-4 text-stone-400 hover:text-stone-600 transition-colors z-10"
+              >
+                <X className="w-6 h-6" />
+              </button>
+            )}
+
+            <div className="p-6">
+              <div className="flex items-center mb-4">
+                <Package className="h-6 w-6 text-blue-600 mr-2" />
+                <div>
+                  <h3 className="text-lg font-medium text-stone-900">
+                    Update Baggage Status
+                  </h3>
+                  <p className="text-sm text-stone-500">
+                    {selectedBaggage.qr_code}
+                  </p>
+                </div>
+              </div>
+
+              {error && (
+                <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg">
+                  <p className="text-red-700 text-sm">{error}</p>
+                </div>
+              )}
+
+              {successMessage && (
+                <div className="mb-4 p-3 bg-green-50 border border-green-200 rounded-lg">
+                  <p className="text-green-700 text-sm">{successMessage}</p>
+                </div>
+              )}
+
+              <div className="space-y-4 mb-6">
+                <Select
+                  label="New Status"
+                  value={updateForm.status}
+                  onChange={(e) => {
+                    setUpdateForm({ ...updateForm, status: e.target.value });
+                    setError("");
+                  }}
+                  options={statusOptions.slice(1)}
+                  disabled={isUpdating}
+                />
+                <Input
+                  label="Location"
+                  type="text"
+                  value={updateForm.location}
+                  onChange={(e) =>
+                    setUpdateForm({ ...updateForm, location: e.target.value })
+                  }
+                  placeholder="e.g., Gate A12, Baggage Claim 3"
+                  disabled={isUpdating}
+                />
+                <Input
+                  label="Notes"
+                  type="text"
+                  value={updateForm.notes}
+                  onChange={(e) =>
+                    setUpdateForm({ ...updateForm, notes: e.target.value })
+                  }
+                  placeholder="Additional notes (optional)"
+                  disabled={isUpdating}
+                />
+              </div>
+
+              <div className="flex flex-col sm:flex-row gap-3">
+                <Button
+                  onClick={handleStatusUpdate}
+                  className="flex-1 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800"
+                  disabled={!updateForm.status || isUpdating}
+                >
+                  {isUpdating ? (
+                    <>
+                      <LoadingSpinner size="sm" className="mr-2" />
+                      Updating...
+                    </>
+                  ) : (
+                    "Update Status"
+                  )}
+                </Button>
+                <Button
+                  variant="outline"
+                  onClick={closeModal}
+                  className="flex-1 border-amber-300 text-amber-700 hover:bg-amber-50"
+                  disabled={isUpdating}
+                >
+                  Cancel
+                </Button>
+              </div>
+            </div>
+          </div>
         </div>
       )}
     </div>
