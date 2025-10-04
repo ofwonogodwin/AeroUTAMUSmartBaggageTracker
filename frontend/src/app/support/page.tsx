@@ -41,7 +41,6 @@ export default function SupportPage() {
     { id: "account", name: "Account & Login", icon: User },
     { id: "qr", name: "QR Codes", icon: QrCode },
     { id: "technical", name: "Technical Issues", icon: Settings },
-    { id: "airport", name: "Airport Navigation", icon: MapPin },
   ];
 
   const faqs = [
@@ -81,12 +80,7 @@ export default function SupportPage() {
       answer:
         "Ensure your camera permissions are enabled. Try cleaning your camera lens and ensuring good lighting. If the issue persists, you can manually enter your QR code on the tracking page.",
     },
-    {
-      category: "airport",
-      question: "How do I navigate Entebbe International Airport?",
-      answer:
-        "Use our interactive airport map available in the main menu. It shows terminals, baggage claim areas, check-in counters, security checkpoints, and other important facilities.",
-    },
+
     {
       category: "technical",
       question: "Why is my baggage status not updating?",
@@ -147,12 +141,6 @@ export default function SupportPage() {
                 className="text-stone-600 hover:text-blue-600 font-medium transition-all duration-200 hover:scale-105"
               >
                 Track Baggage
-              </Link>
-              <Link
-                href="/map"
-                className="text-stone-600 hover:text-amber-600 font-medium transition-all duration-200 hover:scale-105"
-              >
-                Airport Map
               </Link>
             </nav>
 
@@ -435,17 +423,6 @@ export default function SupportPage() {
 
         {/* Additional Resources */}
         <div className="mt-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          <Link
-            href="/map"
-            className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow"
-          >
-            <MapPin className="h-8 w-8 text-blue-600 mb-4" />
-            <h3 className="font-semibold text-gray-900 mb-2">Airport Map</h3>
-            <p className="text-sm text-gray-600">
-              Interactive map of Entebbe International Airport
-            </p>
-          </Link>
-
           <Link
             href="/track"
             className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow"

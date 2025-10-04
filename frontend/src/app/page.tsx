@@ -125,12 +125,7 @@ export default function Home() {
               >
                 Track Baggage
               </Link>
-              <Link
-                href="/map"
-                className="text-stone-600 hover:text-amber-600 font-medium transition-all duration-200 hover:scale-105"
-              >
-                Airport Map
-              </Link>
+
               <Link
                 href="/support"
                 className="text-stone-600 hover:text-blue-600 font-medium transition-all duration-200 hover:scale-105"
@@ -203,16 +198,6 @@ export default function Home() {
                     Track My Baggage
                   </Button>
                 </Link>
-                <Link href="/map">
-                  <Button
-                    size="lg"
-                    variant="outline"
-                    className="px-8 py-3 border-amber-300 text-amber-700 hover:bg-amber-50 shadow-md hover:shadow-lg transition-all duration-200 hover:scale-105"
-                  >
-                    <MapPin className="h-5 w-5 mr-2" />
-                    Airport Map
-                  </Button>
-                </Link>
                 {user?.is_staff_member && (
                   <Link href="/staff">
                     <Button
@@ -237,16 +222,7 @@ export default function Home() {
                     Track Baggage
                   </Button>
                 </Link>
-                <Link href="/map">
-                  <Button
-                    size="lg"
-                    variant="outline"
-                    className="px-8 py-3 border-amber-300 text-amber-700 hover:bg-amber-50 shadow-md hover:shadow-lg transition-all duration-200 hover:scale-105"
-                  >
-                    <MapPin className="h-5 w-5 mr-2" />
-                    Airport Map
-                  </Button>
-                </Link>
+
                 <Link href="/login">
                   <Button
                     size="lg"
@@ -429,18 +405,6 @@ export default function Home() {
             </div>
 
             {/* Feature 4 - Airport Map */}
-            <div className="bg-white/80 backdrop-blur-sm p-8 rounded-2xl shadow-lg border border-stone-200 text-center hover:shadow-xl transition-all duration-300 hover:scale-105">
-              <div className="bg-gradient-to-br from-indigo-100 to-blue-200 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6 shadow-md">
-                <Plane className="h-8 w-8 text-indigo-600" />
-              </div>
-              <h3 className="text-xl font-semibold text-stone-800 mb-4">
-                Interactive Airport Map
-              </h3>
-              <p className="text-stone-600">
-                Navigate Entebbe Airport easily with our interactive map showing
-                gates, baggage areas, and services.
-              </p>
-            </div>
           </div>
         </div>
 
