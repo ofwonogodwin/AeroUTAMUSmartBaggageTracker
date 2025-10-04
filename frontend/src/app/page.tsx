@@ -31,22 +31,19 @@ export default function Home() {
   const [isSearching, setIsSearching] = useState(false);
   const [searchError, setSearchError] = useState("");
 
-  // Redirect unauthenticated users to login with a longer delay to allow auth initialization
+  // Immediately redirect unauthenticated users to login
   useEffect(() => {
-    console.log("Main page auth check:", { isLoading, isAuthenticated, user });
-    if (!isLoading && !isAuthenticated) {
-      console.log("User not authenticated, redirecting to login...");
-      const timer = setTimeout(() => {
-        // Double-check authentication state before redirecting
-        const storedTokens = localStorage.getItem("auth_tokens");
-        const storedUser = localStorage.getItem("user");
-        if (!storedTokens || !storedUser) {
-          router.push("/login");
-        }
-      }, 1000); // Longer delay to allow auth context to initialize
-      return () => clearTimeout(timer);
+    if (!isLoading) {
+      if (!isAuthenticated) {
+        console.log(
+          "User not authenticated, redirecting to login immediately..."
+        );
+        router.replace("/login");
+      } else {
+        console.log("User is authenticated, showing main page");
+      }
     }
-  }, [isLoading, isAuthenticated, user, router]);
+  }, [isLoading, isAuthenticated, router]);
 
   // Handle baggage search
   const handleSearch = async (e?: React.FormEvent) => {
