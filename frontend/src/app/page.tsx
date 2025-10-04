@@ -94,39 +94,46 @@ export default function Home() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Clean Header */}
-      <header className="bg-white border-b border-gray-200 sticky top-0 z-50 shadow-sm">
+    <div
+      className="min-h-screen"
+      style={{
+        background: "linear-gradient(135deg, #faf8f6 0%, #f7f5f3 100%)",
+      }}
+    >
+      {/* Uganda Airlines Header */}
+      <header className="bg-white/90 backdrop-blur-sm border-b border-stone-200 sticky top-0 z-50 shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center space-x-3">
-              <div className="bg-blue-600 p-2 rounded-lg">
+              <div className="bg-gradient-to-br from-blue-600 to-blue-700 p-2 rounded-lg shadow-md">
                 <Luggage className="h-6 w-6 text-white" />
               </div>
               <div>
-                <h1 className="text-xl font-semibold text-gray-900">
+                <h1 className="text-xl font-semibold text-stone-800">
                   AERO UTAMU
                 </h1>
-                <p className="text-xs text-gray-500">Smart Baggage Tracker</p>
+                <p className="text-xs text-amber-600 font-medium">
+                  Smart Baggage Tracker
+                </p>
               </div>
             </div>
 
             <nav className="hidden md:flex items-center space-x-8">
               <Link
                 href="/track"
-                className="text-gray-600 hover:text-blue-600 font-medium transition-colors"
+                className="text-stone-600 hover:text-blue-600 font-medium transition-all duration-200 hover:scale-105"
               >
                 Track Baggage
               </Link>
               <Link
                 href="/map"
-                className="text-gray-600 hover:text-blue-600 font-medium transition-colors"
+                className="text-stone-600 hover:text-amber-600 font-medium transition-all duration-200 hover:scale-105"
               >
                 Airport Map
               </Link>
               <Link
                 href="/support"
-                className="text-gray-600 hover:text-blue-600 font-medium transition-colors"
+                className="text-stone-600 hover:text-blue-600 font-medium transition-all duration-200 hover:scale-105"
               >
                 Support
               </Link>
@@ -169,13 +176,13 @@ export default function Home() {
       {/* Hero Section */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="py-20 text-center">
-          <h1 className="text-4xl sm:text-6xl font-bold text-gray-900 mb-6">
+          <h1 className="text-4xl sm:text-6xl font-bold text-stone-800 mb-6">
             Track your baggage
             <br />
-            <span className="text-blue-600">anywhere, anytime</span>
+            <span className="text-stone-700">anywhere, anytime</span>
           </h1>
 
-          <p className="text-xl text-gray-600 mb-8 max-w-3xl mx-auto">
+          <p className="text-xl text-stone-600 mb-8 max-w-3xl mx-auto leading-relaxed">
             {isAuthenticated
               ? `Welcome back, ${
                   user?.first_name || "traveler"
@@ -190,7 +197,7 @@ export default function Home() {
                 <Link href="/track">
                   <Button
                     size="lg"
-                    className="bg-blue-600 hover:bg-blue-700 px-8 py-3"
+                    className="bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 px-8 py-3 shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-105"
                   >
                     <QrCode className="h-5 w-5 mr-2" />
                     Track My Baggage
@@ -200,7 +207,7 @@ export default function Home() {
                   <Button
                     size="lg"
                     variant="outline"
-                    className="px-8 py-3 border-purple-200 text-purple-600 hover:bg-purple-50"
+                    className="px-8 py-3 border-amber-300 text-amber-700 hover:bg-amber-50 shadow-md hover:shadow-lg transition-all duration-200 hover:scale-105"
                   >
                     <MapPin className="h-5 w-5 mr-2" />
                     Airport Map
@@ -211,7 +218,7 @@ export default function Home() {
                     <Button
                       size="lg"
                       variant="outline"
-                      className="px-8 py-3 border-blue-200 text-blue-600 hover:bg-blue-50"
+                      className="px-8 py-3 border-stone-300 text-stone-700 hover:bg-stone-50 shadow-md hover:shadow-lg transition-all duration-200 hover:scale-105"
                     >
                       <Users className="h-5 w-5 mr-2" />
                       Staff Dashboard
@@ -224,7 +231,7 @@ export default function Home() {
                 <Link href="/track">
                   <Button
                     size="lg"
-                    className="bg-blue-600 hover:bg-blue-700 px-8 py-3"
+                    className="bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 px-8 py-3 shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-105"
                   >
                     <Search className="h-5 w-5 mr-2" />
                     Track Baggage
@@ -234,7 +241,7 @@ export default function Home() {
                   <Button
                     size="lg"
                     variant="outline"
-                    className="px-8 py-3 border-purple-200 text-purple-600 hover:bg-purple-50"
+                    className="px-8 py-3 border-amber-300 text-amber-700 hover:bg-amber-50 shadow-md hover:shadow-lg transition-all duration-200 hover:scale-105"
                   >
                     <MapPin className="h-5 w-5 mr-2" />
                     Airport Map
@@ -244,7 +251,7 @@ export default function Home() {
                   <Button
                     size="lg"
                     variant="outline"
-                    className="px-8 py-3 border-gray-300 text-gray-700 hover:bg-gray-50"
+                    className="px-8 py-3 border-stone-300 text-stone-700 hover:bg-stone-50 shadow-md hover:shadow-lg transition-all duration-200 hover:scale-105"
                   >
                     Sign In
                     <ArrowRight className="h-5 w-5 ml-2" />
@@ -255,8 +262,8 @@ export default function Home() {
           </div>
 
           {/* Quick Track Section */}
-          <div className="bg-white p-8 rounded-2xl shadow-sm border border-gray-200 mb-16 max-w-2xl mx-auto">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">
+          <div className="bg-white/80 backdrop-blur-sm p-8 rounded-2xl shadow-lg border border-stone-200 mb-16 max-w-2xl mx-auto">
+            <h3 className="text-lg font-semibold text-stone-800 mb-4">
               Quick Track
             </h3>
             <form
@@ -275,7 +282,7 @@ export default function Home() {
               </div>
               <Button
                 type="submit"
-                className="bg-blue-600 hover:bg-blue-700 px-6 py-3"
+                className="bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 px-6 py-3 shadow-md hover:shadow-lg transition-all duration-200"
                 disabled={isSearching || !searchQuery.trim()}
               >
                 {isSearching ? (
@@ -289,19 +296,19 @@ export default function Home() {
 
             {/* Search Results */}
             {searchError && (
-              <div className="mt-4 p-4 bg-red-50 border border-red-200 rounded-lg">
-                <p className="text-red-600 text-sm">{searchError}</p>
+              <div className="mt-4 p-4 bg-red-50 border border-red-300 rounded-lg">
+                <p className="text-red-700 text-sm">{searchError}</p>
               </div>
             )}
 
             {searchResult && (
-              <div className="mt-6 p-6 bg-green-50 border border-green-200 rounded-lg">
+              <div className="mt-6 p-6 bg-gradient-to-br from-green-50 to-emerald-50 border border-green-300 rounded-lg shadow-md">
                 <div className="flex items-start justify-between mb-4">
                   <div>
                     <h4 className="text-lg font-semibold text-green-800 mb-1">
                       Baggage Found! 🎉
                     </h4>
-                    <p className="text-green-600 text-sm">
+                    <p className="text-green-700 text-sm font-medium">
                       ID: {searchResult.id}
                     </p>
                   </div>
@@ -324,30 +331,30 @@ export default function Home() {
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
-                    <p className="text-sm text-gray-600 mb-1">Passenger</p>
-                    <p className="font-medium text-gray-900">
+                    <p className="text-sm text-stone-600 mb-1">Passenger</p>
+                    <p className="font-medium text-stone-800">
                       {searchResult.passenger_name}
                     </p>
                   </div>
                   {searchResult.flight_number && (
                     <div>
-                      <p className="text-sm text-gray-600 mb-1">Flight</p>
-                      <p className="font-medium text-gray-900">
+                      <p className="text-sm text-stone-600 mb-1">Flight</p>
+                      <p className="font-medium text-stone-800">
                         {searchResult.flight_number}
                       </p>
                     </div>
                   )}
                   {searchResult.destination && (
                     <div>
-                      <p className="text-sm text-gray-600 mb-1">Destination</p>
-                      <p className="font-medium text-gray-900">
+                      <p className="text-sm text-stone-600 mb-1">Destination</p>
+                      <p className="font-medium text-stone-800">
                         {searchResult.destination}
                       </p>
                     </div>
                   )}
                   <div>
-                    <p className="text-sm text-gray-600 mb-1">Last Updated</p>
-                    <p className="font-medium text-gray-900">
+                    <p className="text-sm text-stone-600 mb-1">Last Updated</p>
+                    <p className="font-medium text-stone-800">
                       {new Date(searchResult.updated_at).toLocaleString()}
                     </p>
                   </div>
@@ -355,7 +362,7 @@ export default function Home() {
 
                 <div className="mt-4 pt-4 border-t border-green-200">
                   <Link href={`/track?id=${searchResult.id}`}>
-                    <Button className="bg-green-600 hover:bg-green-700 text-white">
+                    <Button className="bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white shadow-md hover:shadow-lg transition-all duration-200">
                       <MapPin className="h-4 w-4 mr-2" />
                       View Full Tracking Details
                     </Button>
@@ -369,67 +376,67 @@ export default function Home() {
         {/* Features Section */}
         <div className="pb-20">
           <div className="text-center mb-16">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">
+            <h2 className="text-3xl font-bold text-stone-800 mb-4">
               Why choose AERO UTAMU?
             </h2>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+            <p className="text-lg text-stone-600 max-w-2xl mx-auto">
               Professional baggage tracking with real-time updates and 24/7
-              monitoring
+              monitoring from Uganda&apos;s premier airline
             </p>
           </div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
             {/* Feature 1 */}
-            <div className="bg-white p-8 rounded-2xl shadow-sm border border-gray-200 text-center">
-              <div className="bg-blue-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6">
+            <div className="bg-white/80 backdrop-blur-sm p-8 rounded-2xl shadow-lg border border-stone-200 text-center hover:shadow-xl transition-all duration-300 hover:scale-105">
+              <div className="bg-gradient-to-br from-blue-100 to-blue-200 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6 shadow-md">
                 <QrCode className="h-8 w-8 text-blue-600" />
               </div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-4">
+              <h3 className="text-xl font-semibold text-stone-800 mb-4">
                 QR Code Scanning
               </h3>
-              <p className="text-gray-600">
+              <p className="text-stone-600">
                 Scan QR codes instantly with your camera or upload images for
                 quick baggage identification.
               </p>
             </div>
 
             {/* Feature 2 */}
-            <div className="bg-white p-8 rounded-2xl shadow-sm border border-gray-200 text-center">
-              <div className="bg-green-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6">
+            <div className="bg-white/80 backdrop-blur-sm p-8 rounded-2xl shadow-lg border border-stone-200 text-center hover:shadow-xl transition-all duration-300 hover:scale-105">
+              <div className="bg-gradient-to-br from-green-100 to-emerald-200 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6 shadow-md">
                 <MapPin className="h-8 w-8 text-green-600" />
               </div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-4">
+              <h3 className="text-xl font-semibold text-stone-800 mb-4">
                 Real-time Tracking
               </h3>
-              <p className="text-gray-600">
+              <p className="text-stone-600">
                 Monitor your baggage location and status updates in real-time
                 from check-in to arrival.
               </p>
             </div>
 
             {/* Feature 3 */}
-            <div className="bg-white p-8 rounded-2xl shadow-sm border border-gray-200 text-center">
-              <div className="bg-orange-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6">
-                <Shield className="h-8 w-8 text-orange-600" />
+            <div className="bg-white/80 backdrop-blur-sm p-8 rounded-2xl shadow-lg border border-stone-200 text-center hover:shadow-xl transition-all duration-300 hover:scale-105">
+              <div className="bg-gradient-to-br from-amber-100 to-yellow-200 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6 shadow-md">
+                <Shield className="h-8 w-8 text-amber-600" />
               </div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-4">
+              <h3 className="text-xl font-semibold text-stone-800 mb-4">
                 Secure & Reliable
               </h3>
-              <p className="text-gray-600">
+              <p className="text-stone-600">
                 Industry-standard security with 99.9% uptime ensuring your
                 baggage data is always protected.
               </p>
             </div>
 
             {/* Feature 4 - Airport Map */}
-            <div className="bg-white p-8 rounded-2xl shadow-sm border border-gray-200 text-center">
-              <div className="bg-purple-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6">
-                <Plane className="h-8 w-8 text-purple-600" />
+            <div className="bg-white/80 backdrop-blur-sm p-8 rounded-2xl shadow-lg border border-stone-200 text-center hover:shadow-xl transition-all duration-300 hover:scale-105">
+              <div className="bg-gradient-to-br from-indigo-100 to-blue-200 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6 shadow-md">
+                <Plane className="h-8 w-8 text-indigo-600" />
               </div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-4">
+              <h3 className="text-xl font-semibold text-stone-800 mb-4">
                 Interactive Airport Map
               </h3>
-              <p className="text-gray-600">
+              <p className="text-stone-600">
                 Navigate Entebbe Airport easily with our interactive map showing
                 gates, baggage areas, and services.
               </p>
@@ -439,35 +446,38 @@ export default function Home() {
 
         {/* Status Updates Section */}
         <div className="pb-20">
-          <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-3xl p-8 sm:p-12">
+          <div className="bg-gradient-to-r from-blue-50/70 to-amber-50/70 rounded-3xl p-8 sm:p-12 border border-stone-200/50 shadow-lg">
             <div className="max-w-4xl mx-auto text-center">
-              <h2 className="text-3xl font-bold text-gray-900 mb-6">
+              <h2 className="text-3xl font-bold text-stone-800 mb-6">
                 Stay updated at every step
               </h2>
-              <p className="text-lg text-gray-600 mb-8">
-                Get real-time notifications about your baggage status
+              <p className="text-lg text-stone-600 mb-8">
+                Get real-time notifications about your baggage status throughout
+                your journey
               </p>
 
               <div className="grid sm:grid-cols-4 gap-4 text-center">
-                <div className="bg-white p-4 rounded-xl">
-                  <CheckCircle className="h-8 w-8 text-green-500 mx-auto mb-2" />
-                  <p className="text-sm font-medium text-gray-900">
+                <div className="bg-white/90 backdrop-blur-sm p-4 rounded-xl shadow-md hover:shadow-lg transition-all duration-200">
+                  <CheckCircle className="h-8 w-8 text-green-600 mx-auto mb-2" />
+                  <p className="text-sm font-medium text-stone-800">
                     Checked In
                   </p>
                 </div>
-                <div className="bg-white p-4 rounded-xl">
-                  <Shield className="h-8 w-8 text-blue-500 mx-auto mb-2" />
-                  <p className="text-sm font-medium text-gray-900">
+                <div className="bg-white/90 backdrop-blur-sm p-4 rounded-xl shadow-md hover:shadow-lg transition-all duration-200">
+                  <Shield className="h-8 w-8 text-blue-600 mx-auto mb-2" />
+                  <p className="text-sm font-medium text-stone-800">
                     Security Cleared
                   </p>
                 </div>
-                <div className="bg-white p-4 rounded-xl">
-                  <Plane className="h-8 w-8 text-purple-500 mx-auto mb-2" />
-                  <p className="text-sm font-medium text-gray-900">In Flight</p>
+                <div className="bg-white/90 backdrop-blur-sm p-4 rounded-xl shadow-md hover:shadow-lg transition-all duration-200">
+                  <Plane className="h-8 w-8 text-indigo-600 mx-auto mb-2" />
+                  <p className="text-sm font-medium text-stone-800">
+                    In Flight
+                  </p>
                 </div>
-                <div className="bg-white p-4 rounded-xl">
-                  <MapPin className="h-8 w-8 text-green-500 mx-auto mb-2" />
-                  <p className="text-sm font-medium text-gray-900">Arrived</p>
+                <div className="bg-white/90 backdrop-blur-sm p-4 rounded-xl shadow-md hover:shadow-lg transition-all duration-200">
+                  <MapPin className="h-8 w-8 text-emerald-600 mx-auto mb-2" />
+                  <p className="text-sm font-medium text-stone-800">Arrived</p>
                 </div>
               </div>
             </div>
@@ -476,37 +486,45 @@ export default function Home() {
       </main>
 
       {/* Footer */}
-      <footer className="bg-white border-t border-gray-200">
+      <footer className="bg-white/90 backdrop-blur-sm border-t border-stone-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
           <div className="grid md:grid-cols-4 gap-8">
             <div className="md:col-span-2">
               <div className="flex items-center space-x-3 mb-4">
-                <div className="bg-blue-600 p-2 rounded-lg">
+                <div className="bg-gradient-to-br from-blue-600 to-blue-700 p-2 rounded-lg shadow-md">
                   <Luggage className="h-6 w-6 text-white" />
                 </div>
                 <div>
-                  <h3 className="text-lg font-semibold text-gray-900">
+                  <h3 className="text-lg font-semibold text-stone-800">
                     AERO UTAMU
                   </h3>
-                  <p className="text-sm text-gray-500">Smart Baggage Tracker</p>
+                  <p className="text-sm text-amber-600 font-medium">
+                    Smart Baggage Tracker
+                  </p>
                 </div>
               </div>
-              <p className="text-gray-600 mb-4">
+              <p className="text-stone-600 mb-4">
                 Professional baggage tracking services for Entebbe International
                 Airport. Real-time monitoring with industry-leading accuracy.
               </p>
             </div>
 
             <div>
-              <h4 className="font-semibold text-gray-900 mb-4">Services</h4>
-              <ul className="space-y-2 text-gray-600">
+              <h4 className="font-semibold text-stone-800 mb-4">Services</h4>
+              <ul className="space-y-2 text-stone-600">
                 <li>
-                  <Link href="/track" className="hover:text-blue-600">
+                  <Link
+                    href="/track"
+                    className="hover:text-blue-600 transition-colors duration-200"
+                  >
                     Track Baggage
                   </Link>
                 </li>
                 <li>
-                  <Link href="/support" className="hover:text-blue-600">
+                  <Link
+                    href="/support"
+                    className="hover:text-blue-600 transition-colors duration-200"
+                  >
                     Support
                   </Link>
                 </li>
@@ -514,15 +532,21 @@ export default function Home() {
             </div>
 
             <div>
-              <h4 className="font-semibold text-gray-900 mb-4">Account</h4>
-              <ul className="space-y-2 text-gray-600">
+              <h4 className="font-semibold text-stone-800 mb-4">Account</h4>
+              <ul className="space-y-2 text-stone-600">
                 <li>
-                  <Link href="/login" className="hover:text-blue-600">
+                  <Link
+                    href="/login"
+                    className="hover:text-blue-600 transition-colors duration-200"
+                  >
                     Sign In
                   </Link>
                 </li>
                 <li>
-                  <Link href="/register" className="hover:text-blue-600">
+                  <Link
+                    href="/register"
+                    className="hover:text-blue-600 transition-colors duration-200"
+                  >
                     Register
                   </Link>
                 </li>
@@ -530,8 +554,8 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="border-t border-gray-200 mt-8 pt-8 text-center">
-            <p className="text-gray-500">
+          <div className="border-t border-stone-200 mt-8 pt-8 text-center">
+            <p className="text-stone-500">
               © 2025 AERO UTAMU Smart Baggage Tracker. All rights reserved.
             </p>
           </div>

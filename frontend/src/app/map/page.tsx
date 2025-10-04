@@ -29,19 +29,24 @@ export default function AirportMapPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div
+      className="min-h-screen"
+      style={{
+        background: "linear-gradient(135deg, #faf8f6 0%, #f7f5f3 100%)",
+      }}
+    >
       <Navigation title="Airport Navigation" showTrackButton={true} />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
         <div className="text-center mb-8">
           <div className="flex justify-center items-center space-x-2 mb-4">
-            <MapPin className="h-12 w-12 text-blue-600" />
-            <h1 className="text-3xl font-bold text-gray-900">
+            <MapPin className="h-12 w-12 text-amber-600" />
+            <h1 className="text-3xl font-bold text-stone-800">
               Airport Navigation
             </h1>
           </div>
-          <p className="text-lg text-gray-600 max-w-3xl mx-auto">
+          <p className="text-lg text-stone-600 max-w-3xl mx-auto">
             Find your way around Entebbe International Airport with our
             interactive map. Locate gates, baggage claim areas, restaurants,
             shops, and essential services.

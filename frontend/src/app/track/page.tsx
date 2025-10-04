@@ -137,16 +137,28 @@ export default function TrackPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-sky-100">
+    <div
+      className="min-h-screen"
+      style={{
+        background: "linear-gradient(135deg, #faf8f6 0%, #f7f5f3 100%)",
+      }}
+    >
       {/* Navigation */}
-      <nav className="bg-white shadow-sm border-b border-gray-200">
+      <nav className="bg-white/90 backdrop-blur-sm shadow-sm border-b border-stone-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
-            <Link href="/" className="flex items-center space-x-2">
-              <Plane className="h-8 w-8 text-blue-600" />
-              <span className="text-xl font-bold text-gray-900">
-                Smart Baggage Tracker
-              </span>
+            <Link href="/" className="flex items-center space-x-3">
+              <div className="bg-gradient-to-br from-blue-600 to-blue-700 p-2 rounded-lg shadow-md">
+                <Plane className="h-6 w-6 text-white" />
+              </div>
+              <div>
+                <span className="text-xl font-bold text-stone-800">
+                  AERO UTAMU
+                </span>
+                <p className="text-xs text-amber-600 font-medium">
+                  Track Baggage
+                </p>
+              </div>
             </Link>
 
             <div className="flex items-center space-x-4">

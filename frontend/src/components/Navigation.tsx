@@ -18,18 +18,25 @@ export default function Navigation({
   const { isAuthenticated } = useAuth();
 
   return (
-    <nav className="bg-white shadow-sm border-b border-gray-200">
+    <nav className="bg-white/90 backdrop-blur-sm shadow-sm border-b border-stone-200">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
-          <Link href="/" className="flex items-center space-x-2">
-            <Plane className="h-8 w-8 text-blue-600" />
-            <span className="text-xl font-bold text-gray-900">{title}</span>
+          <Link href="/" className="flex items-center space-x-3">
+            <div className="bg-gradient-to-br from-blue-600 to-blue-700 p-2 rounded-lg shadow-md">
+              <Plane className="h-6 w-6 text-white" />
+            </div>
+            <div>
+              <span className="text-xl font-bold text-stone-800">
+                AERO UTAMU
+              </span>
+              <p className="text-xs text-amber-600 font-medium">{title}</p>
+            </div>
           </Link>
 
           <div className="flex items-center space-x-4">
             {showTrackButton && (
               <Link href="/track">
-                <button className="text-sm text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md transition-colors">
+                <button className="text-sm text-stone-600 hover:text-blue-600 px-3 py-2 rounded-md transition-all duration-200 hover:scale-105">
                   Track Baggage
                 </button>
               </Link>
@@ -42,7 +49,7 @@ export default function Navigation({
                   <Button
                     variant="ghost"
                     size="sm"
-                    className="text-gray-600 hover:text-blue-600"
+                    className="text-stone-600 hover:text-blue-600"
                   >
                     Sign In
                   </Button>

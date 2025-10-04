@@ -117,33 +117,40 @@ export default function SupportPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div
+      className="min-h-screen"
+      style={{
+        background: "linear-gradient(135deg, #faf8f6 0%, #f7f5f3 100%)",
+      }}
+    >
       {/* Header */}
-      <header className="bg-white border-b border-gray-200 sticky top-0 z-50 shadow-sm">
+      <header className="bg-white/90 backdrop-blur-sm border-b border-stone-200 sticky top-0 z-50 shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <Link href="/" className="flex items-center space-x-3">
-              <div className="bg-blue-600 p-2 rounded-lg">
+              <div className="bg-gradient-to-br from-blue-600 to-blue-700 p-2 rounded-lg shadow-md">
                 <Luggage className="h-6 w-6 text-white" />
               </div>
               <div>
-                <h1 className="text-xl font-semibold text-gray-900">
+                <h1 className="text-xl font-semibold text-stone-800">
                   AERO UTAMU
                 </h1>
-                <p className="text-xs text-gray-500">Support Center</p>
+                <p className="text-xs text-amber-600 font-medium">
+                  Support Center
+                </p>
               </div>
             </Link>
 
             <nav className="hidden md:flex items-center space-x-8">
               <Link
                 href="/track"
-                className="text-gray-600 hover:text-blue-600 font-medium transition-colors"
+                className="text-stone-600 hover:text-blue-600 font-medium transition-all duration-200 hover:scale-105"
               >
                 Track Baggage
               </Link>
               <Link
                 href="/map"
-                className="text-gray-600 hover:text-blue-600 font-medium transition-colors"
+                className="text-stone-600 hover:text-amber-600 font-medium transition-all duration-200 hover:scale-105"
               >
                 Airport Map
               </Link>

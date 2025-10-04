@@ -1,20 +1,46 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #1f2937;
+  --background: #faf8f6;
+  --foreground: #2d2826;
 
-  /* Clean Aviation Theme Colors */
-  --primary-blue: #2563eb;
-  --light-blue: #dbeafe;
-  --success-green: #10b981;
-  --warning-orange: #f59e0b;
-  --error-red: #ef4444;
-  --gray-50: #f9fafb;
-  --gray-100: #f3f4f6;
-  --gray-500: #6b7280;
-  --gray-600: #4b5563;
-  --gray-900: #111827;
+  /* Uganda Airlines Inspired Color Palette */
+  /* Primary - Warm Aviation Blue with golden undertones */
+  --primary-blue: #1e40af;
+  --primary-blue-light: #3b82f6;
+  --primary-blue-dark: #1e3a8a;
+
+  /* Secondary - Warm Uganda Gold */
+  --uganda-gold: #f59e0b;
+  --uganda-gold-light: #fbbf24;
+  --uganda-gold-dark: #d97706;
+
+  /* Accent - Uganda Red (subtle) */
+  --uganda-red: #dc2626;
+  --uganda-red-light: #ef4444;
+  --uganda-red-dark: #b91c1c;
+
+  /* Neutral Warm Tones */
+  --warm-white: #faf8f6;
+  --cream: #f7f5f3;
+  --warm-gray-50: #f8f6f4;
+  --warm-gray-100: #f1efec;
+  --warm-gray-200: #e7e4e0;
+  --warm-gray-300: #d6d2cd;
+  --warm-gray-400: #a8a29e;
+  --warm-gray-500: #78716c;
+  --warm-gray-600: #57534e;
+  --warm-gray-700: #44403c;
+  --warm-gray-800: #292524;
+  --warm-gray-900: #1c1917;
+
+  /* Status Colors with Warmth */
+  --success-green: #059669;
+  --success-green-light: #10b981;
+  --warning-orange: #ea580c;
+  --warning-orange-light: #f97316;
+  --error-red: var(--uganda-red);
+  --info-blue: var(--primary-blue-light);
 }
 
 body {
@@ -25,6 +51,9 @@ body {
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  /* Subtle warm gradient background */
+  background: linear-gradient(135deg, var(--warm-white) 0%, var(--cream) 100%);
+  min-height: 100vh;
 }
 
 /* Clean, minimal animations */
@@ -89,60 +118,167 @@ body {
   box-shadow: 0 0 0 2px #3b82f6, 0 0 0 4px rgba(59, 130, 246, 0.2);
 }
 
-/* Button enhancements */
+/* Button enhancements with Uganda Airlines theme */
 .btn-primary {
-  background-color: #2563eb;
+  background: linear-gradient(
+    135deg,
+    var(--primary-blue) 0%,
+    var(--primary-blue-light) 100%
+  );
   color: white;
   font-weight: 500;
   padding: 0.5rem 1rem;
   border-radius: 0.5rem;
-  transition: background-color 0.2s ease-in-out;
+  transition: all 0.2s ease-in-out;
+  box-shadow: 0 2px 4px rgba(30, 64, 175, 0.2);
 }
 
 .btn-primary:hover {
-  background-color: #1d4ed8;
+  background: linear-gradient(
+    135deg,
+    var(--primary-blue-dark) 0%,
+    var(--primary-blue) 100%
+  );
+  box-shadow: 0 4px 12px rgba(30, 64, 175, 0.3);
+  transform: translateY(-1px);
 }
 
 .btn-secondary {
-  background-color: #f3f4f6;
-  color: #111827;
+  background-color: var(--warm-gray-100);
+  color: var(--warm-gray-800);
   font-weight: 500;
   padding: 0.5rem 1rem;
   border-radius: 0.5rem;
-  transition: background-color 0.2s ease-in-out;
+  transition: all 0.2s ease-in-out;
+  border: 1px solid var(--warm-gray-200);
 }
 
 .btn-secondary:hover {
-  background-color: #e5e7eb;
+  background-color: var(--warm-gray-200);
+  border-color: var(--warm-gray-300);
+  transform: translateY(-1px);
 }
 
-/* Status indicator styles */
+/* Status indicator styles with Uganda Airlines warm theme */
 .status-checked-in {
-  background-color: #dbeafe;
-  color: #1e40af;
-  border-color: #bfdbfe;
+  background: linear-gradient(
+    135deg,
+    rgba(59, 130, 246, 0.1) 0%,
+    rgba(30, 64, 175, 0.1) 100%
+  );
+  color: var(--primary-blue-dark);
+  border-color: rgba(59, 130, 246, 0.3);
 }
 
 .status-security-cleared {
-  background-color: #fef3c7;
-  color: #a16207;
-  border-color: #fde68a;
+  background: linear-gradient(
+    135deg,
+    rgba(251, 191, 36, 0.1) 0%,
+    rgba(245, 158, 11, 0.1) 100%
+  );
+  color: var(--uganda-gold-dark);
+  border-color: rgba(245, 158, 11, 0.3);
 }
 
 .status-loaded {
-  background-color: #fed7aa;
-  color: #c2410c;
-  border-color: #fdba74;
+  background: linear-gradient(
+    135deg,
+    rgba(249, 115, 22, 0.1) 0%,
+    rgba(234, 88, 12, 0.1) 100%
+  );
+  color: var(--warning-orange);
+  border-color: rgba(249, 115, 22, 0.3);
 }
 
 .status-in-flight {
-  background-color: #ede9fe;
-  color: #7c3aed;
-  border-color: #ddd6fe;
+  background: linear-gradient(
+    135deg,
+    rgba(30, 64, 175, 0.1) 0%,
+    rgba(59, 130, 246, 0.1) 100%
+  );
+  color: var(--primary-blue);
+  border-color: rgba(30, 64, 175, 0.3);
 }
 
 .status-arrived {
-  background-color: #dcfce7;
-  color: #166534;
-  border-color: #bbf7d0;
+  background: linear-gradient(
+    135deg,
+    rgba(5, 150, 105, 0.1) 0%,
+    rgba(16, 185, 129, 0.1) 100%
+  );
+  color: var(--success-green);
+  border-color: rgba(5, 150, 105, 0.3);
+}
+
+/* Uganda Airlines Additional Theme Enhancements */
+.uganda-gradient-bg {
+  background: linear-gradient(135deg, var(--warm-white) 0%, var(--cream) 100%);
+}
+
+.uganda-card {
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(10px);
+  border: 1px solid var(--warm-gray-200);
+  box-shadow: 0 4px 16px rgba(41, 37, 36, 0.08);
+}
+
+.uganda-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 32px rgba(41, 37, 36, 0.12);
+}
+
+.uganda-primary-gradient {
+  background: linear-gradient(
+    135deg,
+    var(--primary-blue) 0%,
+    var(--primary-blue-light) 100%
+  );
+}
+
+.uganda-gold-gradient {
+  background: linear-gradient(
+    135deg,
+    var(--uganda-gold) 0%,
+    var(--uganda-gold-light) 100%
+  );
+}
+
+.uganda-text-gradient {
+  background: linear-gradient(
+    135deg,
+    var(--primary-blue) 0%,
+    var(--uganda-gold) 100%
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Smooth transitions for all interactive elements */
+* {
+  transition: all 0.2s ease-in-out;
+}
+
+/* Enhanced focus states for accessibility */
+.uganda-focus:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--primary-blue), 0 0 0 4px rgba(30, 64, 175, 0.2);
+}
+
+/* Custom scrollbar for webkit browsers */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--warm-gray-100);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--warm-gray-400);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--warm-gray-500);
 }

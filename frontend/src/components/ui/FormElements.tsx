@@ -22,7 +22,7 @@ export function Input({
       {label && (
         <label
           htmlFor={inputId}
-          className="block text-sm font-medium text-gray-700 mb-1"
+          className="block text-sm font-medium text-stone-700 mb-1"
         >
           {label}
         </label>
@@ -30,11 +30,11 @@ export function Input({
       <input
         id={inputId}
         className={cn(
-          // Professional Google-like styling
-          "block w-full px-4 py-3 text-base rounded-lg border border-gray-300 shadow-sm transition-all duration-200",
-          "placeholder-gray-500 text-gray-900 bg-white",
+          // Professional Uganda Airlines styling
+          "block w-full px-4 py-3 text-base rounded-lg border border-stone-300 shadow-sm transition-all duration-200",
+          "placeholder-stone-500 text-stone-900 bg-white",
           "focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500",
-          "hover:border-gray-400 hover:shadow-md",
+          "hover:border-stone-400 hover:shadow-md",
           // Enhanced sizing and spacing
           "min-h-[48px]",
           // Error states
@@ -46,7 +46,7 @@ export function Input({
       />
       {error && <p className="text-sm text-red-600 mt-1">{error}</p>}
       {helperText && !error && (
-        <p className="text-sm text-gray-500 mt-1">{helperText}</p>
+        <p className="text-sm text-stone-500 mt-1">{helperText}</p>
       )}
     </div>
   );
