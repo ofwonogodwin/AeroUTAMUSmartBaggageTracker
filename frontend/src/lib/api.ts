@@ -61,10 +61,16 @@ api.interceptors.response.use(
           return api(originalRequest);
         } catch (refreshError) {
           // Refresh failed, clear tokens and redirect to login
+          console.log("Token refresh failed, clearing auth and redirecting");
           storage.remove("auth_tokens");
           storage.remove("user");
           if (typeof window !== "undefined") {
-            window.location.href = "/login";
+            // Use a slight delay to prevent conflicts with logout flow
+            setTimeout(() => {
+              if (window.location.pathname !== "/login") {
+                window.location.href = "/login";
+              }
+            }, 100);
           }
           return Promise.reject(refreshError);
         }
@@ -78,11 +84,30 @@ api.interceptors.response.use(
 // Auth API
 export const authAPI = {
   login: async (credentials: LoginCredentials): Promise<AuthResponse> => {
-    const response: AxiosResponse<AuthResponse> = await api.post(
-      "/auth/login/",
-      credentials
-    );
-    return response.data;
+    console.log("API: Making login request to backend...");
+    try {
+      const response: AxiosResponse<any> = await api.post(
+        "/auth/login/",
+        credentials
+      );
+      console.log("API: Login request successful", response.status);
+      console.log("API: Raw backend response:", response.data);
+
+      // Transform backend response to match frontend AuthResponse format
+      const transformedResponse: AuthResponse = {
+        user: response.data.user,
+        tokens: {
+          access: response.data.access,
+          refresh: response.data.refresh,
+        },
+      };
+
+      console.log("API: Transformed response:", transformedResponse);
+      return transformedResponse;
+    } catch (error) {
+      console.log("API: Login request failed", error);
+      throw error;
+    }
   },
 
   staffLogin: async (credentials: LoginCredentials): Promise<AuthResponse> => {
@@ -94,11 +119,19 @@ export const authAPI = {
   },
 
   register: async (data: RegisterData): Promise<AuthResponse> => {
-    const response: AxiosResponse<AuthResponse> = await api.post(
-      "/auth/register/",
-      data
-    );
-    return response.data;
+    console.log("API: Making registration request to backend...");
+    try {
+      const response: AxiosResponse<AuthResponse> = await api.post(
+        "/auth/register/",
+        data
+      );
+      console.log("API: Registration request successful", response.status);
+      console.log("API: Registration response:", response.data);
+      return response.data;
+    } catch (error) {
+      console.log("API: Registration request failed", error);
+      throw error;
+    }
   },
 
   logout: async (refreshToken: string): Promise<void> => {

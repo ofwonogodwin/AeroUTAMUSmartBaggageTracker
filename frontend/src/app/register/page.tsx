@@ -58,14 +58,55 @@ export default function RegisterPage() {
     }
 
     try {
-      console.log("Submitting registration with data:", formData);
+      console.log("Submitting registration...");
       await register(formData);
       // Redirect after successful registration
       setTimeout(() => {
         window.location.href = formData.role === "STAFF" ? "/staff" : "/";
       }, 1000);
-    } catch {
-      setErrors({ general: "Registration failed. Please try again." });
+    } catch (error: any) {
+      // Handle specific error cases
+      const errorData = error?.response?.data;
+      if (errorData) {
+        const newErrors: Record<string, string> = {};
+
+        // Handle field-specific errors
+        if (errorData.username) {
+          newErrors.username = Array.isArray(errorData.username)
+            ? errorData.username[0]
+            : errorData.username;
+        }
+        if (errorData.email) {
+          newErrors.email = Array.isArray(errorData.email)
+            ? errorData.email[0]
+            : errorData.email;
+        }
+        if (errorData.password) {
+          newErrors.password = Array.isArray(errorData.password)
+            ? errorData.password[0]
+            : errorData.password;
+        }
+        if (errorData.non_field_errors) {
+          newErrors.general = Array.isArray(errorData.non_field_errors)
+            ? errorData.non_field_errors[0]
+            : errorData.non_field_errors;
+        }
+
+        // Set specific errors or fallback to general
+        if (Object.keys(newErrors).length > 0) {
+          setErrors(newErrors);
+        } else {
+          setErrors({
+            general:
+              "Registration failed. Please check your information and try again.",
+          });
+        }
+      } else {
+        setErrors({
+          general:
+            "Registration failed. Please check your connection and try again.",
+        });
+      }
     } finally {
       setIsSubmitting(false);
     }
@@ -76,8 +117,10 @@ export default function RegisterPage() {
   ) => {
     const { name, value } = e.target;
 
-    // Debug logging to see what's happening
-    console.log(`Field changed: ${name} = ${value}`);
+    // Safe debug logging (no sensitive data)
+    if (name !== "password" && name !== "password_confirm") {
+      console.log(`Field changed: ${name}`);
+    }
 
     setFormData((prev) => ({ ...prev, [name]: value }));
     // Clear error when user starts typing

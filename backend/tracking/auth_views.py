@@ -147,16 +147,22 @@ def logout(request):
     try:
         refresh_token = request.data.get('refresh')
         if refresh_token:
-            token = RefreshToken(refresh_token)
-            token.blacklist()
+            try:
+                token = RefreshToken(refresh_token)
+                token.blacklist()
+            except Exception as token_error:
+                # Token might already be blacklisted or invalid - that's okay
+                print(f"Token blacklist error (non-critical): {token_error}")
         
         return Response({
             'message': 'Successfully logged out'
         }, status=status.HTTP_200_OK)
     except Exception as e:
+        # Always return success for logout - client-side cleanup is more important
+        print(f"Logout error: {e}")
         return Response({
-            'error': 'Error during logout'
-        }, status=status.HTTP_400_BAD_REQUEST)
+            'message': 'Successfully logged out'
+        }, status=status.HTTP_200_OK)
 
 
 @api_view(['GET'])

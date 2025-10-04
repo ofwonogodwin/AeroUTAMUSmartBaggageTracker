@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/FormElements";
@@ -18,6 +19,7 @@ export default function LoginPage() {
   const [errors, setErrors] = useState<Record<string, string>>({});
 
   const { login, isLoading } = useAuth();
+  const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -26,12 +28,31 @@ export default function LoginPage() {
 
     try {
       await login(formData);
-      // Redirect after successful login
-      setTimeout(() => {
-        window.location.href = "/";
-      }, 500);
-    } catch {
-      const errorMessage = "Login failed. Please check your credentials.";
+      console.log("Login completed successfully, redirecting...");
+      // Use router.push for client-side navigation
+      router.push("/");
+    } catch (error: any) {
+      // Handle specific login errors
+      const errorData = error?.response?.data;
+      let errorMessage = "Login failed. Please check your credentials.";
+
+      if (errorData) {
+        if (errorData.detail) {
+          errorMessage = errorData.detail;
+        } else if (errorData.error) {
+          errorMessage = errorData.error;
+        } else if (
+          errorData.non_field_errors &&
+          Array.isArray(errorData.non_field_errors)
+        ) {
+          errorMessage = errorData.non_field_errors[0];
+        }
+      } else if (error?.response?.status === 401) {
+        errorMessage = "Invalid username or password.";
+      } else if (error?.response?.status === 400) {
+        errorMessage = "Please check your login information.";
+      }
+
       setErrors({ general: errorMessage });
     } finally {
       setIsSubmitting(false);

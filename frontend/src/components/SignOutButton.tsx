@@ -1,6 +1,7 @@
 "use client";
 
 import { LogOut, Users } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/Button";
 
@@ -14,6 +15,7 @@ export default function SignOutButton({
   className = "",
 }: SignOutButtonProps) {
   const { user, logout, isAuthenticated } = useAuth();
+  const router = useRouter();
 
   if (!isAuthenticated || !user) {
     return (
@@ -26,10 +28,14 @@ export default function SignOutButton({
 
   const handleLogout = async () => {
     try {
+      console.log("Starting logout process...");
       await logout();
-      window.location.href = "/";
+      console.log("Logout completed, redirecting to login...");
+      router.push("/login");
     } catch (error) {
       console.error("Logout error:", error);
+      // Even if logout fails, redirect to login
+      router.push("/login");
     }
   };
 
