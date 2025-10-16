@@ -122,8 +122,9 @@ export const baggageAPI = {
     },
 
     updateStatus: async (id: string, data: StatusUpdateCreateData): Promise<Baggage> => {
-        const response: AxiosResponse<Baggage> = await api.post(`/baggage/${id}/update/`, data)
-        return response.data
+        const response = await api.post(`/baggage/${id}/update/`, data)
+        // Backend returns { message, baggage, status_update }, we need just the baggage
+        return response.data.baggage || response.data
     },
 
     create: async (data: BaggageCreateData): Promise<Baggage> => {

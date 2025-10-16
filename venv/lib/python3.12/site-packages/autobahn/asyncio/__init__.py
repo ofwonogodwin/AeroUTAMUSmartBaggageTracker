@@ -27,27 +27,40 @@
 import platform
 
 import autobahn
-
-# WebSocket protocol support
-from autobahn.asyncio.websocket import \
-    WebSocketServerProtocol, \
-    WebSocketClientProtocol, \
-    WebSocketServerFactory, \
-    WebSocketClientFactory
+from autobahn.websocket import USES_NVX
 
 # WAMP support
 from autobahn.asyncio.wamp import ApplicationSession
 
-
-__all__ = (
-    'WebSocketServerProtocol',
-    'WebSocketClientProtocol',
-    'WebSocketServerFactory',
-    'WebSocketClientFactory',
-    'ApplicationSession',
+# WebSocket protocol support
+from autobahn.asyncio.websocket import (
+    WebSocketClientFactory,
+    WebSocketClientProtocol,
+    WebSocketServerFactory,
+    WebSocketServerProtocol,
 )
 
-__ident__ = 'Autobahn/{}-asyncio-{}/{}'.format(autobahn.__version__, platform.python_implementation(), platform.python_version())
+__all__ = (
+    "ApplicationSession",
+    "WebSocketClientFactory",
+    "WebSocketClientProtocol",
+    "WebSocketServerFactory",
+    "WebSocketServerProtocol",
+)
+
+# Build identification string with optional NVX acceleration indicator
+if USES_NVX:
+    import cffi
+    __ident__ = "Autobahn/{}-NVXCFFI/{}-asyncio-{}/{}".format(
+        autobahn.__version__,
+        cffi.__version__,
+        platform.python_implementation(),
+        platform.python_version(),
+    )
+else:
+    __ident__ = "Autobahn/{}-asyncio-{}/{}".format(
+        autobahn.__version__, platform.python_implementation(), platform.python_version()
+    )
 """
 AutobahnPython library implementation (eg. "Autobahn/0.13.0-asyncio-CPython/3.5.1")
 """

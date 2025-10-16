@@ -25,17 +25,34 @@
 ###############################################################################
 
 
-try:
-    # use Cython implementation of XorMasker validator if available
+# XorMaskerNull: pass-through implementation (no masking applied)
+# Shared by all implementations (NVX, pure Python)
+class XorMaskerNull(object):
+    __slots__ = ("_ptr",)
 
-    from wsaccel.xormask import XorMaskerNull
-    # noinspection PyUnresolvedReferences
-    from wsaccel.xormask import createXorMasker
-    create_xor_masker = createXorMasker
+    # noinspection PyUnusedLocal
+    def __init__(self, mask=None):
+        self._ptr = 0
 
-except ImportError:
+    def pointer(self):
+        return self._ptr
 
-    # fallback to pure Python implementation (this is faster on PyPy than above!)
+    def reset(self):
+        self._ptr = 0
+
+    def process(self, data):
+        self._ptr += len(data)
+        return data
+
+
+# Import USES_NVX flag from parent module
+from autobahn.websocket import USES_NVX
+
+if USES_NVX:
+    # Use NVX native implementation (CFFI-based, works on CPython and PyPy)
+    from autobahn.nvx._xormasker import create_xor_masker
+else:
+    # Use pure Python fallback implementation
 
     # http://stackoverflow.com/questions/15014310/python3-xrange-lack-hurts
     try:
@@ -48,32 +65,13 @@ except ImportError:
 
     from array import array
 
-    class XorMaskerNull(object):
-
-        __slots__ = ('_ptr',)
-
-        # noinspection PyUnusedLocal
-        def __init__(self, mask=None):
-            self._ptr = 0
-
-        def pointer(self):
-            return self._ptr
-
-        def reset(self):
-            self._ptr = 0
-
-        def process(self, data):
-            self._ptr += len(data)
-            return data
-
     class XorMaskerSimple(object):
-
-        __slots__ = ('_ptr', '_msk')
+        __slots__ = ("_ptr", "_msk")
 
         def __init__(self, mask):
             assert len(mask) == 4
             self._ptr = 0
-            self._msk = array('B', mask)
+            self._msk = array("B", mask)
 
         def pointer(self):
             return self._ptr
@@ -83,20 +81,19 @@ except ImportError:
 
         def process(self, data):
             dlen = len(data)
-            payload = array('B', data)
+            payload = array("B", data)
             for k in xrange(dlen):
                 payload[k] ^= self._msk[self._ptr & 3]
                 self._ptr += 1
             return payload.tobytes()
 
     class XorMaskerShifted1(object):
-
-        __slots__ = ('_ptr', '_mskarray')
+        __slots__ = ("_ptr", "_mskarray")
 
         def __init__(self, mask):
             assert len(mask) == 4
             self._ptr = 0
-            self._mskarray = [array('B'), array('B'), array('B'), array('B')]
+            self._mskarray = [array("B"), array("B"), array("B"), array("B")]
             for j in xrange(4):
                 self._mskarray[0].append(mask[j & 3])
                 self._mskarray[1].append(mask[(j + 1) & 3])
@@ -111,7 +108,7 @@ except ImportError:
 
         def process(self, data):
             dlen = len(data)
-            payload = array('B', data)
+            payload = array("B", data)
             msk = self._mskarray[self._ptr & 3]
             for k in xrange(dlen):
                 payload[k] ^= msk[k & 3]

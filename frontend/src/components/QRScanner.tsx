@@ -26,18 +26,18 @@ export default function QRScanner({ onScan, onClose, isOpen }: QRScannerProps) {
         } else {
             stopCamera()
         }
-        
+
         return () => {
             stopCamera()
         }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [isOpen])
 
     const startCamera = async () => {
         try {
             setIsScanning(true)
             setError('')
-            
+
             const mediaStream = await navigator.mediaDevices.getUserMedia({
                 video: {
                     facingMode: 'environment', // Use back camera
@@ -45,9 +45,9 @@ export default function QRScanner({ onScan, onClose, isOpen }: QRScannerProps) {
                     height: { ideal: 720 }
                 }
             })
-            
+
             setStream(mediaStream)
-            
+
             if (videoRef.current) {
                 videoRef.current.srcObject = mediaStream
                 await videoRef.current.play()
@@ -85,14 +85,14 @@ export default function QRScanner({ onScan, onClose, isOpen }: QRScannerProps) {
             if (qrResult.match(/^BAG-[A-Z0-9]+$/i)) {
                 return qrResult.toUpperCase()
             }
-            
+
             // If it looks like a baggage ID, format it properly
             if (qrResult.match(/^[a-f0-9-]+$/i)) {
                 const firstPart = qrResult.split('-')[0].toUpperCase()
                 return `BAG-${firstPart}`
             }
         }
-        
+
         // Return as-is if we can't parse it
         return qrResult
     }
@@ -102,19 +102,19 @@ export default function QRScanner({ onScan, onClose, isOpen }: QRScannerProps) {
             const canvas = canvasRef.current
             const video = videoRef.current
             const context = canvas.getContext('2d')
-            
+
             if (context) {
                 setIsProcessing(true)
                 setError('')
-                
+
                 try {
                     canvas.width = video.videoWidth
                     canvas.height = video.videoHeight
                     context.drawImage(video, 0, 0)
-                    
+
                     // Scan for QR code in the captured image
                     const result = await QrScanner.scanImage(canvas)
-                    
+
                     if (result) {
                         // Parse the QR code result and extract baggage code
                         const baggageCode = extractBaggageCode(result)
@@ -162,7 +162,7 @@ export default function QRScanner({ onScan, onClose, isOpen }: QRScannerProps) {
         try {
             // Scan QR code from uploaded image
             const result = await QrScanner.scanImage(file)
-            
+
             if (result) {
                 // Parse the QR code result and extract baggage code
                 const baggageCode = extractBaggageCode(result)
@@ -191,13 +191,13 @@ export default function QRScanner({ onScan, onClose, isOpen }: QRScannerProps) {
         onClose()
     }
 
-    // Demo QR codes for testing
+    // Demo QR codes for testing - These match your actual QR code images
     const demoQRCodes = [
-        'BAG-A8C74A09',
-        'BAG-6A2E7EAD', 
-        'BAG-4DAFF685',
-        'BAG-F781DD59',
-        'BAG-2106F8F3'
+        'BAG-2106F8F3', // Alice Johnson - CHECKED_IN
+        'BAG-F781DD59', // Emma Davis - SECURITY_CLEARED
+        'BAG-6A2E7EAD', // Kate Thomas - IN_FLIGHT
+        'BAG-98C34263', // Ivy Taylor - ARRIVED
+        'BAG-A8C74A09'  // Yara Hall - ARRIVED
     ]
 
     if (!isOpen) return null
@@ -233,7 +233,7 @@ export default function QRScanner({ onScan, onClose, isOpen }: QRScannerProps) {
                                 playsInline
                                 muted
                             />
-                            
+
                             {/* Scanner overlay */}
                             <div className="absolute inset-0 pointer-events-none">
                                 <div className="absolute inset-4 border-2 border-white rounded-lg opacity-50"></div>
@@ -244,7 +244,7 @@ export default function QRScanner({ onScan, onClose, isOpen }: QRScannerProps) {
                                         <div className="absolute top-0 right-0 w-6 h-6 border-t-4 border-r-4 border-blue-500"></div>
                                         <div className="absolute bottom-0 left-0 w-6 h-6 border-b-4 border-l-4 border-blue-500"></div>
                                         <div className="absolute bottom-0 right-0 w-6 h-6 border-b-4 border-r-4 border-blue-500"></div>
-                                        
+
                                         {/* Scanning line animation */}
                                         <div className="absolute top-0 left-0 w-full h-1 bg-blue-500 animate-pulse"></div>
                                     </div>
@@ -275,7 +275,7 @@ export default function QRScanner({ onScan, onClose, isOpen }: QRScannerProps) {
                                 Upload Image
                             </Button>
                         </div>
-                        
+
                         <Button
                             onClick={handleManualInput}
                             variant="outline"
@@ -332,7 +332,7 @@ export default function QRScanner({ onScan, onClose, isOpen }: QRScannerProps) {
 
                 {/* Hidden canvas for image capture */}
                 <canvas ref={canvasRef} className="hidden" />
-                
+
                 {/* Hidden file input for image upload */}
                 <input
                     ref={fileInputRef}

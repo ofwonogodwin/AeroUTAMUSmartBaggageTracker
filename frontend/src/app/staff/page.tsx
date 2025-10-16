@@ -24,9 +24,9 @@ import {
 } from 'lucide-react'
 
 export default function StaffDashboard() {
-    const { user, isAuthenticated, isLoading: authLoading } = useAuth()
+    const { user, tokens, isAuthenticated, isLoading: authLoading } = useAuth()
     const router = useRouter()
-    
+
     // State management
     const [stats, setStats] = useState<DashboardStats | null>(null)
     const [baggage, setBaggage] = useState<Baggage[]>([])
@@ -34,14 +34,14 @@ export default function StaffDashboard() {
     const [isLoading, setIsLoading] = useState(true)
     const [error, setError] = useState('')
     const [successMessage, setSuccessMessage] = useState('')
-    
+
     // Search and filter state
     const [searchQuery, setSearchQuery] = useState('')
     const [statusFilter, setStatusFilter] = useState('')
     const [selectedBaggage, setSelectedBaggage] = useState<Baggage | null>(null)
     const [showUpdateModal, setShowUpdateModal] = useState(false)
     const [showScanner, setShowScanner] = useState(false)
-    
+
     // Update form state
     const [updateForm, setUpdateForm] = useState({
         status: '',
@@ -66,11 +66,11 @@ export default function StaffDashboard() {
     const loadDashboardData = async () => {
         try {
             setIsLoading(true)
-            
+
             // Load all baggage first - use large page_size to get all items
             const baggageData = await baggageAPI.getAll({ page_size: 100 })
             setBaggage(baggageData.results)
-            
+
             // Calculate stats from baggage data
             const stats: DashboardStats = {
                 total_baggage: baggageData.results.length,
@@ -83,7 +83,7 @@ export default function StaffDashboard() {
                 },
                 recent_updates: []
             }
-            
+
             // Count statuses and extract recent updates
             const allUpdates: StatusUpdate[] = []
             baggageData.results.forEach(bag => {
@@ -91,22 +91,22 @@ export default function StaffDashboard() {
                 if (stats.status_counts[bag.current_status]) {
                     stats.status_counts[bag.current_status].count++
                 }
-                
+
                 // Extract updates
                 if (bag.status_timeline) {
                     allUpdates.push(...bag.status_timeline)
                 }
             })
-            
+
             // Sort by timestamp and take latest 10
             const sortedUpdates = allUpdates
                 .sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime())
                 .slice(0, 10)
-            
+
             stats.recent_updates = sortedUpdates
             setStats(stats)
             setRecentUpdates(sortedUpdates)
-            
+
         } catch (error) {
             console.error('Error loading dashboard data:', error)
             setError('Failed to load dashboard data')
@@ -153,7 +153,7 @@ export default function StaffDashboard() {
         try {
             setIsLoading(true)
             setError('')
-            
+
             // Validate that status is selected
             if (!updateForm.status) {
                 setError('Please select a status')
@@ -161,36 +161,54 @@ export default function StaffDashboard() {
                 return
             }
 
-            console.log('Updating baggage:', selectedBaggage.id)
+            console.log('=== UPDATE BAGGAGE STATUS ===')
+            console.log('Baggage ID:', selectedBaggage.id)
+            console.log('QR Code:', selectedBaggage.qr_code)
             console.log('Update data:', updateForm)
-            
+            console.log('User:', user)
+            console.log('Auth tokens exist:', !!tokens)
+
             const response = await baggageAPI.updateStatus(selectedBaggage.id, {
                 status: updateForm.status as 'CHECKED_IN' | 'SECURITY_CLEARED' | 'LOADED' | 'IN_FLIGHT' | 'ARRIVED',
                 location: updateForm.location || undefined,
                 notes: updateForm.notes || undefined
             })
-            
-            console.log('Update successful:', response)
-            
+
+            console.log('✅ Update successful:', response)
+
             setShowUpdateModal(false)
             setSelectedBaggage(null)
             setUpdateForm({ status: '', location: '', notes: '' })
-            
+
             // Show success message
             setError('')
             setSuccessMessage('Baggage status updated successfully!')
-            setTimeout(() => setSuccessMessage(''), 3000)
-            
+            setTimeout(() => setSuccessMessage(''), 5000)
+
             // Refresh data
             await loadDashboardData()
-            
-        } catch (error) {
-            console.error('Update error:', error)
-            const errorMessage = (error as { response?: { data?: { error?: string; message?: string } }; message?: string })?.response?.data?.error || 
-                               (error as { response?: { data?: { error?: string; message?: string } }; message?: string })?.response?.data?.message || 
-                               (error as { message?: string })?.message || 
-                               'Failed to update baggage status'
+
+        } catch (error: any) {
+            console.error('❌ Update error:', error)
+            console.error('Error response:', error.response)
+            console.error('Error data:', error.response?.data)
+
+            let errorMessage = 'Failed to update baggage status'
+
+            if (error.response?.status === 403) {
+                errorMessage = error.response.data?.error || 'Permission denied. Staff privileges required.'
+            } else if (error.response?.status === 401) {
+                errorMessage = 'Authentication required. Please log in again.'
+            } else if (error.response?.data?.error) {
+                errorMessage = error.response.data.error
+            } else if (error.response?.data?.message) {
+                errorMessage = error.response.data.message
+            } else if (error.message) {
+                errorMessage = error.message
+            }
+
             setError(errorMessage)
+            console.error('Displaying error:', errorMessage)
         } finally {
             setIsLoading(false)
         }
@@ -198,13 +216,13 @@ export default function StaffDashboard() {
 
     // Filter baggage based on search query and status filter
     const filteredBaggage = baggage.filter(bag => {
-        const matchesSearch = !searchQuery || 
+        const matchesSearch = !searchQuery ||
             bag.passenger_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
             bag.qr_code.toLowerCase().includes(searchQuery.toLowerCase()) ||
             (bag.flight_number && bag.flight_number.toLowerCase().includes(searchQuery.toLowerCase()))
-        
+
         const matchesStatus = !statusFilter || bag.current_status === statusFilter
-        
+
         return matchesSearch && matchesStatus
     })
 
@@ -262,8 +280,8 @@ export default function StaffDashboard() {
                                 <div className="ml-4">
                                     <p className="text-sm font-medium text-gray-500">In Transit</p>
                                     <p className="text-2xl font-bold text-gray-900">
-                                        {(stats.status_counts.IN_FLIGHT?.count || 0) + 
-                                         (stats.status_counts.LOADED?.count || 0)}
+                                        {(stats.status_counts.IN_FLIGHT?.count || 0) +
+                                            (stats.status_counts.LOADED?.count || 0)}
                                     </p>
                                 </div>
                             </div>
@@ -432,17 +450,41 @@ export default function StaffDashboard() {
             {showUpdateModal && selectedBaggage && (
                 <div className="fixed inset-0 z-50 overflow-y-auto">
                     <div className="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-                        <div className="fixed inset-0 transition-opacity" aria-hidden="true">
-                            <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
-                        </div>
+                        {/* Overlay */}
+                        <div
+                            className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"
+                            aria-hidden="true"
+                            onClick={() => {
+                                setShowUpdateModal(false)
+                                setSelectedBaggage(null)
+                                setUpdateForm({ status: '', location: '', notes: '' })
+                            }}
+                        ></div>
 
-                        <div className="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+                        {/* Center the modal */}
+                        <span className="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+
+                        {/* Modal Content */}
+                        <div className="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full relative z-10">
                             <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
                                 <div className="sm:flex sm:items-start">
                                     <div className="mt-3 text-center sm:mt-0 sm:text-left w-full">
                                         <h3 className="text-lg leading-6 font-medium text-gray-900 mb-4">
                                             Update Baggage Status
                                         </h3>
+
+                                        {/* Error display in modal */}
+                                        {error && (
+                                            <div className="mb-4 p-3 bg-red-100 border-l-4 border-red-500 text-red-700">
+                                                <div className="flex items-start">
+                                                    <svg className="h-5 w-5 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                                                        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+                                                    </svg>
+                                                    <p className="font-medium">{error}</p>
+                                                </div>
+                                            </div>
+                                        )}
+
                                         <div className="mb-4">
                                             <p className="text-sm text-gray-600">
                                                 <strong>QR Code:</strong> {selectedBaggage.qr_code}
@@ -455,21 +497,21 @@ export default function StaffDashboard() {
                                             <Select
                                                 label="New Status"
                                                 value={updateForm.status}
-                                                onChange={(e) => setUpdateForm({...updateForm, status: e.target.value})}
+                                                onChange={(e) => setUpdateForm({ ...updateForm, status: e.target.value })}
                                                 options={statusOptions.slice(1)} // Remove "All Statuses" option
                                             />
                                             <Input
                                                 label="Location"
                                                 type="text"
                                                 value={updateForm.location}
-                                                onChange={(e) => setUpdateForm({...updateForm, location: e.target.value})}
+                                                onChange={(e) => setUpdateForm({ ...updateForm, location: e.target.value })}
                                                 placeholder="e.g., Gate A12, Baggage Claim 3"
                                             />
                                             <Input
                                                 label="Notes"
                                                 type="text"
                                                 value={updateForm.notes}
-                                                onChange={(e) => setUpdateForm({...updateForm, notes: e.target.value})}
+                                                onChange={(e) => setUpdateForm({ ...updateForm, notes: e.target.value })}
                                                 placeholder="Additional notes (optional)"
                                             />
                                         </div>
@@ -523,15 +565,18 @@ export default function StaffDashboard() {
 
             {/* Error Notification */}
             {error && (
-                <div className="fixed bottom-4 right-4 bg-red-500 text-white px-6 py-3 rounded-lg shadow-lg z-50 max-w-md">
-                    <div className="flex items-center">
-                        <svg className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <div className="fixed bottom-4 right-4 bg-red-600 text-white px-6 py-4 rounded-lg shadow-2xl z-[9999] max-w-md border-2 border-red-700 animate-pulse">
+                    <div className="flex items-start">
+                        <svg className="h-6 w-6 mr-3 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                         </svg>
-                        <p>{error}</p>
-                        <button 
+                        <div className="flex-1">
+                            <p className="font-semibold text-lg">Error</p>
+                            <p className="mt-1">{error}</p>
+                        </div>
+                        <button
                             onClick={() => setError('')}
-                            className="ml-4 text-white hover:text-gray-200"
+                            className="ml-4 text-white hover:text-gray-200 font-bold text-xl flex-shrink-0"
                         >
                             ✕
                         </button>
@@ -541,15 +586,18 @@ export default function StaffDashboard() {
 
             {/* Success Notification */}
             {successMessage && (
-                <div className="fixed bottom-4 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg z-50 max-w-md">
-                    <div className="flex items-center">
-                        <svg className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <div className="fixed bottom-4 right-4 bg-green-600 text-white px-6 py-4 rounded-lg shadow-2xl z-[9999] max-w-md border-2 border-green-700">
+                    <div className="flex items-start">
+                        <svg className="h-6 w-6 mr-3 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                         </svg>
-                        <p>{successMessage}</p>
-                        <button 
+                        <div className="flex-1">
+                            <p className="font-semibold text-lg">Success!</p>
+                            <p className="mt-1">{successMessage}</p>
+                        </div>
+                        <button
                             onClick={() => setSuccessMessage('')}
-                            className="ml-4 text-white hover:text-gray-200"
+                            className="ml-4 text-white hover:text-gray-200 font-bold text-xl flex-shrink-0"
                         >
                             ✕
                         </button>
