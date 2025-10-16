@@ -1,0 +1,64 @@
+# Smart Baggage Tracker - Backend Requirements
+# =============================================
+# Django Backend Dependencies for Python Virtual Environment
+# Install with: pip install -r requirements.txt
+
+# Core Django Framework
+Django==5.0
+
+# Django REST Framework for API development
+djangorestframework==3.14.0
+
+# JWT Authentication
+djangorestframework-simplejwt==5.3.0
+
+# WebSocket Support
+channels==4.0.0
+channels-redis==4.2.0
+daphne==4.0.0
+
+# CORS Headers for frontend communication
+django-cors-headers==4.3.1
+
+# Image Processing (for QR codes and media files)
+Pillow==10.1.0
+
+# QR Code Generation
+qrcode[pil]==7.4.2
+
+# Database Adapters (for production use)
+# psycopg2-binary==2.9.7  # PostgreSQL
+# mysqlclient==2.2.0      # MySQL
+
+# ASGI Server for production deployment
+# uvicorn[standard]==0.23.2
+# gunicorn==21.2.0
+
+# Development and Testing Dependencies
+# pytest==7.4.2
+# pytest-django==4.5.2
+# factory-boy==3.3.0
+# django-debug-toolbar==4.2.0
+
+# Security and Environment Management
+# python-decouple==3.8
+# django-environ==0.11.2
+
+# Redis (for production WebSocket support)
+# redis==4.6.0
+
+# Celery (for background tasks - optional)
+# celery==5.3.1
+# django-celery-beat==2.5.0
+
+# File Storage (for cloud deployment - optional)
+# django-storages==1.14.2
+# boto3==1.28.62
+
+# Monitoring and Logging (optional)
+# sentry-sdk==1.32.0
+# django-extensions==3.2.3
+
+# Documentation (optional)
+# django-rest-swagger==2.2.0
+# drf-spectacular==0.26.5

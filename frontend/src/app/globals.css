@@ -1,0 +1,74 @@
+@import "tailwindcss";
+
+:root {
+  --background: #ffffff;
+  --foreground: #003366;
+
+  /* Aviation Theme Colors */
+  --deep-blue: #003366;
+  --sky-blue: #0096FF;
+  --gold: #FFD700;
+  --light-gray: #F8FAFC;
+  --dark-gray: #64748B;
+}
+
+/* Theme variables moved to :root for better compatibility */
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0f172a;
+    --foreground: #f1f5f9;
+  }
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+}
+
+/* Custom animations for aviation theme */
+@keyframes plane-takeoff {
+  0% {
+    transform: translateX(-100px) translateY(0px) rotate(-10deg);
+  }
+
+  100% {
+    transform: translateX(100px) translateY(-50px) rotate(10deg);
+  }
+}
+
+.animate-plane-takeoff {
+  animation: plane-takeoff 3s ease-in-out infinite;
+}
+
+/* Status indicator styles */
+.status-checked-in {
+  background-color: #dbeafe;
+  color: #1e40af;
+  border-color: #bfdbfe;
+}
+
+.status-security-cleared {
+  background-color: #fef3c7;
+  color: #a16207;
+  border-color: #fde68a;
+}
+
+.status-loaded {
+  background-color: #fed7aa;
+  color: #c2410c;
+  border-color: #fdba74;
+}
+
+.status-in-flight {
+  background-color: #ede9fe;
+  color: #7c3aed;
+  border-color: #ddd6fe;
+}
+
+.status-arrived {
+  background-color: #dcfce7;
+  color: #166534;
+  border-color: #bbf7d0;
+}

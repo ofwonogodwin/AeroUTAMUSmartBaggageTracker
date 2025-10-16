@@ -1,0 +1,639 @@
+{
+  "report_generated": "2025-10-03T15:01:15.070063+00:00",
+  "total_passengers": 25,
+  "total_baggage_items": 40,
+  "system_info": {
+    "login_url_passenger": "http://localhost:3000/login",
+    "login_url_staff": "http://localhost:3000/staff-login",
+    "track_baggage_url": "http://localhost:3000/track"
+  },
+  "passenger_accounts": [
+    {
+      "passenger_name": "Adam Young",
+      "email": "adam.young@email.com",
+      "username": "adamyoung",
+      "password": "adam2024",
+      "first_name": "Adam",
+      "last_name": "Young",
+      "user_id": "11",
+      "baggage_count": 2,
+      "baggage_items": [
+        {
+          "qr_code": "BAG-85D37765",
+          "flight_number": "VS201",
+          "destination": "Doha",
+          "status": "SECURITY_CLEARED",
+          "created_at": "2025-09-30T20:34:26.389156+00:00"
+        },
+        {
+          "qr_code": "BAG-CD0BE473",
+          "flight_number": "QR434",
+          "destination": "Istanbul",
+          "status": "CHECKED_IN",
+          "created_at": "2025-10-02T14:37:01.343685+00:00"
+        }
+      ],
+      "account_created": "2025-10-03T15:00:44.086506+00:00"
+    },
+    {
+      "passenger_name": "Alice Johnson",
+      "email": "alice.johnson@email.com",
+      "username": "alicejohnson",
+      "password": "alice2024",
+      "first_name": "Alice",
+      "last_name": "Johnson",
+      "user_id": "12",
+      "baggage_count": 2,
+      "baggage_items": [
+        {
+          "qr_code": "BAG-2106F8F3",
+          "flight_number": "QR434",
+          "destination": "Paris",
+          "status": "CHECKED_IN",
+          "created_at": "2025-10-03T06:50:25.802399+00:00"
+        },
+        {
+          "qr_code": "BAG-3265BBAE",
+          "flight_number": "LH567",
+          "destination": "Cairo",
+          "status": "CHECKED_IN",
+          "created_at": "2025-10-01T01:47:55.241660+00:00"
+        }
+      ],
+      "account_created": "2025-10-03T15:00:45.309201+00:00"
+    },
+    {
+      "passenger_name": "Beth King",
+      "email": "beth.king@email.com",
+      "username": "bethking",
+      "password": "beth2024",
+      "first_name": "Beth",
+      "last_name": "King",
+      "user_id": "13",
+      "baggage_count": 1,
+      "baggage_items": [
+        {
+          "qr_code": "BAG-ADAE3DB3",
+          "flight_number": "MS843",
+          "destination": "Doha",
+          "status": "SECURITY_CLEARED",
+          "created_at": "2025-10-01T08:47:50.954843+00:00"
+        }
+      ],
+      "account_created": "2025-10-03T15:00:46.447298+00:00"
+    },
+    {
+      "passenger_name": "Diana Lopez",
+      "email": "diana.lopez@email.com",
+      "username": "dianalopez",
+      "password": "diana2024",
+      "first_name": "Diana",
+      "last_name": "Lopez",
+      "user_id": "14",
+      "baggage_count": 1,
+      "baggage_items": [
+        {
+          "qr_code": "BAG-D2752A32",
+          "flight_number": "EK729",
+          "destination": "Amsterdam",
+          "status": "ARRIVED",
+          "created_at": "2025-09-30T07:33:37.555020+00:00"
+        }
+      ],
+      "account_created": "2025-10-03T15:00:47.532192+00:00"
+    },
+    {
+      "passenger_name": "Emma Davis",
+      "email": "emma.davis@email.com",
+      "username": "emmadavis",
+      "password": "emma2024",
+      "first_name": "Emma",
+      "last_name": "Davis",
+      "user_id": "15",
+      "baggage_count": 1,
+      "baggage_items": [
+        {
+          "qr_code": "BAG-F781DD59",
+          "flight_number": "DL439",
+          "destination": "Atlanta",
+          "status": "SECURITY_CLEARED",
+          "created_at": "2025-10-03T01:20:32.704312+00:00"
+        }
+      ],
+      "account_created": "2025-10-03T15:00:48.900396+00:00"
+    },
+    {
+      "passenger_name": "Eric Hill",
+      "email": "eric.hill@email.com",
+      "username": "erichill",
+      "password": "eric2024",
+      "first_name": "Eric",
+      "last_name": "Hill",
+      "user_id": "16",
+      "baggage_count": 1,
+      "baggage_items": [
+        {
+          "qr_code": "BAG-9C91C819",
+          "flight_number": "RW501",
+          "destination": "Dubai",
+          "status": "ARRIVED",
+          "created_at": "2025-09-30T14:03:26.474680+00:00"
+        }
+      ],
+      "account_created": "2025-10-03T15:00:49.915268+00:00"
+    },
+    {
+      "passenger_name": "Fiona Scott",
+      "email": "fiona.scott@email.com",
+      "username": "fionascott",
+      "password": "fiona2024",
+      "first_name": "Fiona",
+      "last_name": "Scott",
+      "user_id": "17",
+      "baggage_count": 1,
+      "baggage_items": [
+        {
+          "qr_code": "BAG-AB344D65",
+          "flight_number": "TK742",
+          "destination": "Kigali",
+          "status": "LOADED",
+          "created_at": "2025-10-02T10:13:18.425363+00:00"
+        }
+      ],
+      "account_created": "2025-10-03T15:00:51.464695+00:00"
+    },
+    {
+      "passenger_name": "Frank Miller",
+      "email": "frank.miller@email.com",
+      "username": "frankmiller",
+      "password": "frank2024",
+      "first_name": "Frank",
+      "last_name": "Miller",
+      "user_id": "18",
+      "baggage_count": 3,
+      "baggage_items": [
+        {
+          "qr_code": "BAG-9BE98CF5",
+          "flight_number": "BA728",
+          "destination": "Paris",
+          "status": "LOADED",
+          "created_at": "2025-09-30T18:26:35.755385+00:00"
+        },
+        {
+          "qr_code": "BAG-155EBDDD",
+          "flight_number": "MS843",
+          "destination": "London",
+          "status": "SECURITY_CLEARED",
+          "created_at": "2025-10-01T20:57:14.545400+00:00"
+        },
+        {
+          "qr_code": "BAG-B40F5BD0",
+          "flight_number": "AF814",
+          "destination": "Frankfurt",
+          "status": "CHECKED_IN",
+          "created_at": "2025-10-01T01:22:17.099259+00:00"
+        }
+      ],
+      "account_created": "2025-10-03T15:00:52.415491+00:00"
+    },
+    {
+      "passenger_name": "George Green",
+      "email": "george.green@email.com",
+      "username": "georgegreen",
+      "password": "george2024",
+      "first_name": "George",
+      "last_name": "Green",
+      "user_id": "19",
+      "baggage_count": 2,
+      "baggage_items": [
+        {
+          "qr_code": "BAG-23702C05",
+          "flight_number": "KE924",
+          "destination": "Atlanta",
+          "status": "CHECKED_IN",
+          "created_at": "2025-10-02T03:45:10.960207+00:00"
+        },
+        {
+          "qr_code": "BAG-885E73A8",
+          "flight_number": "DL439",
+          "destination": "Istanbul",
+          "status": "ARRIVED",
+          "created_at": "2025-09-30T21:02:20.920414+00:00"
+        }
+      ],
+      "account_created": "2025-10-03T15:00:54.115177+00:00"
+    },
+    {
+      "passenger_name": "Grace Wilson",
+      "email": "grace.wilson@email.com",
+      "username": "gracewilson",
+      "password": "grace2024",
+      "first_name": "Grace",
+      "last_name": "Wilson",
+      "user_id": "20",
+      "baggage_count": 1,
+      "baggage_items": [
+        {
+          "qr_code": "BAG-3AF9643F",
+          "flight_number": "SA234",
+          "destination": "Amsterdam",
+          "status": "IN_FLIGHT",
+          "created_at": "2025-10-01T15:31:57.289771+00:00"
+        }
+      ],
+      "account_created": "2025-10-03T15:00:55.323374+00:00"
+    },
+    {
+      "passenger_name": "Henry Moore",
+      "email": "henry.moore@email.com",
+      "username": "henrymoore",
+      "password": "henry2024",
+      "first_name": "Henry",
+      "last_name": "Moore",
+      "user_id": "21",
+      "baggage_count": 1,
+      "baggage_items": [
+        {
+          "qr_code": "BAG-1F0C5581",
+          "flight_number": "TK742",
+          "destination": "London",
+          "status": "LOADED",
+          "created_at": "2025-10-02T03:29:43.463190+00:00"
+        }
+      ],
+      "account_created": "2025-10-03T15:00:56.411156+00:00"
+    },
+    {
+      "passenger_name": "Ivy Taylor",
+      "email": "ivy.taylor@email.com",
+      "username": "ivytaylor",
+      "password": "ivy2024",
+      "first_name": "Ivy",
+      "last_name": "Taylor",
+      "user_id": "22",
+      "baggage_count": 2,
+      "baggage_items": [
+        {
+          "qr_code": "BAG-14D44F17",
+          "flight_number": "DL439",
+          "destination": "Paris",
+          "status": "CHECKED_IN",
+          "created_at": "2025-10-01T02:56:00.486188+00:00"
+        },
+        {
+          "qr_code": "BAG-98C34263",
+          "flight_number": "BA728",
+          "destination": "Doha",
+          "status": "ARRIVED",
+          "created_at": "2025-10-02T12:04:04.651680+00:00"
+        }
+      ],
+      "account_created": "2025-10-03T15:00:57.466269+00:00"
+    },
+    {
+      "passenger_name": "Kate Thomas",
+      "email": "kate.thomas@email.com",
+      "username": "katethomas",
+      "password": "kate2024",
+      "first_name": "Kate",
+      "last_name": "Thomas",
+      "user_id": "23",
+      "baggage_count": 1,
+      "baggage_items": [
+        {
+          "qr_code": "BAG-6A2E7EAD",
+          "flight_number": "MS843",
+          "destination": "Cairo",
+          "status": "IN_FLIGHT",
+          "created_at": "2025-10-02T15:46:23.668996+00:00"
+        }
+      ],
+      "account_created": "2025-10-03T15:00:58.604232+00:00"
+    },
+    {
+      "passenger_name": "Liam Jackson",
+      "email": "liam.jackson@email.com",
+      "username": "liamjackson",
+      "password": "liam2024",
+      "first_name": "Liam",
+      "last_name": "Jackson",
+      "user_id": "24",
+      "baggage_count": 1,
+      "baggage_items": [
+        {
+          "qr_code": "BAG-8CEC369C",
+          "flight_number": "BA728",
+          "destination": "Istanbul",
+          "status": "LOADED",
+          "created_at": "2025-09-30T21:27:34.032684+00:00"
+        }
+      ],
+      "account_created": "2025-10-03T15:01:00.415334+00:00"
+    },
+    {
+      "passenger_name": "Noah Harris",
+      "email": "noah.harris@email.com",
+      "username": "noahharris",
+      "password": "noah2024",
+      "first_name": "Noah",
+      "last_name": "Harris",
+      "user_id": "25",
+      "baggage_count": 1,
+      "baggage_items": [
+        {
+          "qr_code": "BAG-B4B0147A",
+          "flight_number": "QR434",
+          "destination": "Paris",
+          "status": "SECURITY_CLEARED",
+          "created_at": "2025-10-02T18:22:56.245598+00:00"
+        }
+      ],
+      "account_created": "2025-10-03T15:01:01.786204+00:00"
+    },
+    {
+      "passenger_name": "Olivia Martin",
+      "email": "olivia.martin@email.com",
+      "username": "oliviamartin",
+      "password": "olivia2024",
+      "first_name": "Olivia",
+      "last_name": "Martin",
+      "user_id": "26",
+      "baggage_count": 2,
+      "baggage_items": [
+        {
+          "qr_code": "BAG-C82AA5D7",
+          "flight_number": "SA234",
+          "destination": "London",
+          "status": "CHECKED_IN",
+          "created_at": "2025-09-30T22:02:09.979721+00:00"
+        },
+        {
+          "qr_code": "BAG-834391D1",
+          "flight_number": "VS201",
+          "destination": "Atlanta",
+          "status": "ARRIVED",
+          "created_at": "2025-10-01T06:04:29.260998+00:00"
+        }
+      ],
+      "account_created": "2025-10-03T15:01:03.302999+00:00"
+    },
+    {
+      "passenger_name": "Quinn Garcia",
+      "email": "quinn.garcia@email.com",
+      "username": "quinngarcia",
+      "password": "quinn2024",
+      "first_name": "Quinn",
+      "last_name": "Garcia",
+      "user_id": "27",
+      "baggage_count": 1,
+      "baggage_items": [
+        {
+          "qr_code": "BAG-B808E237",
+          "flight_number": "QR434",
+          "destination": "Paris",
+          "status": "LOADED",
+          "created_at": "2025-10-02T09:40:32.692635+00:00"
+        }
+      ],
+      "account_created": "2025-10-03T15:01:05.121251+00:00"
+    },
+    {
+      "passenger_name": "Ruby Martinez",
+      "email": "ruby.martinez@email.com",
+      "username": "rubymartinez",
+      "password": "ruby2024",
+      "first_name": "Ruby",
+      "last_name": "Martinez",
+      "user_id": "28",
+      "baggage_count": 2,
+      "baggage_items": [
+        {
+          "qr_code": "BAG-4DAFF685",
+          "flight_number": "LH567",
+          "destination": "Dubai",
+          "status": "LOADED",
+          "created_at": "2025-10-02T07:42:01.367054+00:00"
+        },
+        {
+          "qr_code": "BAG-65B24C93",
+          "flight_number": "DL439",
+          "destination": "Paris",
+          "status": "SECURITY_CLEARED",
+          "created_at": "2025-10-03T11:35:23.342750+00:00"
+        }
+      ],
+      "account_created": "2025-10-03T15:01:06.588407+00:00"
+    },
+    {
+      "passenger_name": "Sam Robinson",
+      "email": "sam.robinson@email.com",
+      "username": "samrobinson",
+      "password": "sam2024",
+      "first_name": "Sam",
+      "last_name": "Robinson",
+      "user_id": "29",
+      "baggage_count": 2,
+      "baggage_items": [
+        {
+          "qr_code": "BAG-96D4A575",
+          "flight_number": "KL566",
+          "destination": "Brussels",
+          "status": "SECURITY_CLEARED",
+          "created_at": "2025-10-02T19:54:45.878637+00:00"
+        },
+        {
+          "qr_code": "BAG-C475BC9D",
+          "flight_number": "RW501",
+          "destination": "Dubai",
+          "status": "LOADED",
+          "created_at": "2025-10-01T18:04:52.803570+00:00"
+        }
+      ],
+      "account_created": "2025-10-03T15:01:07.671620+00:00"
+    },
+    {
+      "passenger_name": "Uma Rodriguez",
+      "email": "uma.rodriguez@email.com",
+      "username": "umarodriguez",
+      "password": "uma2024",
+      "first_name": "Uma",
+      "last_name": "Rodriguez",
+      "user_id": "30",
+      "baggage_count": 3,
+      "baggage_items": [
+        {
+          "qr_code": "BAG-3F7E9333",
+          "flight_number": "KL566",
+          "destination": "Cairo",
+          "status": "IN_FLIGHT",
+          "created_at": "2025-10-02T16:07:07.379099+00:00"
+        },
+        {
+          "qr_code": "BAG-0EC9E801",
+          "flight_number": "KE924",
+          "destination": "Dubai",
+          "status": "SECURITY_CLEARED",
+          "created_at": "2025-10-01T19:30:11.890370+00:00"
+        },
+        {
+          "qr_code": "BAG-433A66FD",
+          "flight_number": "BA728",
+          "destination": "Dubai",
+          "status": "SECURITY_CLEARED",
+          "created_at": "2025-10-01T23:59:24.954693+00:00"
+        }
+      ],
+      "account_created": "2025-10-03T15:01:08.982151+00:00"
+    },
+    {
+      "passenger_name": "Victor Lewis",
+      "email": "victor.lewis@email.com",
+      "username": "victorlewis",
+      "password": "victor2024",
+      "first_name": "Victor",
+      "last_name": "Lewis",
+      "user_id": "31",
+      "baggage_count": 3,
+      "baggage_items": [
+        {
+          "qr_code": "BAG-7A85CD17",
+          "flight_number": "EK729",
+          "destination": "Istanbul",
+          "status": "ARRIVED",
+          "created_at": "2025-10-01T11:09:47.650727+00:00"
+        },
+        {
+          "qr_code": "BAG-4878C9A7",
+          "flight_number": "MS843",
+          "destination": "London",
+          "status": "SECURITY_CLEARED",
+          "created_at": "2025-09-30T18:47:13.286038+00:00"
+        },
+        {
+          "qr_code": "BAG-25CF3AA0",
+          "flight_number": "TK742",
+          "destination": "Istanbul",
+          "status": "SECURITY_CLEARED",
+          "created_at": "2025-10-02T20:49:15.803297+00:00"
+        }
+      ],
+      "account_created": "2025-10-03T15:01:10.289836+00:00"
+    },
+    {
+      "passenger_name": "Wendy Lee",
+      "email": "wendy.lee@email.com",
+      "username": "wendylee",
+      "password": "wendy2024",
+      "first_name": "Wendy",
+      "last_name": "Lee",
+      "user_id": "32",
+      "baggage_count": 1,
+      "baggage_items": [
+        {
+          "qr_code": "BAG-097730C2",
+          "flight_number": "LH567",
+          "destination": "Istanbul",
+          "status": "SECURITY_CLEARED",
+          "created_at": "2025-10-01T09:29:58.888672+00:00"
+        }
+      ],
+      "account_created": "2025-10-03T15:01:11.347836+00:00"
+    },
+    {
+      "passenger_name": "Xavier Walker",
+      "email": "xavier.walker@email.com",
+      "username": "xavierwalker",
+      "password": "xavier2024",
+      "first_name": "Xavier",
+      "last_name": "Walker",
+      "user_id": "33",
+      "baggage_count": 1,
+      "baggage_items": [
+        {
+          "qr_code": "BAG-68879D04",
+          "flight_number": "LH567",
+          "destination": "Atlanta",
+          "status": "ARRIVED",
+          "created_at": "2025-09-30T20:34:27.646855+00:00"
+        }
+      ],
+      "account_created": "2025-10-03T15:01:12.491226+00:00"
+    },
+    {
+      "passenger_name": "Yara Hall",
+      "email": "yara.hall@email.com",
+      "username": "yarahall",
+      "password": "yara2024",
+      "first_name": "Yara",
+      "last_name": "Hall",
+      "user_id": "34",
+      "baggage_count": 2,
+      "baggage_items": [
+        {
+          "qr_code": "BAG-A8C74A09",
+          "flight_number": "EK729",
+          "destination": "Kigali",
+          "status": "ARRIVED",
+          "created_at": "2025-10-01T12:15:40.175043+00:00"
+        },
+        {
+          "qr_code": "BAG-C8E09E0D",
+          "flight_number": "DL439",
+          "destination": "Frankfurt",
+          "status": "ARRIVED",
+          "created_at": "2025-10-02T10:16:36.966922+00:00"
+        }
+      ],
+      "account_created": "2025-10-03T15:01:13.766506+00:00"
+    },
+    {
+      "passenger_name": "Zoe Allen",
+      "email": "zoe.allen@email.com",
+      "username": "zoeallen",
+      "password": "zoe2024",
+      "first_name": "Zoe",
+      "last_name": "Allen",
+      "user_id": "35",
+      "baggage_count": 2,
+      "baggage_items": [
+        {
+          "qr_code": "BAG-C94A991C",
+          "flight_number": "RW501",
+          "destination": "Brussels",
+          "status": "CHECKED_IN",
+          "created_at": "2025-09-30T15:39:03.537342+00:00"
+        },
+        {
+          "qr_code": "BAG-CEDBFF0D",
+          "flight_number": "QR434",
+          "destination": "Frankfurt",
+          "status": "IN_FLIGHT",
+          "created_at": "2025-09-30T18:40:35.183916+00:00"
+        }
+      ],
+      "account_created": "2025-10-03T15:01:15.069925+00:00"
+    }
+  ],
+  "quick_reference": {
+    "sample_logins": [
+      {
+        "type": "Passenger",
+        "username": "adamyoung",
+        "password": "adam2024",
+        "url": "http://localhost:3000/login"
+      },
+      {
+        "type": "Staff",
+        "username": "staff1",
+        "password": "staff123",
+        "url": "http://localhost:3000/staff-login"
+      },
+      {
+        "type": "Admin",
+        "username": "admin",
+        "password": "admin123",
+        "url": "http://localhost:3000/staff-login"
+      }
+    ]
+  }
+}
