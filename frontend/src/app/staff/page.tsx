@@ -33,6 +33,7 @@ export default function StaffDashboard() {
     const [recentUpdates, setRecentUpdates] = useState<StatusUpdate[]>([])
     const [isLoading, setIsLoading] = useState(true)
     const [error, setError] = useState('')
+    const [successMessage, setSuccessMessage] = useState('')
     
     // Search and filter state
     const [searchQuery, setSearchQuery] = useState('')
@@ -66,8 +67,8 @@ export default function StaffDashboard() {
         try {
             setIsLoading(true)
             
-            // Load all baggage first
-            const baggageData = await baggageAPI.getAll()
+            // Load all baggage first - use large page_size to get all items
+            const baggageData = await baggageAPI.getAll({ page_size: 100 })
             setBaggage(baggageData.results)
             
             // Calculate stats from baggage data
@@ -123,6 +124,7 @@ export default function StaffDashboard() {
         try {
             setIsLoading(true)
             const searchData = await baggageAPI.getAll({
+                page_size: 100,
                 search: searchQuery,
                 status: statusFilter ? statusFilter as 'CHECKED_IN' | 'SECURITY_CLEARED' | 'LOADED' | 'IN_FLIGHT' | 'ARRIVED' : undefined
             })
@@ -150,19 +152,45 @@ export default function StaffDashboard() {
 
         try {
             setIsLoading(true)
-            await baggageAPI.updateStatus(selectedBaggage.id, {
+            setError('')
+            
+            // Validate that status is selected
+            if (!updateForm.status) {
+                setError('Please select a status')
+                setIsLoading(false)
+                return
+            }
+
+            console.log('Updating baggage:', selectedBaggage.id)
+            console.log('Update data:', updateForm)
+            
+            const response = await baggageAPI.updateStatus(selectedBaggage.id, {
                 status: updateForm.status as 'CHECKED_IN' | 'SECURITY_CLEARED' | 'LOADED' | 'IN_FLIGHT' | 'ARRIVED',
-                location: updateForm.location,
-                notes: updateForm.notes
+                location: updateForm.location || undefined,
+                notes: updateForm.notes || undefined
             })
+            
+            console.log('Update successful:', response)
             
             setShowUpdateModal(false)
             setSelectedBaggage(null)
-            loadDashboardData() // Refresh data
+            setUpdateForm({ status: '', location: '', notes: '' })
+            
+            // Show success message
+            setError('')
+            setSuccessMessage('Baggage status updated successfully!')
+            setTimeout(() => setSuccessMessage(''), 3000)
+            
+            // Refresh data
+            await loadDashboardData()
             
         } catch (error) {
             console.error('Update error:', error)
-            setError('Failed to update baggage status')
+            const errorMessage = (error as { response?: { data?: { error?: string; message?: string } }; message?: string })?.response?.data?.error || 
+                               (error as { response?: { data?: { error?: string; message?: string } }; message?: string })?.response?.data?.message || 
+                               (error as { message?: string })?.message || 
+                               'Failed to update baggage status'
+            setError(errorMessage)
         } finally {
             setIsLoading(false)
         }
@@ -452,14 +480,26 @@ export default function StaffDashboard() {
                                 <Button
                                     onClick={handleStatusUpdate}
                                     className="w-full sm:w-auto sm:ml-3"
-                                    disabled={!updateForm.status}
+                                    disabled={!updateForm.status || isLoading}
                                 >
-                                    Update Status
+                                    {isLoading ? (
+                                        <>
+                                            <LoadingSpinner size="sm" className="mr-2" />
+                                            Updating...
+                                        </>
+                                    ) : (
+                                        'Update Status'
+                                    )}
                                 </Button>
                                 <Button
                                     variant="outline"
-                                    onClick={() => setShowUpdateModal(false)}
+                                    onClick={() => {
+                                        setShowUpdateModal(false)
+                                        setSelectedBaggage(null)
+                                        setUpdateForm({ status: '', location: '', notes: '' })
+                                    }}
                                     className="mt-3 w-full sm:mt-0 sm:w-auto"
+                                    disabled={isLoading}
                                 >
                                     Cancel
                                 </Button>
@@ -481,9 +521,39 @@ export default function StaffDashboard() {
                 onClose={() => setShowScanner(false)}
             />
 
+            {/* Error Notification */}
             {error && (
-                <div className="fixed bottom-4 right-4 bg-red-500 text-white px-4 py-2 rounded-lg shadow-lg">
-                    {error}
+                <div className="fixed bottom-4 right-4 bg-red-500 text-white px-6 py-3 rounded-lg shadow-lg z-50 max-w-md">
+                    <div className="flex items-center">
+                        <svg className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        <p>{error}</p>
+                        <button 
+                            onClick={() => setError('')}
+                            className="ml-4 text-white hover:text-gray-200"
+                        >
+                            ✕
+                        </button>
+                    </div>
+                </div>
+            )}
+
+            {/* Success Notification */}
+            {successMessage && (
+                <div className="fixed bottom-4 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg z-50 max-w-md">
+                    <div className="flex items-center">
+                        <svg className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        <p>{successMessage}</p>
+                        <button 
+                            onClick={() => setSuccessMessage('')}
+                            className="ml-4 text-white hover:text-gray-200"
+                        >
+                            ✕
+                        </button>
+                    </div>
                 </div>
             )}
         </div>

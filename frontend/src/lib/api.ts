@@ -111,7 +111,7 @@ export const authAPI = {
 
 // Baggage API
 export const baggageAPI = {
-    getAll: async (params?: { page?: number; search?: string; status?: string }): Promise<PaginatedResponse<Baggage>> => {
+    getAll: async (params?: { page?: number; page_size?: number; search?: string; status?: string }): Promise<PaginatedResponse<Baggage>> => {
         const response: AxiosResponse<PaginatedResponse<Baggage>> = await api.get('/baggage/', { params })
         return response.data
     },
