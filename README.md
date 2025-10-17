@@ -1,4 +1,4 @@
-# 🎯 AERO UTAMU Smart Baggage Tracker
+#  AERO UTAMU Smart Baggage Tracker
 
 **Professional Aviation Baggage Management System for Entebbe International Airport**
 
@@ -6,23 +6,23 @@ A comprehensive full-stack baggage tracking solution featuring real-time updates
 
 ---
 
-## 🚀 System Overview
+##  System Overview
 
-### 🎫 For Passengers
+###  For Passengers
 - **QR Code Scanning**: Real-time camera scanning with file upload support
 - **Baggage Tracking**: Complete timeline from check-in to arrival
 - **Real-time Updates**: Live status notifications via WebSocket
 - **Mobile Optimized**: PWA-enabled responsive design
 - **User Authentication**: Secure registration and login system
 
-### 👨‍✈️ For Staff
+###  For Staff
 - **Operations Dashboard**: Complete overview of all 40+ baggage items
 - **Status Management**: Update baggage status with location and notes
 - **Search & Filter**: Find baggage by name, QR code, or flight number
 - **Real-time Analytics**: Live statistics and activity monitoring
 - **QR Scanner Integration**: Quick baggage lookup via mobile scanning
 
-### 🏗️ Technical Architecture
+###  Technical Architecture
 - **Backend**: Django 5.0 + DRF + WebSocket (Channels)
 - **Frontend**: Next.js 15 + TypeScript + Tailwind CSS
 - **Authentication**: JWT with role-based access control
@@ -32,7 +32,7 @@ A comprehensive full-stack baggage tracking solution featuring real-time updates
 
 ---
 
-## 🎨 Design & Features
+##  Design & Features
 
 ### Aviation-Themed Interface
 - **Deep Blue** (#003366) - Primary navigation and headers
@@ -50,14 +50,14 @@ A comprehensive full-stack baggage tracking solution featuring real-time updates
 
 ---
 
-## 📦 Quick Start Installation
+##  Quick Start Installation
 
 ### Prerequisites
 - **Python 3.12+** and **Node.js 18+**
 - **Git** for version control
 - **Terminal/Command Prompt** access
 
-### 🛠️ Backend Setup (Django API)
+###  Backend Setup (Django API)
 
 ```bash
 # 1. Navigate to backend directory
@@ -85,7 +85,7 @@ python manage.py runserver
 
 **Backend runs at**: `http://localhost:8000`
 
-### 🎨 Frontend Setup (Next.js UI)
+###  Frontend Setup (Next.js UI)
 
 ```bash
 # 1. Navigate to frontend directory (new terminal)
@@ -106,9 +106,9 @@ npm run dev
 
 ---
 
-## 🎯 Demo Access & Testing
+##  Demo Access & Testing
 
-### 🔐 Ready-to-Use Accounts
+###  Ready-to-Use Accounts
 
 #### Staff Access (Full System Control)
 ```
@@ -136,7 +136,7 @@ URL: http://localhost:8000/admin
 Features: Django admin interface, full system control
 ```
 
-### 🧳 Sample QR Codes for Testing
+###  Sample QR Codes for Testing
 ```
 BAG-1F0C5581  (Henry Moore - Flight TK742 → London)
 BAG-65B24C93  (Ruby Martinez - Flight DL439 → Paris) 
@@ -148,7 +148,7 @@ BAG-F781DD59  (Emma Davis - Flight DL439 → Atlanta)
 
 ---
 
-## 🌐 Complete API Reference
+##  Complete API Reference
 
 ### Authentication Endpoints
 ```http
@@ -183,7 +183,7 @@ GET  /api/health/                     # API health check
 
 ---
 
-## 🧪 Development & Testing Workflow
+##  Development & Testing Workflow
 
 ### Backend Development
 ```bash
@@ -240,7 +240,7 @@ npm run build && npm start
 
 ---
 
-## 📊 System Statistics
+##  System Statistics
 
 ### Data Volume
 - **User Accounts**: 25 passengers + 3 staff + 1 admin = 29 total
@@ -258,7 +258,7 @@ npm run build && npm start
 
 ---
 
-## 🚀 Production Deployment
+##  Production Deployment
 
 ### Backend (Django) Production
 ```bash
@@ -294,7 +294,7 @@ npx vercel --prod
 
 ---
 
-## 🔒 Security Features
+##  Security Features
 
 ### Authentication & Authorization
 - **JWT Tokens**: Secure access and refresh token system
@@ -315,7 +315,7 @@ npx vercel --prod
 
 ---
 
-## 🐛 Troubleshooting Guide
+##  Troubleshooting Guide
 
 ### Common Backend Issues
 ```bash
@@ -353,7 +353,7 @@ echo "NEXT_PUBLIC_API_URL=http://localhost:8000/api" > .env.local
 
 ---
 
-## 📈 Future Enhancements
+##  Future Enhancements
 
 ### Planned Features
 - **Push Notifications**: Browser notifications for status updates
@@ -372,7 +372,7 @@ echo "NEXT_PUBLIC_API_URL=http://localhost:8000/api" > .env.local
 
 ---
 
-## 📞 Support & Documentation
+##  Support & Documentation
 
 ### Resources
 - **API Documentation**: `http://localhost:8000/api/`
@@ -389,23 +389,23 @@ echo "NEXT_PUBLIC_API_URL=http://localhost:8000/api" > .env.local
 
 ---
 
-## 🎉 Demo Success Checklist
+##  Demo Success Checklist
 
-### ✅ Backend Verification
+###  Backend Verification
 - [ ] Django server running on `http://localhost:8000`
 - [ ] Health check returns success: `http://localhost:8000/api/health/`
 - [ ] 40 baggage items created with QR codes
 - [ ] 25 passenger accounts created
 - [ ] Staff login working: `staff1` / `staff123`
 
-### ✅ Frontend Verification  
+###  Frontend Verification  
 - [ ] Next.js server running on `http://localhost:3000`
 - [ ] Passenger login working with sample accounts
 - [ ] QR scanner functional with camera and file upload
 - [ ] Staff dashboard showing all baggage items
 - [ ] Real-time updates working between staff and passenger views
 
-### ✅ Integration Testing
+###  Integration Testing
 - [ ] Scan QR code `BAG-1F0C5581` successfully
 - [ ] Update baggage status from staff dashboard
 - [ ] Verify passenger sees real-time status update
@@ -414,6 +414,6 @@ echo "NEXT_PUBLIC_API_URL=http://localhost:8000/api" > .env.local
 
 ---
 
-**🛫 Ready for takeoff! Your professional aviation baggage tracking system is now fully operational.**
+** Ready for takeoff! Your professional aviation baggage tracking system is now fully operational.**
 
-**Built with ❤️ for Entebbe International Airport Hackathon 2025**
+**Built  for Entebbe International Airport Hackathon 2025**
